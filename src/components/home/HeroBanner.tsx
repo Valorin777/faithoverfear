@@ -106,16 +106,39 @@ export default function HeroBanner() {
           display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
           gap: '0.4rem 2rem',
         }}>
-          {['100% хлопок', 'Стойкий принт', 'Доставка по России', 'Возврат 14 дней'].map(t => (
-            <span key={t} style={{
-              fontFamily: 'var(--font-inter), sans-serif',
-              fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)',
-              letterSpacing: '0.14em', textTransform: 'uppercase',
-            }}>{t}</span>
+          {[
+            { label: '100% хлопок', href: null },
+            { label: 'Стойкий принт', href: null },
+            { label: 'Доставка по России', href: '/delivery' },
+            { label: 'Возврат 14 дней', href: '/returns' },
+          ].map(t => (
+            t.href ? (
+              <Link key={t.label} href={t.href} className="hero-tag-link" style={{
+                fontFamily: 'var(--font-inter), sans-serif',
+                fontSize: '0.6rem', color: 'rgba(232,213,163,0.6)',
+                letterSpacing: '0.14em', textTransform: 'uppercase',
+                textDecoration: 'none',
+                display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+              }}>
+                {t.label}
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </Link>
+            ) : (
+              <span key={t.label} style={{
+                fontFamily: 'var(--font-inter), sans-serif',
+                fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)',
+                letterSpacing: '0.14em', textTransform: 'uppercase',
+              }}>{t.label}</span>
+            )
           ))}
         </div>
 
       </div>
+
+      <style>{`
+        .hero-tag-link { transition: color 0.2s; }
+        .hero-tag-link:hover { color: var(--gold) !important; }
+      `}</style>
     </section>
   )
 }

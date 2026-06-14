@@ -230,12 +230,74 @@ input, textarea, select, button { font-family: inherit; }
   white-space: nowrap;
 }
 
-/* ── Анимация появления ── */
+/* ── Анимации ── */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.fade-in { animation: fadeInUp 0.5s ease both; }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(201,168,76,0); }
+}
+
+.fade-in        { animation: fadeInUp 0.5s ease both; }
+.fade-in-soft   { animation: fadeIn 0.6s ease both; }
+.scale-in       { animation: scaleIn 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* Поэтапное появление (stagger) */
+.stagger > *           { animation: fadeInUp 0.5s ease both; }
+.stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger > *:nth-child(2) { animation-delay: 0.12s; }
+.stagger > *:nth-child(3) { animation-delay: 0.19s; }
+.stagger > *:nth-child(4) { animation-delay: 0.26s; }
+.stagger > *:nth-child(5) { animation-delay: 0.33s; }
+.stagger > *:nth-child(6) { animation-delay: 0.40s; }
+
+/* Подъём при наведении */
+.hover-lift { transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s; }
+.hover-lift:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26,39,68,0.10); }
+
+/* Ховер иконок в шапке */
+.header-icon-btn:hover { background: var(--beige) !important; }
+
+/* Золотое подчёркивание ссылок навигации */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -4px;
+  width: 100%; height: 1.5px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-underline:hover::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, .fade-in, .fade-in-soft, .scale-in, .stagger > * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 
 /* ── Focus visible ── */
 *:focus-visible {

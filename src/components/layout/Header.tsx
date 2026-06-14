@@ -136,7 +136,7 @@ export default function Header() {
                 justifyContent: 'center',
               }}>
                 {navLinks.slice(0, 6).map(link => (
-                  <Link key={link.href} href={link.href} style={{
+                  <Link key={link.href} href={link.href} className="nav-underline" style={{
                     fontFamily: 'var(--font-inter), sans-serif',
                     fontSize: '0.82rem',
                     textDecoration: 'none',
@@ -162,6 +162,7 @@ export default function Header() {
               <button
                 onClick={() => setSearchOpen(v => !v)}
                 style={iconBtn}
+                className="header-icon-btn"
                 aria-label="Поиск"
                 type="button"
               >
@@ -170,20 +171,20 @@ export default function Header() {
 
               {/* Избранное — только на планшете+ */}
               {isDesktop && (
-                <Link href="/account/wishlist" style={iconBtn} aria-label="Избранное">
+                <Link href="/account/wishlist" style={iconBtn} className="header-icon-btn" aria-label="Избранное">
                   <Heart size={19} strokeWidth={1.75} />
                 </Link>
               )}
 
               {/* Кабинет — только на планшете+ */}
               {isDesktop && (
-                <Link href="/account" style={iconBtn} aria-label="Личный кабинет">
+                <Link href="/account" style={iconBtn} className="header-icon-btn" aria-label="Личный кабинет">
                   <User size={19} strokeWidth={1.75} />
                 </Link>
               )}
 
               {/* Корзина */}
-              <Link href="/cart" style={iconBtn} aria-label="Корзина">
+              <Link href="/cart" style={iconBtn} className="header-icon-btn" aria-label="Корзина">
                 <ShoppingCart size={19} strokeWidth={1.75} />
                 {count > 0 && (
                   <span style={{
@@ -213,6 +214,7 @@ export default function Header() {
                 <button
                   onClick={() => setMenuOpen(v => !v)}
                   style={iconBtn}
+                  className="header-icon-btn"
                   aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'}
                   aria-expanded={menuOpen}
                   type="button"
