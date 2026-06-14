@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+:root {
+  --navy:        #1a2744;
+  --navy-dark:   #111a33;
+  --gold:        #c9a84c;
+  --gold-light:  #e8d5a3;
+  --beige:       #f8f2e8;
+  --beige-dark:  #f0e6d2;
+  --burgundy:    #7a1e2e;
+  --burgundy-dk: #5a1520;
+  --white:       #ffffff;
+  --black:       #111111;
+  --gray:        #6b7280;
+  --gray-light:  #f5f5f5;
+  --text:        #2d2d2d;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  background: #ffffff;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-inter), 'Inter', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  max-width: 100%;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  color: var(--navy);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+input, textarea, select, button { font-family: inherit; }
+
+/* ── Кнопки ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--burgundy);
+  color: #fff;
+  padding: 0.8rem 2rem;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-inter), sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--burgundy-dk); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--navy);
+  padding: 0.8rem 2rem;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border: 1.5px solid var(--navy);
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-inter), sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-secondary:hover { background: var(--navy); color: #fff; }
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 0.875rem 2.25rem;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-inter), sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-gold:hover { background: #b8943f; transform: translateY(-1px); }
+
+.btn-outline-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #ffffff;
+  padding: 0.875rem 2.25rem;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border: 1.5px solid rgba(255,255,255,0.45);
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-inter), sans-serif;
+  text-decoration: none;
+}
+.btn-outline-white:hover { border-color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.07); }
+
+/* ── Секции ── */
+.section-title {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--navy);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.9rem;
+  color: #888;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+.gold-divider {
+  width: 48px;
+  height: 2px;
+  background: var(--gold);
+  margin: 0.75rem auto 2.5rem;
+  border-radius: 2px;
+}
+
+.gold-divider-sm {
+  width: 32px;
+  height: 1.5px;
+  background: var(--gold);
+  margin: 0.5rem auto 1.5rem;
+  border-radius: 2px;
+}
+
+/* ── Контейнер ── */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+@media (min-width: 768px) {
+  .container { padding: 0 2rem; }
+}
+@media (min-width: 1280px) {
+  .container { padding: 0 2.5rem; }
+}
+
+/* ── Карточки товаров ── */
+.product-card {
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: box-shadow 0.25s, transform 0.25s;
+  border: 1px solid #f0f0f0;
+}
+.product-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+}
+
+/* ── Бейджи ── */
+.badge {
+  display: inline-block;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.badge-new { background: var(--navy); color: #fff; }
+.badge-sale { background: var(--burgundy); color: #fff; }
+.badge-hit { background: var(--gold); color: var(--navy); }
+
+/* ── Разделитель секции ── */
+.section-sep {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 0;
+}
+
+/* ── Утилиты ── */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Анимация появления ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeInUp 0.5s ease both; }
+
+/* ── Focus visible ── */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}

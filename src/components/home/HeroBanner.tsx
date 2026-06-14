@@ -1,0 +1,121 @@
+import Link from 'next/link'
+
+export default function HeroBanner() {
+  return (
+    <section style={{
+      background: 'var(--navy)',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Тонкий радиальный свет снизу */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 80% 50% at 50% 120%, rgba(201,168,76,0.09) 0%, transparent 70%)',
+      }} />
+
+      <div style={{
+        maxWidth: 1280, margin: '0 auto',
+        padding: '6rem 1.5rem 4.5rem',
+        position: 'relative', zIndex: 1,
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        textAlign: 'center', minHeight: '90vh', justifyContent: 'center',
+      }}>
+
+        {/* Eyebrow */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '0.75rem',
+          marginBottom: '2rem',
+        }}>
+          <div style={{ width: 24, height: 1, background: 'var(--gold)', opacity: 0.5, flexShrink: 0 }} />
+          <span style={{
+            fontFamily: 'var(--font-inter), sans-serif',
+            color: 'var(--gold)', fontSize: '0.6rem',
+            letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 500,
+          }}>
+            Православная одежда · Faith over Fear
+          </span>
+          <div style={{ width: 24, height: 1, background: 'var(--gold)', opacity: 0.5, flexShrink: 0 }} />
+        </div>
+
+        {/* Заголовок */}
+        <h1 style={{
+          fontFamily: 'var(--font-playfair), Georgia, serif',
+          fontSize: 'clamp(2.5rem, 9vw, 6.5rem)',
+          fontWeight: 700, color: '#ffffff',
+          lineHeight: 1.1, marginBottom: '0.25rem',
+          letterSpacing: '-0.02em', maxWidth: '100%',
+        }}>
+          Одежда,
+        </h1>
+        <h1 style={{
+          fontFamily: 'var(--font-playfair), Georgia, serif',
+          fontSize: 'clamp(2.5rem, 9vw, 6.5rem)',
+          fontWeight: 700, color: 'var(--gold)',
+          lineHeight: 1.1, marginBottom: '1.75rem',
+          letterSpacing: '-0.02em', fontStyle: 'italic', maxWidth: '100%',
+        }}>
+          которая несёт Свет
+        </h1>
+
+        {/* Описание */}
+        <p style={{
+          fontFamily: 'var(--font-inter), sans-serif',
+          color: 'rgba(255,255,255,0.55)',
+          fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+          fontWeight: 300, maxWidth: 440,
+          lineHeight: 1.8, marginBottom: '2.5rem',
+        }}>
+          Футболки, поло, свитшоты и аксессуары с цитатами Священного Писания
+          и православной символикой. Создано с молитвой.
+        </p>
+
+        {/* Кнопки */}
+        <div style={{
+          display: 'flex', flexDirection: 'column',
+          gap: '0.75rem', width: '100%', maxWidth: 320, alignItems: 'stretch',
+        }}>
+          <Link href="/catalog" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+            background: 'var(--gold)', color: 'var(--navy)',
+            padding: '0.95rem 2rem', borderRadius: 2,
+            fontFamily: 'var(--font-inter), sans-serif',
+            fontSize: '0.78rem', fontWeight: 700,
+            letterSpacing: '0.1em', textTransform: 'uppercase',
+            textDecoration: 'none',
+          }}>
+            Перейти в каталог
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </Link>
+          <Link href="/about" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'transparent', color: 'rgba(255,255,255,0.7)',
+            padding: '0.875rem 2rem', borderRadius: 2,
+            fontFamily: 'var(--font-inter), sans-serif',
+            fontSize: '0.78rem', fontWeight: 400,
+            letterSpacing: '0.08em', textTransform: 'uppercase',
+            textDecoration: 'none',
+            border: '1px solid rgba(255,255,255,0.2)',
+          }}>
+            О нашей миссии
+          </Link>
+        </div>
+
+        {/* Теги */}
+        <div style={{
+          marginTop: '3.5rem',
+          display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
+          gap: '0.4rem 2rem',
+        }}>
+          {['100% хлопок', 'Стойкий принт', 'Доставка по России', 'Возврат 14 дней'].map(t => (
+            <span key={t} style={{
+              fontFamily: 'var(--font-inter), sans-serif',
+              fontSize: '0.6rem', color: 'rgba(255,255,255,0.28)',
+              letterSpacing: '0.14em', textTransform: 'uppercase',
+            }}>{t}</span>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )
+}

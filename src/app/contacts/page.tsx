@@ -1,0 +1,228 @@
+import { Metadata } from 'next'
+import PageLayout from '@/components/layout/PageLayout'
+
+export const metadata: Metadata = { title: 'Контакты', description: 'Свяжитесь с нами — Faith over Fear' }
+
+export default function ContactsPage() {
+  return (
+    <PageLayout>
+      {/* Hero */}
+      <div style={{ background: 'var(--navy)', padding: '5rem 0 4rem' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.25rem', textAlign: 'center' }}>
+          <p style={{
+            fontFamily: 'var(--font-inter), sans-serif',
+            fontSize: '0.6rem', letterSpacing: '0.28em',
+            textTransform: 'uppercase', color: 'var(--gold)',
+            fontWeight: 500, marginBottom: '0.75rem',
+          }}>
+            Мы на связи
+          </p>
+          <h1 style={{
+            fontFamily: 'var(--font-playfair), Georgia, serif',
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            color: '#fff', fontWeight: 700,
+          }}>
+            Контакты
+          </h1>
+          <div style={{ width: 40, height: 2, background: 'var(--gold)', margin: '1.25rem auto 0', borderRadius: 2 }} />
+        </div>
+      </div>
+
+      <div style={{ background: '#fff', padding: '5rem 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 1.25rem' }}>
+          <div className="contacts-grid" style={{ display: 'grid', gap: '4rem' }}>
+
+            {/* Форма */}
+            <div>
+              <p style={{
+                fontFamily: 'var(--font-inter), sans-serif',
+                fontSize: '0.62rem', letterSpacing: '0.24em',
+                textTransform: 'uppercase', color: 'var(--gold)',
+                fontWeight: 500, marginBottom: '0.5rem',
+              }}>
+                Обратная связь
+              </p>
+              <h2 style={{
+                fontFamily: 'var(--font-playfair), Georgia, serif',
+                fontSize: '1.5rem', fontWeight: 700,
+                color: 'var(--navy)', marginBottom: '2rem',
+              }}>
+                Напишите нам
+              </h2>
+              <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {[
+                  { label: 'Имя', type: 'text', placeholder: 'Иван' },
+                  { label: 'Email', type: 'email', placeholder: 'ivan@mail.ru' },
+                  { label: 'Тема', type: 'text', placeholder: 'Вопрос о заказе' },
+                ].map(({ label, type, placeholder }) => (
+                  <div key={label}>
+                    <label style={{
+                      display: 'block',
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.72rem', fontWeight: 600,
+                      color: '#555', marginBottom: '0.5rem',
+                      textTransform: 'uppercase', letterSpacing: '0.06em',
+                    }}>
+                      {label}
+                    </label>
+                    <input
+                      type={type}
+                      placeholder={placeholder}
+                      style={{
+                        width: '100%', boxSizing: 'border-box',
+                        border: '1.5px solid #e8e8e8',
+                        borderRadius: 4, padding: '0.8rem 1rem',
+                        fontFamily: 'var(--font-inter), sans-serif',
+                        fontSize: '0.88rem', color: 'var(--navy)',
+                        outline: 'none',
+                        transition: 'border-color 0.2s',
+                      }}
+                    />
+                  </div>
+                ))}
+                <div>
+                  <label style={{
+                    display: 'block',
+                    fontFamily: 'var(--font-inter), sans-serif',
+                    fontSize: '0.72rem', fontWeight: 600,
+                    color: '#555', marginBottom: '0.5rem',
+                    textTransform: 'uppercase', letterSpacing: '0.06em',
+                  }}>
+                    Сообщение
+                  </label>
+                  <textarea
+                    rows={5}
+                    placeholder="Ваш вопрос..."
+                    style={{
+                      width: '100%', boxSizing: 'border-box',
+                      border: '1.5px solid #e8e8e8',
+                      borderRadius: 4, padding: '0.8rem 1rem',
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.88rem', color: 'var(--navy)',
+                      outline: 'none', resize: 'vertical',
+                    }}
+                  />
+                </div>
+                <button type="submit" style={{
+                  background: 'var(--navy)', color: '#fff',
+                  border: 'none', borderRadius: 3, padding: '1rem',
+                  fontFamily: 'var(--font-inter), sans-serif',
+                  fontSize: '0.78rem', fontWeight: 700,
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                  cursor: 'pointer',
+                }}>
+                  Отправить сообщение
+                </button>
+              </form>
+            </div>
+
+            {/* Контакты */}
+            <div>
+              <p style={{
+                fontFamily: 'var(--font-inter), sans-serif',
+                fontSize: '0.62rem', letterSpacing: '0.24em',
+                textTransform: 'uppercase', color: 'var(--gold)',
+                fontWeight: 500, marginBottom: '0.5rem',
+              }}>
+                Реквизиты
+              </p>
+              <h2 style={{
+                fontFamily: 'var(--font-playfair), Georgia, serif',
+                fontSize: '1.5rem', fontWeight: 700,
+                color: 'var(--navy)', marginBottom: '2rem',
+              }}>
+                Наши контакты
+              </h2>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0', marginBottom: '2.5rem' }}>
+                {[
+                  { label: 'Email', value: 'info@faithof.ru' },
+                  { label: 'Сайт', value: 'faithof.ru' },
+                  { label: 'Telegram', value: '@faithoverfear' },
+                  { label: 'ВКонтакте', value: 'vk.com/faithoverfear' },
+                  { label: 'Режим работы', value: 'Пн–Пт, 10:00–18:00 МСК' },
+                ].map(({ label, value }) => (
+                  <div key={label} style={{
+                    display: 'grid',
+                    gridTemplateColumns: '120px 1fr',
+                    gap: '1rem',
+                    padding: '0.875rem 0',
+                    borderBottom: '1px solid #f5f5f5',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.75rem', color: '#aaa', fontWeight: 400,
+                    }}>
+                      {label}
+                    </span>
+                    <span style={{
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.85rem', color: 'var(--navy)', fontWeight: 500,
+                    }}>
+                      {value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Telegram-карточка */}
+              <div style={{
+                background: 'var(--navy)', borderRadius: 8,
+                padding: '1.5rem',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', marginBottom: '0.75rem' }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: '50%',
+                    background: '#229ED9',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <svg viewBox="0 0 24 24" fill="white" width="18" height="18">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.16 14.605l-2.963-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.659.981z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p style={{
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.85rem', fontWeight: 600, color: '#fff',
+                    }}>
+                      Telegram-канал
+                    </p>
+                    <p style={{
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)',
+                    }}>
+                      Новинки и акции каждый день
+                    </p>
+                  </div>
+                </div>
+                <a href="https://t.me/" target="_blank" rel="noopener noreferrer" style={{
+                  display: 'block', textAlign: 'center',
+                  background: '#229ED9', color: '#fff',
+                  padding: '0.7rem', borderRadius: 6,
+                  fontFamily: 'var(--font-inter), sans-serif',
+                  fontSize: '0.75rem', fontWeight: 600,
+                  textDecoration: 'none', letterSpacing: '0.06em',
+                }}>
+                  Подписаться на канал
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        .contacts-grid {
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 768px) {
+          .contacts-grid { grid-template-columns: 1fr 1fr; }
+        }
+        input:focus, textarea:focus {
+          border-color: var(--navy) !important;
+        }
+      `}</style>
+    </PageLayout>
+  )
+}
