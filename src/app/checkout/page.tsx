@@ -15,11 +15,11 @@ const DELIVERY_OPTIONS = [
 ]
 
 const PAYMENT_OPTIONS = [
+  { id: 'yukassa', label: 'ЮKassa', hint: 'Карты · SberPay · рассрочка' },
   { id: 'sbp', label: 'СБП — Система быстрых платежей', hint: 'Без комиссии' },
-  { id: 'card', label: 'Банковская карта', hint: 'Visa · Mastercard · МИР' },
   { id: 'tinkoff', label: 'Тинькофф Pay', hint: '' },
   { id: 'sber', label: 'СберПей', hint: '' },
-  { id: 'alfa', label: 'Альфа-Банк', hint: '' },
+  { id: 'crypto', label: 'Криптовалюта', hint: 'USDT · BTC · ETH' },
 ]
 
 const FREE_DELIVERY_FROM = 3500
@@ -29,7 +29,7 @@ export default function CheckoutPage() {
   const router = useRouter()
 
   const [delivery, setDelivery] = useState('cdek')
-  const [payment, setPayment] = useState('card')
+  const [payment, setPayment] = useState('yukassa')
   const [loading, setLoading] = useState(false)
 
   const [form, setForm] = useState({

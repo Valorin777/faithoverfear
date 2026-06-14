@@ -11,11 +11,11 @@ const deliveryMethods = [
 ]
 
 const paymentMethods = [
+  'ЮKassa — банковские карты, SberPay, рассрочка',
   'СБП (Система быстрых платежей) — мгновенно, без комиссии',
-  'Банковская карта Visa, Mastercard, МИР',
   'Тинькофф Pay',
   'СберПей',
-  'Альфа-Банк онлайн',
+  'Криптовалюта — USDT, BTC, ETH',
 ]
 
 export default function DeliveryPage() {
