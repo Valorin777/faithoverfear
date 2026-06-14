@@ -5,7 +5,7 @@ import Analytics from './Analytics'
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'clip' }}>
       <Analytics />
       <Header />
       <main style={{ flex: 1 }}>

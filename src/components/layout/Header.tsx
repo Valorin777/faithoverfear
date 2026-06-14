@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ShoppingCart, User, Search, Menu, X, Heart } from 'lucide-react'
@@ -23,6 +23,8 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [headerH, setHeaderH] = useState(92)
+  const headerRef = useRef<HTMLElement>(null)
   const { count } = useCart()
   const pathname = usePathname()
 
@@ -35,9 +37,22 @@ export default function Header() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4)
+    onScroll()
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Измеряем высоту фиксированной шапки, чтобы спейсер не давал контенту прятаться под ней
+  useEffect(() => {
+    const measure = () => { if (headerRef.current) setHeaderH(headerRef.current.offsetHeight) }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  useEffect(() => {
+    if (headerRef.current) setHeaderH(headerRef.current.offsetHeight)
+  }, [searchOpen, isDesktop])
 
   useEffect(() => {
     setMenuOpen(false)
@@ -68,19 +83,24 @@ export default function Header() {
 
   return (
     <>
-      {/* ── ШАПКА ── */}
-      <header style={{
-        position: 'sticky',
+      {/* ── ШАПКА (fixed, всегда на экране) ── */}
+      <header ref={headerRef} style={{
+        position: 'fixed',
         top: 0,
+        left: 0,
+        right: 0,
         zIndex: 200,
-        backgroundColor: '#ffffff',
-        borderBottom: '1px solid #efefef',
-        boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.07)' : 'none',
-        transition: 'box-shadow 0.3s',
+        backgroundColor: scrolled ? 'rgba(255,255,255,0.82)' : '#ffffff',
+        backdropFilter: scrolled ? 'saturate(180%) blur(14px)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'saturate(180%) blur(14px)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(0,0,0,0.06)' : '1px solid #efefef',
+        boxShadow: scrolled ? '0 4px 24px rgba(26,39,68,0.07)' : 'none',
+        transition: 'background-color 0.35s, box-shadow 0.35s, border-color 0.35s',
       }}>
 
-        {/* Промо-полоска */}
-        <div style={{
+        {/* Промо-полоска (кликабельная → доставка) */}
+        <Link href="/delivery" style={{
+          display: 'block',
           backgroundColor: 'var(--navy)',
           color: 'rgba(232,213,163,0.85)',
           textAlign: 'center',
@@ -89,9 +109,10 @@ export default function Header() {
           letterSpacing: '0.1em',
           fontFamily: 'var(--font-inter), sans-serif',
           lineHeight: 1,
+          textDecoration: 'none',
         }}>
           Бесплатная доставка от 3 500 ₽&nbsp;&nbsp;·&nbsp;&nbsp;Православная одежда&nbsp;&nbsp;·&nbsp;&nbsp;faithof.ru
-        </div>
+        </Link>
 
         {/* Основная строка */}
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.25rem' }}>
@@ -256,6 +277,9 @@ export default function Header() {
           )}
         </div>
       </header>
+
+      {/* Спейсер под высоту фиксированной шапки */}
+      <div aria-hidden style={{ height: headerH }} />
 
       {/* ── МОБИЛЬНОЕ МЕНЮ ── */}
       {menuOpen && (

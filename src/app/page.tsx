@@ -1,4 +1,5 @@
 import PageLayout from '@/components/layout/PageLayout'
+import Reveal from '@/components/ui/Reveal'
 import HeroBanner from '@/components/home/HeroBanner'
 import BestsellersSection from '@/components/home/BestsellersSection'
 import NewArrivalsSection from '@/components/home/NewArrivalsSection'
@@ -11,12 +12,12 @@ export default function HomePage() {
   return (
     <PageLayout>
       <HeroBanner />
-      <BestsellersSection />
-      <CategoriesSection />
-      <NewArrivalsSection />
-      <ReviewsSection />
-      <AboutSection />
-      <MissionBlock />
+      <Reveal><BestsellersSection /></Reveal>
+      <Reveal><CategoriesSection /></Reveal>
+      <Reveal><NewArrivalsSection /></Reveal>
+      <Reveal><ReviewsSection /></Reveal>
+      <Reveal><AboutSection /></Reveal>
+      <Reveal><MissionBlock /></Reveal>
     </PageLayout>
   )
 }
