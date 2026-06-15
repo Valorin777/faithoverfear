@@ -1,9 +1,7 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
-
 export const dynamic = 'force-dynamic'
 
 // ВРЕМЕННЫЙ диагностический маршрут — удалить после отладки.
+// Импорты ленивые (внутри try/catch), чтобы поймать ошибку загрузки модуля/адаптера.
 export async function GET() {
   const env = {
     hasDATABASE_URI: !!process.env.DATABASE_URI,
@@ -21,6 +19,8 @@ export async function GET() {
   }
 
   try {
+    const { getPayload } = await import('payload')
+    const { default: config } = await import('@payload-config')
     const payload = await getPayload({ config })
     const res = await payload.count({ collection: 'products' })
     return Response.json({ ok: true, productsCount: res.totalDocs, env })
@@ -29,7 +29,8 @@ export async function GET() {
     return Response.json({
       ok: false,
       error: String(err?.message || err),
-      stack: String(err?.stack || '').split('\n').slice(0, 10),
+      name: String(err?.name || ''),
+      stack: String(err?.stack || '').split('\n').slice(0, 12),
       env,
     })
   }
