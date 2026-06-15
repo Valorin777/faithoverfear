@@ -6,7 +6,6 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { ru } from '@payloadcms/translations/languages/ru'
-import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -65,7 +64,6 @@ export default buildConfig({
   },
   db,
   plugins: [...storagePlugins],
-  sharp,
   i18n: {
     supportedLanguages: { ru },
     fallbackLanguage: 'ru',
