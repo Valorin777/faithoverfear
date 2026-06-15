@@ -29,7 +29,12 @@ const databaseUri =
 const isPostgres = databaseUri.startsWith('postgres')
 
 const db = isPostgres
-  ? postgresAdapter({ pool: { connectionString: databaseUri } })
+  ? postgresAdapter({
+      pool: { connectionString: databaseUri },
+      // Автоматически создаёт/синхронизирует таблицы при запуске
+      // (чтобы не запускать миграции вручную при первом деплое)
+      push: true,
+    })
   : sqliteAdapter({ client: { url: databaseUri } })
 
 // Хранилище фото: на Vercel — облако (Blob), локально — диск.
