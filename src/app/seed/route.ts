@@ -7,12 +7,22 @@ export const dynamic = 'force-dynamic'
 
 /**
  * Разовый сидинг: переносит статичные товары и отзывы в базу Payload.
- * Запуск: GET /seed  (идемпотентно — если товары уже есть, пропускает).
- * Доступно только в режиме разработки.
+ *
+ * Безопасность:
+ *  - Требуется секретный токен: GET /seed?secret=<SEED_SECRET>
+ *  - Если переменная окружения SEED_SECRET не задана — маршрут полностью отключён.
+ *  - Идемпотентно: если товары уже есть, повторно не создаёт (нужен ?force=1).
+ *
+ * После наполнения базы переменную SEED_SECRET можно удалить из окружения,
+ * чтобы маршрут стал недоступен.
  */
 export async function GET(request: Request) {
-  if (process.env.NODE_ENV === 'production') {
-    return Response.json({ error: 'Disabled in production' }, { status: 403 })
+  const seedSecret = process.env.SEED_SECRET
+  const provided = new URL(request.url).searchParams.get('secret')
+
+  // Маршрут отключён, если секрет не настроен или не совпадает
+  if (!seedSecret || provided !== seedSecret) {
+    return Response.json({ error: 'Not found' }, { status: 404 })
   }
 
   const force = new URL(request.url).searchParams.get('force') === '1'
@@ -22,7 +32,7 @@ export async function GET(request: Request) {
   if (existing.totalDocs > 0 && !force) {
     return Response.json({
       skipped: true,
-      message: `В базе уже ${existing.totalDocs} товаров. Добавьте ?force=1 для повторного сидинга.`,
+      message: `В базе уже ${existing.totalDocs} товаров. Добавьте &force=1 для повторного сидинга.`,
     })
   }
 

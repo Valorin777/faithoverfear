@@ -2,6 +2,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { ru } from '@payloadcms/translations/languages/ru'
 import sharp from 'sharp'
@@ -15,6 +17,30 @@ import { Posts } from './collections/Posts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// Выбор базы данных:
+//  - локально (SQLite): DATABASE_URI = file:./faithoverfear.db
+//  - продакшен (Postgres на Vercel): DATABASE_URI / POSTGRES_URL = postgres://...
+const databaseUri =
+  process.env.DATABASE_URI ||
+  process.env.POSTGRES_URL_NON_POOLING ||
+  process.env.POSTGRES_URL ||
+  'file:./faithoverfear.db'
+const isPostgres = databaseUri.startsWith('postgres')
+
+const db = isPostgres
+  ? postgresAdapter({ pool: { connectionString: databaseUri } })
+  : sqliteAdapter({ client: { url: databaseUri } })
+
+// Хранилище фото: на Vercel — облако (Blob), локально — диск.
+const storagePlugins = process.env.BLOB_READ_WRITE_TOKEN
+  ? [
+      vercelBlobStorage({
+        collections: { media: true },
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+      }),
+    ]
+  : []
 
 export default buildConfig({
   admin: {
@@ -32,11 +58,8 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || 'file:./faithoverfear.db',
-    },
-  }),
+  db,
+  plugins: [...storagePlugins],
   sharp,
   i18n: {
     supportedLanguages: { ru },
