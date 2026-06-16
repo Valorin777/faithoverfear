@@ -23,10 +23,16 @@ import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import DashboardStats from '../../../components/admin/DashboardStats'
+import AdminLogo from '../../../components/admin/Logo'
+import AdminIcon from '../../../components/admin/Icon'
+import YesNoCell from '../../../components/admin/YesNoCell'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
   "/components/admin/DashboardStats#default": DashboardStats,
+  "/components/admin/Logo#default": AdminLogo,
+  "/components/admin/Icon#default": AdminIcon,
+  "/components/admin/YesNoCell#default": YesNoCell,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,

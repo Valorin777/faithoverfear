@@ -159,11 +159,13 @@ export const Products: CollectionConfig = {
           name: 'isNew',
           label: 'Новинка',
           type: 'checkbox',
+          admin: { components: { Cell: '/components/admin/YesNoCell#default' } },
         },
         {
           name: 'isBestseller',
           label: 'Хит продаж',
           type: 'checkbox',
+          admin: { components: { Cell: '/components/admin/YesNoCell#default' } },
         },
       ],
     },

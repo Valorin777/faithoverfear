@@ -13,6 +13,8 @@ import { Products } from './collections/Products'
 import { Orders } from './collections/Orders'
 import { Reviews } from './collections/Reviews'
 import { Posts } from './collections/Posts'
+import { Promocodes } from './collections/Promocodes'
+import { Returns } from './collections/Returns'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -58,9 +60,14 @@ export default buildConfig({
     components: {
       // Сводка с реальными метриками над списком коллекций
       beforeDashboard: ['/components/admin/DashboardStats#default'],
+      // Фирменная графика вместо логотипа Payload
+      graphics: {
+        Logo: '/components/admin/Logo#default',
+        Icon: '/components/admin/Icon#default',
+      },
     },
   },
-  collections: [Products, Orders, Reviews, Posts, Media, Users],
+  collections: [Products, Orders, Promocodes, Returns, Reviews, Posts, Media, Users],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
