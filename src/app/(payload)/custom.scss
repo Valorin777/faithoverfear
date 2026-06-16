@@ -1,1 +1,204 @@
-/* Кастомные стили админки Payload — при необходимости */
+/* ─────────────────────────────────────────────
+   Кастомная админка Faith over Fear
+   Люксовые, плавные анимации в стиле Apple
+   ───────────────────────────────────────────── */
+
+@keyframes fof-fade-up {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes fof-bar-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+.fof-dash {
+  margin-bottom: 2rem;
+}
+
+/* ── Быстрые действия ── */
+.fof-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+.fof-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-100);
+  color: var(--theme-text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  animation: fof-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s, border-color 0.25s, background 0.25s;
+}
+.fof-quick-btn:hover {
+  transform: translateY(-2px);
+  border-color: #c9a84c;
+  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.18);
+  text-decoration: none;
+}
+.fof-quick-icon {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: rgba(201, 168, 76, 0.14);
+  color: #b8943f;
+}
+
+/* ── Сетка метрик ── */
+.fof-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.fof-card {
+  background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  opacity: 0;
+  animation: fof-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s, border-color 0.3s;
+  will-change: transform;
+}
+.fof-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.1);
+  border-color: var(--theme-elevation-150);
+}
+
+.fof-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+.fof-card-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--theme-elevation-500);
+}
+.fof-card-icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--theme-elevation-100);
+  color: var(--theme-elevation-600, var(--theme-text));
+}
+.fof-card-icon.accent {
+  background: rgba(201, 168, 76, 0.16);
+  color: #b8943f;
+}
+.fof-card-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--theme-text);
+  font-variant-numeric: tabular-nums;
+}
+.fof-card-sub {
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--theme-elevation-450);
+}
+
+/* ── График ── */
+.fof-chart { padding: 1.3rem 1.4rem; }
+.fof-chart-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+.fof-chart-total {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--theme-text);
+}
+.fof-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 130px;
+}
+.fof-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  height: 100%;
+  justify-content: flex-end;
+}
+.fof-bar {
+  width: 100%;
+  min-height: 3px;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(180deg, #d8b85a 0%, #c9a84c 100%);
+  transform-origin: bottom;
+  animation: fof-bar-grow 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.fof-bar-label {
+  font-size: 0.6rem;
+  color: var(--theme-elevation-450);
+}
+.fof-empty {
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--theme-elevation-150);
+  border-radius: 8px;
+  color: var(--theme-elevation-450);
+  font-size: 0.85rem;
+}
+
+/* ─────────────────────────────────────────────
+   Общая полировка админки — плавность и мягкость
+   ───────────────────────────────────────────── */
+
+/* Плавные переходы для интерактивных элементов */
+.nav__link,
+.btn,
+.pill,
+.table tbody tr,
+.card {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Подсветка строк таблиц при наведении */
+.table tbody tr:hover {
+  background: var(--theme-elevation-50);
+}
+
+/* Лёгкий подъём основных кнопок */
+.btn--style-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Пункты навигации — мягкий акцент */
+.nav__link:hover {
+  background: var(--theme-elevation-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fof-card, .fof-quick-btn, .fof-bar { animation: none !important; opacity: 1 !important; transform: none !important; }
+}

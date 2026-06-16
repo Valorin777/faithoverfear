@@ -39,7 +39,8 @@ export default function RegisterPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: form.email.toLowerCase(), password: form.password }),
       })
-      router.push('/account')
+      const redirect = new URLSearchParams(window.location.search).get('redirect')
+      router.push(redirect && redirect.startsWith('/') ? redirect : '/account')
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка регистрации')

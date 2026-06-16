@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
@@ -32,11 +32,39 @@ export default function CheckoutPage() {
   const [payment, setPayment] = useState('yukassa')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [authState, setAuthState] = useState<'checking' | 'authed' | 'guest'>('checking')
 
   const [form, setForm] = useState({
     firstName: '', lastName: '', phone: '', email: '',
     city: '', address: '', comment: '',
   })
+
+  // Оформление заказа доступно только из аккаунта.
+  // Если покупатель не вошёл — отправляем на вход с возвратом на /checkout.
+  useEffect(() => {
+    let active = true
+    fetch('/api/customers/me', { credentials: 'include' })
+      .then(r => r.json())
+      .then(me => {
+        if (!active) return
+        if (me.user) {
+          setAuthState('authed')
+          // Подставляем данные из аккаунта
+          const [firstName, ...rest] = (me.user.name || '').split(' ')
+          setForm(f => ({
+            ...f,
+            firstName: f.firstName || firstName || '',
+            lastName: f.lastName || rest.join(' ') || '',
+            email: f.email || me.user.email || '',
+            phone: f.phone || me.user.phone || '',
+          }))
+        } else {
+          router.replace('/account/login?redirect=/checkout')
+        }
+      })
+      .catch(() => { if (active) router.replace('/account/login?redirect=/checkout') })
+    return () => { active = false }
+  }, [router])
 
   const deliveryPrice = total >= FREE_DELIVERY_FROM ? 0
     : DELIVERY_OPTIONS.find(d => d.id === delivery)?.price ?? 0
@@ -76,6 +104,22 @@ export default function CheckoutPage() {
       setError(err instanceof Error ? err.message : 'Ошибка оформления заказа')
       setLoading(false)
     }
+  }
+
+  // Пока проверяем вход (или идёт редирект гостя) — показываем загрузку
+  if (authState !== 'authed') {
+    return (
+      <PageLayout>
+        <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            width: 30, height: 30, borderRadius: '50%',
+            border: '3px solid #eee', borderTopColor: 'var(--navy)',
+            animation: 'spin 0.7s linear infinite',
+          }} />
+        </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </PageLayout>
+    )
   }
 
   if (items.length === 0) {

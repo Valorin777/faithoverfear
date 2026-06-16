@@ -278,6 +278,26 @@ input, textarea, select, button { font-family: inherit; }
 /* Ховер иконок в шапке */
 .header-icon-btn:hover { background: var(--beige) !important; }
 
+/* ── Люксовый ховер карточки товара (Apple-стиль) ── */
+.product-card-lux {
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
+  will-change: transform;
+}
+.product-card-lux:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 24px 48px rgba(26,39,68,0.14);
+  border-color: rgba(201,168,76,0.4) !important;
+}
+.product-card-lux .pc-image {
+  transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform;
+}
+.product-card-lux:hover .pc-image { transform: scale(1.07); }
+.product-card-lux .pc-cta { transition: background 0.3s, letter-spacing 0.3s; }
+.product-card-lux:hover .pc-cta { background: var(--burgundy) !important; letter-spacing: 0.14em !important; }
+.product-card-lux .pc-fav { transition: transform 0.2s, color 0.2s, background 0.2s; }
+.product-card-lux .pc-fav:hover { transform: scale(1.12); color: var(--burgundy) !important; background: #fff !important; }
+
 /* Золотое подчёркивание ссылок навигации */
 .nav-underline {
   position: relative;

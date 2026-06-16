@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
   const payload = await getPayload({ config })
 
-  // Определяем вошедшего покупателя (если заказ из личного кабинета)
+  // Заказ можно оформить только из аккаунта — проверяем вход
   let customer: AuthedCustomer | null = null
   try {
     const authResult = await payload.auth({ headers: request.headers })
@@ -70,7 +70,11 @@ export async function POST(request: Request) {
       customer = { id: u.id, referredBy: u.referredBy, referralRewarded: u.referralRewarded }
     }
   } catch {
-    // не залогинен — обычный гостевой заказ
+    // не залогинен
+  }
+
+  if (!customer) {
+    return Response.json({ error: 'Войдите в аккаунт, чтобы оформить заказ' }, { status: 401 })
   }
 
   // Пересчёт суммы товаров по реальным ценам из базы (защита от подмены)

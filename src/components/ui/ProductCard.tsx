@@ -8,14 +8,13 @@ export default function ProductCard({ product }: { product: Product }) {
   const sizes = [...new Set(product.variants.map(v => v.size))]
 
   return (
-    <div style={{
+    <div className="product-card-lux" style={{
       background: '#fff',
       border: '1px solid #efefef',
       borderRadius: 4,
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
-      transition: 'box-shadow 0.25s, transform 0.25s',
     }}>
       {/* Фото */}
       <Link href={`/product/${product.slug}`} style={{ display: 'block', position: 'relative', textDecoration: 'none' }}>
@@ -26,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
           overflow: 'hidden',
         }}>
           {/* Плейсхолдер */}
-          <div style={{
+          <div className="pc-image" style={{
             position: 'absolute', inset: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
@@ -71,7 +70,7 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
 
           {/* Кнопка избранное */}
-          <button style={{
+          <button className="pc-fav" style={{
             position: 'absolute', top: 8, right: 8,
             width: 28, height: 28,
             background: 'rgba(255,255,255,0.9)',
@@ -156,7 +155,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Кнопка — всегда видна */}
-        <Link href={`/product/${product.slug}`} style={{
+        <Link href={`/product/${product.slug}`} className="pc-cta" style={{
           display: 'block',
           textAlign: 'center',
           padding: '0.55rem',

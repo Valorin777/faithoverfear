@@ -25,7 +25,8 @@ export default function LoginPage() {
       if (!res.ok) {
         throw new Error('Неверный email или пароль')
       }
-      router.push('/account')
+      const redirect = new URLSearchParams(window.location.search).get('redirect')
+      router.push(redirect && redirect.startsWith('/') ? redirect : '/account')
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка входа')
