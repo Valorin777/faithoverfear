@@ -17,6 +17,7 @@ export interface Product {
   isNew?: boolean
   isBestseller?: boolean
   wildberriesUrl?: string
+  specifications?: { label: string; labelEn?: string; value: string; valueEn?: string }[]
 }
 
 export interface ProductVariant {
@@ -95,6 +96,7 @@ export interface BlogPost {
   excerptEn?: string
   content: string
   image?: string
+  video?: string
   createdAt: string
 }
 

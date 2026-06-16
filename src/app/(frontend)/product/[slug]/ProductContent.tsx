@@ -15,7 +15,7 @@ interface ProductContentProps {
 export default function ProductContent({ product, related, productReviews }: ProductContentProps) {
   const { t } = useLang()
 
-  const specs: { label: string; labelEn: string; value: string; valueEn: string }[] = [
+  const DEFAULT_SPECS: { label: string; labelEn?: string; value: string; valueEn?: string }[] = [
     { label: 'Состав', labelEn: 'Composition', value: '100% хлопок (пеньё)', valueEn: '100% cotton (combed)' },
     { label: 'Плотность', labelEn: 'Density', value: '180 г/м²', valueEn: '180 g/m²' },
     { label: 'Уход', labelEn: 'Care', value: 'Стирка при 30°C, не отбеливать, гладить при низкой температуре', valueEn: 'Wash at 30°C, do not bleach, iron at low temperature' },
@@ -23,6 +23,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
     { label: 'Тип печати', labelEn: 'Print type', value: 'Шелкография / DTG — стойкий принт', valueEn: 'Silkscreen / DTG — durable print' },
     { label: 'Крой', labelEn: 'Cut', value: 'Прямой, унисекс', valueEn: 'Straight, unisex' },
   ]
+  const specs = product.specifications && product.specifications.length ? product.specifications : DEFAULT_SPECS
 
   return (
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '1.5rem 1.25rem 4rem' }}>

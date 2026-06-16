@@ -4,6 +4,7 @@ import Link from 'next/link'
 import PageLayout from '@/components/layout/PageLayout'
 import { BlogPost } from '@/types'
 import { useLang } from '@/context/LanguageContext'
+import VideoPlayer from '@/components/ui/VideoPlayer'
 
 export default function BlogPostContent({ post }: { post: BlogPost }) {
   const { t, lang } = useLang()
@@ -20,11 +21,18 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
           {t(post.title, post.titleEn)}
         </h1>
         <div className="w-12 h-[2px] bg-[var(--gold)] mb-8" />
-        <div className="aspect-video bg-gradient-to-br from-[var(--beige)] to-[var(--gold-light)] rounded-lg mb-8 flex items-center justify-center">
-          <svg width="40" height="56" viewBox="0 0 32 44" fill="none" className="opacity-15">
-            <rect x="13" y="0" width="6" height="44" rx="3" fill="var(--navy)" />
-            <rect x="0" y="12" width="32" height="6" rx="3" fill="var(--navy)" />
-          </svg>
+        <div className="aspect-video bg-gradient-to-br from-[var(--beige)] to-[var(--gold-light)] rounded-lg mb-8 overflow-hidden flex items-center justify-center">
+          {post.video ? (
+            <VideoPlayer src={post.video} poster={post.image} controls />
+          ) : post.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={post.image} alt={t(post.title, post.titleEn)} className="w-full h-full object-cover" />
+          ) : (
+            <svg width="40" height="56" viewBox="0 0 32 44" fill="none" className="opacity-15">
+              <rect x="13" y="0" width="6" height="44" rx="3" fill="var(--navy)" />
+              <rect x="0" y="12" width="32" height="6" rx="3" fill="var(--navy)" />
+            </svg>
+          )}
         </div>
         <div className="text-gray-600 leading-relaxed" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
           <p>{t(post.excerpt, post.excerptEn)}</p>

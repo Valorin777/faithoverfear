@@ -59,6 +59,13 @@ export const Posts: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name: 'video',
+      label: 'Видео',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Опционально: видео в начале статьи (MP4/WebM).' },
+    },
+    {
       name: 'content',
       label: 'Текст статьи (рус)',
       type: 'richText',

@@ -7,6 +7,7 @@ import { ShoppingCart, User, Search, Menu, X, Heart } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
 import { useLang } from '@/context/LanguageContext'
+import { useSettings } from '@/context/SettingsContext'
 
 const navLinks = [
   { href: '/', label: 'Главная', en: 'Home' },
@@ -30,6 +31,8 @@ export default function Header() {
   const { count } = useCart()
   const { count: wishCount } = useWishlist()
   const { lang, setLang, t } = useLang()
+  const settings = useSettings()
+  const freeFrom = (settings.freeDeliveryFrom || 3500).toLocaleString('ru-RU')
   const pathname = usePathname()
 
   useEffect(() => {
@@ -115,7 +118,9 @@ export default function Header() {
           lineHeight: 1,
           textDecoration: 'none',
         }}>
-          {t('Бесплатная доставка от 3 500 ₽', 'Free delivery from 3 500 ₽')}&nbsp;&nbsp;·&nbsp;&nbsp;{t('Православная одежда', 'Orthodox clothing')}&nbsp;&nbsp;·&nbsp;&nbsp;faithof.ru
+          {settings.promoBarText
+            ? t(settings.promoBarText, settings.promoBarTextEn)
+            : <>{t(`Бесплатная доставка от ${freeFrom} ₽`, `Free delivery from ${freeFrom} ₽`)}&nbsp;&nbsp;·&nbsp;&nbsp;{t('Православная одежда', 'Orthodox clothing')}&nbsp;&nbsp;·&nbsp;&nbsp;{settings.contactWebsite || 'faithof.ru'}</>}
         </Link>
 
         {/* Основная строка */}

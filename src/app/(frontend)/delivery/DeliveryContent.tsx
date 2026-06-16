@@ -2,15 +2,16 @@
 
 import PageLayout from '@/components/layout/PageLayout'
 import { useLang } from '@/context/LanguageContext'
+import { useSettings } from '@/context/SettingsContext'
 
-const deliveryMethods = [
+const DEFAULT_DELIVERY = [
   { name: 'СДЭК', nameEn: 'CDEK', time: '2–5 рабочих дней', timeEn: '2–5 business days', price: 'от 290 ₽', priceEn: 'from 290 ₽', desc: 'Доставка до пункта выдачи или курьером до двери. Отслеживание заказа в личном кабинете СДЭК.', descEn: 'Delivery to a pickup point or by courier to your door. Track your order in the CDEK account.' },
   { name: 'Boxberry', nameEn: 'Boxberry', time: '3–6 рабочих дней', timeEn: '3–6 business days', price: 'от 250 ₽', priceEn: 'from 250 ₽', desc: 'Доставка до пункта выдачи. Широкая сеть по всей России.', descEn: 'Delivery to a pickup point. A wide network across Russia.' },
   { name: 'Почта России', nameEn: 'Russian Post', time: '5–14 рабочих дней', timeEn: '5–14 business days', price: 'от 180 ₽', priceEn: 'from 180 ₽', desc: 'Доставка в любую точку России, включая удалённые регионы.', descEn: 'Delivery to anywhere in Russia, including remote regions.' },
   { name: 'Самовывоз', nameEn: 'Pickup', time: 'После подтверждения', timeEn: 'After confirmation', price: 'Бесплатно', priceEn: 'Free', desc: 'Уточните адрес при оформлении заказа.', descEn: 'Confirm the address at checkout.' },
 ]
 
-const paymentMethods = [
+const DEFAULT_PAYMENT = [
   { ru: 'ЮKassa — банковские карты, SberPay, рассрочка', en: 'YooKassa — bank cards, SberPay, instalments' },
   { ru: 'СБП (Система быстрых платежей) — мгновенно, без комиссии', en: 'SBP (Faster Payments System) — instant, no fees' },
   { ru: 'Тинькофф Pay', en: 'Tinkoff Pay' },
@@ -20,6 +21,11 @@ const paymentMethods = [
 
 export default function DeliveryContent() {
   const { t } = useLang()
+  const settings = useSettings()
+  const deliveryMethods = settings.deliveryMethods.length
+    ? settings.deliveryMethods.map((m) => ({ name: m.name, nameEn: m.nameEn, time: m.time, timeEn: m.timeEn, price: m.price, priceEn: m.priceEn, desc: m.description, descEn: m.descriptionEn }))
+    : DEFAULT_DELIVERY
+  const paymentMethods = settings.paymentMethods.length ? settings.paymentMethods : DEFAULT_PAYMENT
   return (
     <PageLayout>
       {/* Hero */}

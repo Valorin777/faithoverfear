@@ -193,6 +193,29 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'specifications',
+      label: 'Характеристики',
+      type: 'array',
+      labels: { singular: 'Характеристика', plural: 'Характеристики' },
+      admin: { description: 'Состав, плотность, уход и т.д. Если пусто — показываются значения по умолчанию.' },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'label', label: 'Параметр (рус)', type: 'text' },
+            { name: 'labelEn', label: 'Параметр (англ)', type: 'text' },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'value', label: 'Значение (рус)', type: 'text' },
+            { name: 'valueEn', label: 'Значение (англ)', type: 'text' },
+          ],
+        },
+      ],
+    },
+    {
       type: 'row',
       fields: [
         {

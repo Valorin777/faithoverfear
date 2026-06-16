@@ -50,6 +50,11 @@ function mapProduct(doc: any): Product {
     isNew: !!doc.isNew,
     isBestseller: !!doc.isBestseller,
     wildberriesUrl: doc.wildberriesUrl || undefined,
+    specifications: Array.isArray(doc.specifications)
+      ? doc.specifications
+          .filter((s: any) => s?.label)
+          .map((s: any) => ({ label: s.label, labelEn: s.labelEn || undefined, value: s.value || '', valueEn: s.valueEn || undefined }))
+      : undefined,
   }
 }
 
@@ -79,6 +84,7 @@ function mapPost(doc: any): BlogPost {
     excerptEn: doc.excerptEn || undefined,
     content: '',
     image: mediaUrl(doc.image) || undefined,
+    video: mediaUrl(doc.video) || undefined,
     createdAt: doc.createdAt ?? new Date(0).toISOString(),
   }
 }
