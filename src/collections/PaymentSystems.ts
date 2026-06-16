@@ -54,7 +54,7 @@ export const PaymentSystems: CollectionConfig = {
     {
       type: 'row',
       fields: [
-        { name: 'enabled', label: 'Включена на сайте', type: 'checkbox', defaultValue: true },
+        { name: 'enabled', label: 'Включена на сайте', type: 'checkbox', defaultValue: true, admin: { components: { Cell: '/components/admin/YesNoCell#default' } } },
         { name: 'hint', label: 'Подсказка (рус)', type: 'text', admin: { description: 'Напр.: Карты · SberPay · рассрочка' } },
       ],
     },

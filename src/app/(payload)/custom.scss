@@ -215,20 +215,31 @@
   margin-bottom: var(--section-gap);
 }
 .fof-kpi {
-  background: var(--surface-card);
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 90% at 100% 0%, color-mix(in srgb, var(--kpi-accent) 9%, transparent) 0%, transparent 58%),
+    var(--surface-card);
   border: 1px solid var(--border-hair);
   border-radius: 16px;
-  padding: 16px 17px 14px;
+  padding: 18px 18px 15px;
   box-shadow: var(--shadow-sm);
   opacity: 0;
   animation: fof-rise .5s var(--ease-out) both;
   transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), border-color .25s;
   will-change: transform;
 }
+.fof-kpi::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--kpi-accent), transparent 75%);
+}
 .fof-kpi:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--border-soft);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--kpi-accent) 30%, transparent);
+  border-color: transparent;
 }
 .fof-kpi__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .fof-kpi__icon {
@@ -409,16 +420,29 @@
 /* Пустые состояния */
 .fof-empty {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   text-align: center;
-  min-height: 130px;
-  padding: 1rem;
+  min-height: 150px;
+  padding: 1.75rem;
   border: 1px dashed var(--border-soft);
-  border-radius: 12px;
+  border-radius: 14px;
+  background: var(--bg-subtle);
   color: var(--text-muted);
   font-size: .85rem;
 }
+.fof-empty::before {
+  content: '✦';
+  font-size: 1.5rem;
+  color: var(--gold);
+  opacity: .55;
+}
+
+/* Брендовая иконка в хлебных крошках и навигации — не обрезать */
+.step-nav__home { overflow: visible; display: inline-flex; align-items: center; }
+.step-nav__home svg { width: 20px; height: 20px; }
 
 /* Адаптив */
 @media (max-width: 1100px) {

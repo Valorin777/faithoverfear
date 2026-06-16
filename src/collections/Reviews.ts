@@ -69,6 +69,7 @@ export const Reviews: CollectionConfig = {
       label: 'Опубликован',
       type: 'checkbox',
       defaultValue: true,
+      admin: { components: { Cell: '/components/admin/YesNoCell#default' } },
     },
   ],
 }

@@ -80,6 +80,7 @@ export const Posts: CollectionConfig = {
       label: 'Опубликована',
       type: 'checkbox',
       defaultValue: true,
+      admin: { components: { Cell: '/components/admin/YesNoCell#default' } },
     },
   ],
 }

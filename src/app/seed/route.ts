@@ -132,12 +132,35 @@ export async function GET(request: Request) {
     console.error('Seed settings error:', err)
   }
 
+  // ── Платёжные системы по умолчанию (если ещё ни одной) ──
+  let payments_created = 0
+  try {
+    const ex = await payload.count({ collection: 'payment-systems' })
+    if (ex.totalDocs === 0) {
+      const defs = [
+        { code: 'yukassa', name: 'ЮKassa', nameEn: 'YooKassa', hint: 'Карты · SberPay · рассрочка', hintEn: 'Cards · SberPay · instalments', order: 1 },
+        { code: 'sbp', name: 'СБП', nameEn: 'SBP', hint: 'Система быстрых платежей · без комиссии', hintEn: 'Faster Payments · no fees', order: 2 },
+        { code: 'tinkoff', name: 'Тинькофф Pay', nameEn: 'Tinkoff Pay', hint: '', order: 3 },
+        { code: 'sber', name: 'СберПей', nameEn: 'SberPay', hint: '', order: 4 },
+        { code: 'crypto', name: 'Криптовалюта', nameEn: 'Cryptocurrency', hint: 'USDT · BTC · ETH', hintEn: 'USDT · BTC · ETH', order: 5 },
+        { code: 'card', name: 'Банковская карта', nameEn: 'Bank card', hint: '', order: 6 },
+      ]
+      for (const d of defs) {
+        await payload.create({ collection: 'payment-systems', data: { ...d, enabled: true } as never, overrideAccess: true })
+        payments_created++
+      }
+    }
+  } catch (err) {
+    console.error('Seed payment-systems error:', err)
+  }
+
   return Response.json({
     success: true,
     products_created,
     products_updated,
     posts_upserted,
     reviews_created,
-    message: `Товары: +${products_created} новых, ${products_updated} обновлено · Статьи: ${posts_upserted} · Отзывы: ${reviews_created} · Баннер обновлён`,
+    payments_created,
+    message: `Товары: +${products_created} · Статьи: ${posts_upserted} · Отзывы: ${reviews_created} · Платёжные системы: +${payments_created} · Баннер обновлён`,
   })
 }
