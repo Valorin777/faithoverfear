@@ -60,6 +60,11 @@ export const Orders: CollectionConfig = {
           ],
         },
         { name: 'customerEmail', label: 'Email', type: 'email' },
+        {
+          name: 'contactLinks',
+          type: 'ui',
+          admin: { components: { Field: '/components/admin/OrderContact#default' } },
+        },
       ],
     },
     {
