@@ -6,17 +6,18 @@ import { usePathname } from 'next/navigation'
 import { ShoppingCart, User, Search, Menu, X, Heart } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
+import { useLang } from '@/context/LanguageContext'
 
 const navLinks = [
-  { href: '/', label: 'Главная' },
-  { href: '/catalog', label: 'Каталог' },
-  { href: '/new', label: 'Новинки' },
-  { href: '/sale', label: 'Акции' },
-  { href: '/gift-sets', label: 'Подарочные наборы' },
-  { href: '/about', label: 'О проекте' },
-  { href: '/contacts', label: 'Контакты' },
-  { href: '/delivery', label: 'Доставка и оплата' },
-  { href: '/blog', label: 'Блог' },
+  { href: '/', label: 'Главная', en: 'Home' },
+  { href: '/catalog', label: 'Каталог', en: 'Catalog' },
+  { href: '/new', label: 'Новинки', en: 'New In' },
+  { href: '/sale', label: 'Акции', en: 'Sale' },
+  { href: '/gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
+  { href: '/about', label: 'О проекте', en: 'About' },
+  { href: '/contacts', label: 'Контакты', en: 'Contacts' },
+  { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },
+  { href: '/blog', label: 'Блог', en: 'Blog' },
 ]
 
 export default function Header() {
@@ -28,6 +29,7 @@ export default function Header() {
   const headerRef = useRef<HTMLElement>(null)
   const { count } = useCart()
   const { count: wishCount } = useWishlist()
+  const { lang, setLang, t } = useLang()
   const pathname = usePathname()
 
   useEffect(() => {
@@ -113,7 +115,7 @@ export default function Header() {
           lineHeight: 1,
           textDecoration: 'none',
         }}>
-          Бесплатная доставка от 3 500 ₽&nbsp;&nbsp;·&nbsp;&nbsp;Православная одежда&nbsp;&nbsp;·&nbsp;&nbsp;faithof.ru
+          {t('Бесплатная доставка от 3 500 ₽', 'Free delivery from 3 500 ₽')}&nbsp;&nbsp;·&nbsp;&nbsp;{t('Православная одежда', 'Orthodox clothing')}&nbsp;&nbsp;·&nbsp;&nbsp;faithof.ru
         </Link>
 
         {/* Основная строка */}
@@ -169,7 +171,7 @@ export default function Header() {
                     whiteSpace: 'nowrap',
                     transition: 'color 0.15s',
                   }}>
-                    {link.label}
+                    {t(link.label, link.en)}
                   </Link>
                 ))}
               </nav>
@@ -180,6 +182,33 @@ export default function Header() {
 
             {/* Иконки */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0px', flexShrink: 0 }}>
+
+              {/* Переключатель языка */}
+              <div style={{
+                display: 'flex', alignItems: 'center',
+                border: '1px solid #e5e5e5', borderRadius: 99,
+                padding: 2, marginRight: 4, flexShrink: 0,
+              }}>
+                {(['ru', 'en'] as const).map(l => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => setLang(l)}
+                    style={{
+                      border: 'none', cursor: 'pointer',
+                      borderRadius: 99, padding: '3px 8px',
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.04em',
+                      background: lang === l ? 'var(--navy)' : 'transparent',
+                      color: lang === l ? '#fff' : '#aaa',
+                      transition: 'background 0.2s, color 0.2s',
+                    }}
+                    aria-label={l === 'ru' ? 'Русский' : 'English'}
+                  >
+                    {l.toUpperCase()}
+                  </button>
+                ))}
+              </div>
 
               {/* Поиск */}
               <button
@@ -268,7 +297,7 @@ export default function Header() {
               <div style={{ position: 'relative' }}>
                 <input
                   type="search"
-                  placeholder="Поиск товаров..."
+                  placeholder={t('Поиск товаров...', 'Search products...')}
                   autoFocus
                   style={{
                     width: '100%',
@@ -338,7 +367,7 @@ export default function Header() {
                 fontWeight: 600,
                 color: 'var(--navy)',
               }}>
-                Меню
+                {t('Меню', 'Menu')}
               </span>
               <button
                 onClick={() => setMenuOpen(false)}
@@ -407,7 +436,7 @@ export default function Header() {
                 }}
               >
                 <User size={15} strokeWidth={1.75} />
-                Кабинет
+                {t('Кабинет', 'Account')}
               </Link>
               <Link
                 href="/account/wishlist"
@@ -428,7 +457,7 @@ export default function Header() {
                 }}
               >
                 <Heart size={15} strokeWidth={1.75} />
-                Избранное
+                {t('Избранное', 'Wishlist')}
               </Link>
             </div>
           </div>
