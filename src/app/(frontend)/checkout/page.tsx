@@ -31,6 +31,7 @@ export default function CheckoutPage() {
   const [delivery, setDelivery] = useState('cdek')
   const [payment, setPayment] = useState('yukassa')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const [form, setForm] = useState({
     firstName: '', lastName: '', phone: '', email: '',
@@ -47,9 +48,34 @@ export default function CheckoutPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    await new Promise(r => setTimeout(r, 1200))
-    clearCart()
-    router.push('/checkout/success')
+    setError('')
+    try {
+      const res = await fetch('/api/place-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...form,
+          delivery,
+          payment,
+          items: items.map(i => ({
+            slug: i.product.slug,
+            name: i.product.name,
+            size: i.variant.size,
+            color: i.variant.color,
+            quantity: i.quantity,
+          })),
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Не удалось оформить заказ')
+      }
+      clearCart()
+      router.push(`/checkout/success?order=${encodeURIComponent(data.orderNumber)}`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка оформления заказа')
+      setLoading(false)
+    }
   }
 
   if (items.length === 0) {
@@ -300,6 +326,17 @@ export default function CheckoutPage() {
                       fontSize: '1.5rem', fontWeight: 700, color: 'var(--navy)',
                     }}>{formatPrice(grandTotal)}</span>
                   </div>
+
+                  {error && (
+                    <div style={{
+                      background: 'rgba(122,30,46,0.07)', border: '1px solid rgba(122,30,46,0.2)',
+                      borderRadius: 6, padding: '0.7rem 0.875rem', marginBottom: '0.875rem',
+                      fontFamily: 'var(--font-inter), sans-serif',
+                      fontSize: '0.78rem', color: 'var(--burgundy)',
+                    }}>
+                      {error}
+                    </div>
+                  )}
 
                   <button
                     type="submit"

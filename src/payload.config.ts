@@ -55,6 +55,10 @@ export default buildConfig({
     meta: {
       titleSuffix: '— Faith over Fear',
     },
+    components: {
+      // Сводка с реальными метриками над списком коллекций
+      beforeDashboard: ['/components/admin/DashboardStats#default'],
+    },
   },
   collections: [Products, Orders, Reviews, Posts, Media, Users],
   editor: lexicalEditor(),

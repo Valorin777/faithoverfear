@@ -40,7 +40,10 @@ export default function CheckoutSuccessPage() {
   const [orderNum, setOrderNum] = useState('—')
 
   useEffect(() => {
-    setOrderNum('FOF-' + Math.floor(100000 + Math.random() * 900000))
+    // Реальный номер заказа приходит из базы через параметр ?order=
+    const params = new URLSearchParams(window.location.search)
+    const fromUrl = params.get('order')
+    if (fromUrl) setOrderNum(fromUrl)
   }, [])
 
   return (
