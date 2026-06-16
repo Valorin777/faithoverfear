@@ -1,4 +1,5 @@
 import { default as default_c819861bcfbec7c19feb676c4d30e0cc } from '../../../components/admin/YesNoCell'
+import { default as default_24b1f9f9bfe76720c6689d12a8249627 } from '../../../components/admin/OrderContact'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -26,12 +27,12 @@ import { default as default_dfe4008080d895d460898c3a6155e9ba } from '../../../co
 import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../components/admin/Logo'
 import { default as default_0d26e315a4c95810d64d55f6aa3ed399 } from '../../../components/admin/AfterNavLinks'
 import { default as default_af669912e06d01f0ca1b5c3178684fc9 } from '../../../components/admin/dashboard/Dashboard'
-import { default as default_fofOrderContact } from '../../../components/admin/OrderContact'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
   "/components/admin/YesNoCell#default": default_c819861bcfbec7c19feb676c4d30e0cc,
+  "/components/admin/OrderContact#default": default_24b1f9f9bfe76720c6689d12a8249627,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -59,6 +60,5 @@ export const importMap = {
   "/components/admin/Logo#default": default_91a09b539d3c86b0aebf520e7564ce08,
   "/components/admin/AfterNavLinks#default": default_0d26e315a4c95810d64d55f6aa3ed399,
   "/components/admin/dashboard/Dashboard#default": default_af669912e06d01f0ca1b5c3178684fc9,
-  "/components/admin/OrderContact#default": default_fofOrderContact,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

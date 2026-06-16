@@ -41,7 +41,7 @@ const db = isPostgres
       // (чтобы не запускать миграции вручную при первом деплое)
       push: true,
     })
-  : sqliteAdapter({ client: { url: databaseUri } })
+  : sqliteAdapter({ client: { url: databaseUri }, push: true })
 
 // Хранилище фото: на Vercel — облако (Blob), локально — диск.
 const storagePlugins = process.env.BLOB_READ_WRITE_TOKEN
