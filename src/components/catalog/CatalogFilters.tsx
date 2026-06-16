@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { X, SlidersHorizontal } from 'lucide-react'
+import { useLang } from '@/context/LanguageContext'
 
 export interface FilterState {
   categories: string[]
@@ -13,22 +14,22 @@ export interface FilterState {
 }
 
 const CATEGORIES = [
-  { value: 'tshirts', label: 'Футболки' },
-  { value: 'polo', label: 'Поло' },
-  { value: 'sweatshirts', label: 'Свитшоты / Худи' },
-  { value: 'sweaters', label: 'Свитеры' },
-  { value: 'gift-sets', label: 'Подарочные наборы' },
-  { value: 'accessories', label: 'Аксессуары' },
+  { value: 'tshirts', label: 'Футболки', en: 'T-shirts' },
+  { value: 'polo', label: 'Поло', en: 'Polo' },
+  { value: 'sweatshirts', label: 'Свитшоты / Худи', en: 'Sweatshirts / Hoodies' },
+  { value: 'sweaters', label: 'Свитеры', en: 'Sweaters' },
+  { value: 'gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
+  { value: 'accessories', label: 'Аксессуары', en: 'Accessories' },
 ]
 
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 
 const COLORS = [
-  { value: 'white', label: 'Белый', hex: '#ffffff', border: '#e0e0e0' },
-  { value: 'black', label: 'Чёрный', hex: '#111111', border: '#111111' },
-  { value: 'navy', label: 'Тёмно-синий', hex: '#1a2744', border: '#1a2744' },
-  { value: 'burgundy', label: 'Бордовый', hex: '#7a1e2e', border: '#7a1e2e' },
-  { value: 'beige', label: 'Бежевый', hex: '#e8d5a3', border: '#c9a84c' },
+  { value: 'white', label: 'Белый', en: 'White', hex: '#ffffff', border: '#e0e0e0' },
+  { value: 'black', label: 'Чёрный', en: 'Black', hex: '#111111', border: '#111111' },
+  { value: 'navy', label: 'Тёмно-синий', en: 'Navy', hex: '#1a2744', border: '#1a2744' },
+  { value: 'burgundy', label: 'Бордовый', en: 'Burgundy', hex: '#7a1e2e', border: '#7a1e2e' },
+  { value: 'beige', label: 'Бежевый', en: 'Beige', hex: '#e8d5a3', border: '#c9a84c' },
 ]
 
 export const DEFAULT_FILTERS: FilterState = {
@@ -48,6 +49,7 @@ interface Props {
 }
 
 export default function CatalogFilters({ filters, onChange, mobileOnly = false }: Props) {
+  const { t } = useLang()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   function toggle<K extends 'categories' | 'sizes' | 'colors'>(key: K, value: string) {
@@ -83,13 +85,13 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
           padding: 0, fontWeight: 500,
         }}>
           <X size={13} strokeWidth={2} />
-          Сбросить ({activeCount})
+          {t('Сбросить', 'Reset')} ({activeCount})
         </button>
       )}
 
       {/* Тип */}
       <div>
-        <span style={labelStyle}>Тип одежды</span>
+        <span style={labelStyle}>{t('Тип одежды', 'Type')}</span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {CATEGORIES.map(cat => (
             <label key={cat.value} style={{
@@ -123,7 +125,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
               }}
                 onClick={() => toggle('categories', cat.value)}
               >
-                {cat.label}
+                {t(cat.label, cat.en)}
               </span>
             </label>
           ))}
@@ -132,7 +134,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
 
       {/* Размер */}
       <div>
-        <span style={labelStyle}>Размер</span>
+        <span style={labelStyle}>{t('Размер', 'Size')}</span>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           {SIZES.map(size => {
             const active = filters.sizes.includes(size)
@@ -158,7 +160,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
 
       {/* Цвет */}
       <div>
-        <span style={labelStyle}>Цвет</span>
+        <span style={labelStyle}>{t('Цвет', 'Colour')}</span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {COLORS.map(color => {
             const active = filters.colors.includes(color.value)
@@ -182,7 +184,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
                   color: active ? 'var(--navy)' : '#666',
                   fontWeight: active ? 500 : 300,
                 }}>
-                  {color.label}
+                  {t(color.label, color.en)}
                 </span>
               </label>
             )
@@ -192,7 +194,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
 
       {/* Цена */}
       <div>
-        <span style={labelStyle}>Цена, ₽</span>
+        <span style={labelStyle}>{t('Цена, ₽', 'Price, ₽')}</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <input type="number" min={0} max={filters.priceMax}
             value={filters.priceMin}
@@ -242,7 +244,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
           color: filters.inStockOnly ? 'var(--navy)' : '#666',
           fontWeight: filters.inStockOnly ? 500 : 300,
         }}>
-          Только в наличии
+          {t('Только в наличии', 'In stock only')}
         </span>
       </label>
     </div>
@@ -266,7 +268,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
           whiteSpace: 'nowrap',
         }}>
           <SlidersHorizontal size={14} strokeWidth={1.75} />
-          Фильтры{activeCount > 0 ? ` · ${activeCount}` : ''}
+          {t('Фильтры', 'Filters')}{activeCount > 0 ? ` · ${activeCount}` : ''}
         </button>
 
         {/* Bottom sheet */}
@@ -309,7 +311,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
                   fontFamily: 'var(--font-playfair), Georgia, serif',
                   fontSize: '1.05rem', fontWeight: 700, color: 'var(--navy)',
                 }}>
-                  Фильтры
+                  {t('Фильтры', 'Filters')}
                 </span>
                 <button onClick={() => setMobileOpen(false)} style={{
                   background: 'none', border: 'none', cursor: 'pointer',
@@ -342,7 +344,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
                     fontSize: '0.78rem', fontWeight: 500,
                     color: '#888', background: '#fff', cursor: 'pointer',
                   }}>
-                    Сбросить
+                    {t('Сбросить', 'Reset')}
                   </button>
                 )}
                 <button onClick={() => setMobileOpen(false)} style={{
@@ -357,7 +359,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
                   letterSpacing: '0.08em', textTransform: 'uppercase',
                   cursor: 'pointer',
                 }}>
-                  Показать товары
+                  {t('Показать товары', 'Show products')}
                 </button>
               </div>
             </div>
