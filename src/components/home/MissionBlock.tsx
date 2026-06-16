@@ -1,4 +1,9 @@
+'use client'
+
+import { useLang } from '@/context/LanguageContext'
+
 export default function MissionBlock() {
+  const { t } = useLang()
   return (
     <section style={{ background: 'var(--navy)', padding: '6rem 0', position: 'relative', overflow: 'hidden' }}>
       {/* Фоновый акцент */}
@@ -35,8 +40,7 @@ export default function MissionBlock() {
           lineHeight: 1.65,
           marginBottom: '1.25rem',
         }}>
-          «Все средства от продажи одежды направляются
-          на поддержку православных общин и социальных проектов»
+          {t('«Все средства от продажи одежды направляются на поддержку православных общин и социальных проектов»', '“All proceeds from clothing sales go to support Orthodox communities and social projects”')}
         </p>
 
         <p style={{
@@ -49,8 +53,7 @@ export default function MissionBlock() {
           maxWidth: 560,
           margin: '0 auto 3.5rem',
         }}>
-          Покупая нашу одежду, вы участвуете в добром деле.
-          Часть прибыли идёт на помощь нуждающимся и развитие православных инициатив в России.
+          {t('Покупая нашу одежду, вы участвуете в добром деле. Часть прибыли идёт на помощь нуждающимся и развитие православных инициатив в России.', 'By buying our clothing, you take part in a good cause. Part of the profit goes to helping those in need and developing Orthodox initiatives in Russia.')}
         </p>
 
         {/* Статистика */}
@@ -61,9 +64,9 @@ export default function MissionBlock() {
           flexWrap: 'wrap',
         }}>
           {[
-            { title: 'Помощь общинам', desc: 'Поддержка православных приходов' },
-            { title: 'Социальные проекты', desc: 'Помощь нуждающимся семьям' },
-            { title: 'Духовное просвещение', desc: 'Распространение Слова Божия' },
+            { title: t('Помощь общинам', 'Helping communities'), desc: t('Поддержка православных приходов', 'Support for Orthodox parishes') },
+            { title: t('Социальные проекты', 'Social projects'), desc: t('Помощь нуждающимся семьям', 'Help for families in need') },
+            { title: t('Духовное просвещение', 'Spiritual education'), desc: t('Распространение Слова Божия', 'Spreading the Word of God') },
           ].map(({ title, desc }, i) => (
             <div key={title} style={{
               flex: '1 1 200px',

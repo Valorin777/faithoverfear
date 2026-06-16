@@ -1,4 +1,7 @@
+'use client'
+
 import { reviews } from '@/data/products'
+import { useLang } from '@/context/LanguageContext'
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -13,6 +16,7 @@ function Stars({ rating }: { rating: number }) {
 }
 
 export default function ReviewsSection() {
+  const { t } = useLang()
   return (
     <section style={{ background: '#fff', padding: '6rem 0' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.25rem' }}>
@@ -28,7 +32,7 @@ export default function ReviewsSection() {
             marginBottom: '0.75rem',
             fontWeight: 500,
           }}>
-            Отзывы покупателей
+            {t('Отзывы покупателей', 'Customer reviews')}
           </p>
           <h2 style={{
             fontFamily: 'var(--font-playfair), Georgia, serif',
@@ -37,7 +41,7 @@ export default function ReviewsSection() {
             fontWeight: 700,
             marginBottom: '0.5rem',
           }}>
-            Что говорят наши покупатели
+            {t('Что говорят наши покупатели', 'What our customers say')}
           </h2>
           <div style={{ width: 40, height: 2, background: 'var(--gold)', margin: '1rem auto 0', borderRadius: 2 }} />
         </div>
@@ -132,9 +136,9 @@ export default function ReviewsSection() {
           flexWrap: 'wrap',
         }}>
           {[
-            { num: '4.9', label: 'Средняя оценка' },
-            { num: '200+', label: 'Довольных покупателей' },
-            { num: '98%', label: 'Рекомендуют нас' },
+            { num: '4.9', label: t('Средняя оценка', 'Average rating') },
+            { num: '200+', label: t('Довольных покупателей', 'Happy customers') },
+            { num: '98%', label: t('Рекомендуют нас', 'Would recommend us') },
           ].map(({ num, label }) => (
             <div key={label} style={{ textAlign: 'center' }}>
               <p style={{
