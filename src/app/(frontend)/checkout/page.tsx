@@ -39,6 +39,14 @@ export default function CheckoutPage() {
     city: '', address: '', comment: '',
   })
 
+  // Промокод и бонусы
+  const [promoInput, setPromoInput] = useState('')
+  const [promo, setPromo] = useState<{ code: string; discount: number } | null>(null)
+  const [promoError, setPromoError] = useState('')
+  const [promoLoading, setPromoLoading] = useState(false)
+  const [bonusBalance, setBonusBalance] = useState(0)
+  const [useBonus, setUseBonus] = useState(false)
+
   // Оформление заказа доступно только из аккаунта.
   // Если покупатель не вошёл — отправляем на вход с возвратом на /checkout.
   useEffect(() => {
@@ -49,6 +57,7 @@ export default function CheckoutPage() {
         if (!active) return
         if (me.user) {
           setAuthState('authed')
+          setBonusBalance(me.user.bonusBalance || 0)
           // Подставляем данные из аккаунта
           const [firstName, ...rest] = (me.user.name || '').split(' ')
           setForm(f => ({
@@ -68,10 +77,38 @@ export default function CheckoutPage() {
 
   const deliveryPrice = total >= FREE_DELIVERY_FROM ? 0
     : DELIVERY_OPTIONS.find(d => d.id === delivery)?.price ?? 0
-  const grandTotal = total + deliveryPrice
+  const promoDiscount = promo?.discount ?? 0
+  const afterPromo = Math.max(0, total - promoDiscount) + deliveryPrice
+  const bonusToUse = useBonus ? Math.min(bonusBalance, afterPromo) : 0
+  const grandTotal = Math.max(0, afterPromo - bonusToUse)
 
   const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [field]: e.target.value }))
+
+  async function applyPromo() {
+    if (!promoInput.trim()) return
+    setPromoLoading(true)
+    setPromoError('')
+    try {
+      const res = await fetch('/api/validate-promo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: promoInput.trim(), orderTotal: total }),
+      })
+      const data = await res.json()
+      if (data.valid) {
+        setPromo({ code: data.code, discount: data.discount })
+        setPromoError('')
+      } else {
+        setPromo(null)
+        setPromoError(data.error || 'Промокод недействителен')
+      }
+    } catch {
+      setPromoError('Ошибка проверки промокода')
+    } finally {
+      setPromoLoading(false)
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -85,6 +122,8 @@ export default function CheckoutPage() {
           ...form,
           delivery,
           payment,
+          promoCode: promo?.code,
+          useBonus,
           items: items.map(i => ({
             slug: i.product.slug,
             name: i.product.name,
@@ -350,9 +389,54 @@ export default function CheckoutPage() {
                     ))}
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingTop: '1rem', borderTop: '1px solid #f0f0f0' }}>
+                  {/* Промокод */}
+                  <div style={{ paddingTop: '1rem', borderTop: '1px solid #f0f0f0' }}>
+                    <div style={{ display: 'flex', gap: '0.4rem' }}>
+                      <input
+                        value={promoInput}
+                        onChange={e => setPromoInput(e.target.value.toUpperCase())}
+                        placeholder="Промокод"
+                        disabled={!!promo}
+                        style={{
+                          flex: 1, boxSizing: 'border-box', border: '1.5px solid #e8e8e8',
+                          borderRadius: 6, padding: '0.6rem 0.8rem',
+                          fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.82rem',
+                          textTransform: 'uppercase', outline: 'none',
+                          background: promo ? '#f6f6f6' : '#fff',
+                        }}
+                      />
+                      {promo ? (
+                        <button type="button" onClick={() => { setPromo(null); setPromoInput(''); setPromoError('') }}
+                          style={{ background: '#eee', color: '#888', border: 'none', borderRadius: 6, padding: '0 1rem', cursor: 'pointer', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem', fontWeight: 600 }}>
+                          Убрать
+                        </button>
+                      ) : (
+                        <button type="button" onClick={applyPromo} disabled={promoLoading}
+                          style={{ background: 'var(--navy)', color: '#fff', border: 'none', borderRadius: 6, padding: '0 1rem', cursor: 'pointer', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                          {promoLoading ? '…' : 'Применить'}
+                        </button>
+                      )}
+                    </div>
+                    {promoError && <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem', color: 'var(--burgundy)', marginTop: '0.4rem' }}>{promoError}</p>}
+                    {promo && <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem', color: '#22863a', marginTop: '0.4rem' }}>Промокод {promo.code} применён</p>}
+                  </div>
+
+                  {/* Бонусы */}
+                  {bonusBalance > 0 && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.875rem', cursor: 'pointer' }}>
+                      <input type="checkbox" checked={useBonus} onChange={e => setUseBonus(e.target.checked)} style={{ accentColor: 'var(--burgundy)', width: 16, height: 16 }} />
+                      <span style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.82rem', color: 'var(--navy)' }}>
+                        Списать бонусы <strong>(доступно {formatPrice(bonusBalance)})</strong>
+                      </span>
+                    </label>
+                  )}
+
+                  {/* Суммы */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingTop: '1rem', marginTop: '1rem', borderTop: '1px solid #f0f0f0' }}>
                     <SummaryRow label="Товары" value={formatPrice(total)} />
+                    {promoDiscount > 0 && <SummaryRow label={`Скидка${promo ? ` (${promo.code})` : ''}`} value={`−${formatPrice(promoDiscount)}`} valueColor="#22863a" />}
                     <SummaryRow label="Доставка" value={deliveryPrice === 0 ? 'Бесплатно' : formatPrice(deliveryPrice)} valueColor={deliveryPrice === 0 ? '#22863a' : undefined} />
+                    {bonusToUse > 0 && <SummaryRow label="Бонусами" value={`−${formatPrice(bonusToUse)}`} valueColor="#22863a" />}
                   </div>
 
                   <div style={{

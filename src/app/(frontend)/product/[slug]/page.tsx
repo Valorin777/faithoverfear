@@ -52,7 +52,7 @@ export default async function ProductPage({ params }: PageProps) {
 
   return (
     <PageLayout>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '1.5rem 1.25rem 4rem' }}>
 

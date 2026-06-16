@@ -1,5 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { checkPromo } from '../validate-promo/route'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,6 +29,8 @@ interface OrderPayload {
   delivery: string
   payment: string
   items: IncomingItem[]
+  promoCode?: string
+  useBonus?: boolean
 }
 
 const DELIVERY_PRICES: Record<string, number> = {
@@ -111,7 +114,31 @@ export async function POST(request: Request) {
 
   const deliveryPrice =
     goodsTotal >= FREE_DELIVERY_FROM ? 0 : DELIVERY_PRICES[body.delivery] ?? 0
-  const total = goodsTotal + deliveryPrice
+
+  // Промокод — скидка на товары (пересчёт на сервере, клиент не может подделать)
+  let promoDiscount = 0
+  let appliedPromo: string | undefined
+  if (body.promoCode) {
+    const promoRes = await checkPromo(body.promoCode, goodsTotal)
+    if (promoRes.valid) {
+      promoDiscount = promoRes.discount
+      appliedPromo = promoRes.code
+    }
+  }
+
+  const afterPromo = Math.max(0, goodsTotal - promoDiscount) + deliveryPrice
+
+  // Списание бонусов с баланса покупателя
+  let bonusUsed = 0
+  if (body.useBonus && customer) {
+    const fresh = await payload
+      .findByID({ collection: 'customers', id: customer.id, depth: 0 })
+      .catch(() => null)
+    const balance = (fresh as { bonusBalance?: number } | null)?.bonusBalance || 0
+    bonusUsed = Math.min(balance, afterPromo)
+  }
+
+  const total = Math.max(0, afterPromo - bonusUsed)
   const orderNumber = genOrderNumber()
 
   try {
@@ -127,7 +154,7 @@ export async function POST(request: Request) {
         city: body.city,
         address: body.address,
         paymentMethod: body.payment as 'yukassa' | 'sbp' | 'tinkoff' | 'sber' | 'crypto',
-        items: { goods: itemsSnapshot, goodsTotal, deliveryPrice },
+        items: { goods: itemsSnapshot, goodsTotal, deliveryPrice, promoCode: appliedPromo, promoDiscount, bonusUsed },
         total,
         comment: body.comment,
         customer: customer?.id,
@@ -138,10 +165,38 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Не удалось создать заказ' }, { status: 500 })
   }
 
-  // Реферальный бонус: если покупатель пришёл по приглашению, заказ от 3000 ₽
-  // и бонус ещё не начислялся — начисляем пригласившему 10% от суммы заказа.
+  // Учёт использования промокода
+  if (appliedPromo && promoDiscount > 0) {
+    try {
+      const pr = await payload.find({ collection: 'promocodes', where: { code: { equals: appliedPromo } }, limit: 1, depth: 0 })
+      const promo = pr.docs[0] as { id: string | number; usedCount?: number } | undefined
+      if (promo) {
+        await payload.update({
+          collection: 'promocodes', id: promo.id,
+          data: { usedCount: (promo.usedCount || 0) + 1 },
+          overrideAccess: true, overrideLock: true,
+        })
+      }
+    } catch (e) { console.error('Promo usedCount error:', e) }
+  }
+
+  // Списание бонусов с баланса
+  if (bonusUsed > 0 && customer) {
+    try {
+      const fresh = await payload.findByID({ collection: 'customers', id: customer.id, depth: 0 })
+      const balance = (fresh as { bonusBalance?: number }).bonusBalance || 0
+      await payload.update({
+        collection: 'customers', id: customer.id,
+        data: { bonusBalance: Math.max(0, balance - bonusUsed) },
+        overrideAccess: true, overrideLock: true,
+      })
+    } catch (e) { console.error('Bonus spend error:', e) }
+  }
+
+  // Реферальный бонус: покупатель пришёл по приглашению, товаров на 3000 ₽+,
+  // бонус ещё не начислялся — начисляем пригласившему 10% от стоимости товаров.
   let referralBonus = 0
-  if (customer && customer.referredBy && !customer.referralRewarded && total >= 3000) {
+  if (customer && customer.referredBy && !customer.referralRewarded && goodsTotal >= 3000) {
     const rb: unknown = customer.referredBy
     const referrerId = (
       typeof rb === 'object' && rb !== null ? (rb as { id: string | number }).id : rb
@@ -153,7 +208,7 @@ export async function POST(request: Request) {
         depth: 0,
       })
       if (referrer) {
-        referralBonus = Math.round(total * 0.1)
+        referralBonus = Math.round(goodsTotal * 0.1)
         await payload.update({
           collection: 'customers',
           id: referrerId,
@@ -174,5 +229,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return Response.json({ success: true, orderNumber, total, referralBonus })
+  return Response.json({ success: true, orderNumber, total, referralBonus, promoDiscount, bonusUsed })
 }
