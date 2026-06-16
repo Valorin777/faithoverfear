@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import WishlistButton from './WishlistButton'
+import { useLang } from '@/context/LanguageContext'
 
 export default function ProductCard({ product }: { product: Product }) {
+  const { t } = useLang()
   const hasDiscount = product.salePrice && product.salePrice < product.price
   const sizes = [...new Set(product.variants.map(v => v.size))]
 
@@ -49,7 +51,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 padding: '2px 7px', borderRadius: 2,
                 fontFamily: 'var(--font-inter), sans-serif',
                 letterSpacing: '0.08em', textTransform: 'uppercase',
-              }}>Новинка</span>
+              }}>{t('Новинка', 'New')}</span>
             )}
             {hasDiscount && (
               <span style={{
@@ -58,7 +60,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 padding: '2px 7px', borderRadius: 2,
                 fontFamily: 'var(--font-inter), sans-serif',
                 letterSpacing: '0.08em', textTransform: 'uppercase',
-              }}>Скидка</span>
+              }}>{t('Скидка', 'Sale')}</span>
             )}
             {product.isBestseller && !product.isNew && (
               <span style={{
@@ -67,7 +69,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 padding: '2px 7px', borderRadius: 2,
                 fontFamily: 'var(--font-inter), sans-serif',
                 letterSpacing: '0.08em', textTransform: 'uppercase',
-              }}>Хит</span>
+              }}>{t('Хит', 'Top')}</span>
             )}
           </div>
 
@@ -160,7 +162,7 @@ export default function ProductCard({ product }: { product: Product }) {
           textDecoration: 'none',
           marginTop: '0.25rem',
         }}>
-          Выбрать
+          {t('Выбрать', 'View')}
         </Link>
       </div>
     </div>
