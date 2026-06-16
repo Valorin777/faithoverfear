@@ -1,8 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 import ProductCard from '@/components/ui/ProductCard'
 import { products } from '@/data/products'
+import { useLang } from '@/context/LanguageContext'
 
 export default function NewArrivalsSection() {
+  const { t } = useLang()
   const newProducts = products.filter(p => p.isNew).slice(0, 4)
 
   return (
@@ -20,7 +24,7 @@ export default function NewArrivalsSection() {
             marginBottom: '0.75rem',
             fontWeight: 500,
           }}>
-            Только что появились
+            {t('Только что появились', 'Just arrived')}
           </p>
           <h2 style={{
             fontFamily: 'var(--font-playfair), Georgia, serif',
@@ -29,7 +33,7 @@ export default function NewArrivalsSection() {
             fontWeight: 700,
             marginBottom: '0.5rem',
           }}>
-            Новинки
+            {t('Новинки', 'New In')}
           </h2>
           <p style={{
             fontFamily: 'var(--font-inter), sans-serif',
@@ -37,7 +41,7 @@ export default function NewArrivalsSection() {
             color: '#999',
             fontWeight: 300,
           }}>
-            Свежие дизайны, только что добавленные в коллекцию
+            {t('Свежие дизайны, только что добавленные в коллекцию', 'Fresh designs just added to the collection')}
           </p>
           <div style={{ width: 40, height: 2, background: 'var(--gold)', margin: '1rem auto 0', borderRadius: 2 }} />
         </div>
@@ -68,7 +72,7 @@ export default function NewArrivalsSection() {
             textTransform: 'uppercase',
             textDecoration: 'none',
           }}>
-            Все новинки
+            {t('Все новинки', 'All new arrivals')}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
         </div>

@@ -1,8 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 import ProductCard from '@/components/ui/ProductCard'
 import { products } from '@/data/products'
+import { useLang } from '@/context/LanguageContext'
 
 export default function BestsellersSection() {
+  const { t } = useLang()
   const bestsellers = products.filter(p => p.isBestseller).slice(0, 4)
 
   return (
@@ -20,7 +24,7 @@ export default function BestsellersSection() {
             marginBottom: '0.75rem',
             fontWeight: 500,
           }}>
-            Популярное
+            {t('Популярное', 'Popular')}
           </p>
           <h2 style={{
             fontFamily: 'var(--font-playfair), Georgia, serif',
@@ -29,7 +33,7 @@ export default function BestsellersSection() {
             fontWeight: 700,
             marginBottom: '0.5rem',
           }}>
-            Наши хиты
+            {t('Наши хиты', 'Bestsellers')}
           </h2>
           <p style={{
             fontFamily: 'var(--font-inter), sans-serif',
@@ -37,7 +41,7 @@ export default function BestsellersSection() {
             color: '#999',
             fontWeight: 300,
           }}>
-            Самые любимые модели наших покупателей
+            {t('Самые любимые модели наших покупателей', 'Our customers’ favourite pieces')}
           </p>
           <div style={{ width: 40, height: 2, background: 'var(--gold)', margin: '1rem auto 0', borderRadius: 2 }} />
         </div>
@@ -69,7 +73,7 @@ export default function BestsellersSection() {
             textDecoration: 'none',
             transition: 'background 0.2s, color 0.2s',
           }}>
-            Смотреть весь каталог
+            {t('Смотреть весь каталог', 'View full catalog')}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
         </div>
