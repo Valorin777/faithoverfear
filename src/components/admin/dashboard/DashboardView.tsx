@@ -7,6 +7,7 @@ import RevenueChart from './RevenueChart'
 import StatusDonut from './StatusDonut'
 import ActivityFeed from './ActivityFeed'
 import LowStockList from './LowStockList'
+import TopReferrers from './TopReferrers'
 
 interface Props {
   data: DashboardData
@@ -130,6 +131,10 @@ export default function DashboardView({ data, userName, dateLabel }: Props) {
       <section className="fof-row fof-row--1-1">
         <ActivityFeed items={data.recentActivity} empty={data.flags.activityEmpty} />
         <LowStockList rows={data.lowStock} empty={data.flags.lowStockEmpty} />
+      </section>
+
+      <section className="fof-row">
+        <TopReferrers rows={data.topReferrers} empty={data.flags.referrersEmpty} />
       </section>
     </div>
   )

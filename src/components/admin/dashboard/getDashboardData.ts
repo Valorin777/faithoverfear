@@ -54,12 +54,14 @@ export interface DashboardData {
     createdAt: string
   }[]
   lowStock: { id: string; name: string; category: string; totalStock: number; variantCount: number }[]
+  topReferrers: { id: string; name: string; count: number; tier: string }[]
   flags: {
     revenueEmpty: boolean
     ordersEmpty: boolean
     donutEmpty: boolean
     activityEmpty: boolean
     lowStockEmpty: boolean
+    referrersEmpty: boolean
   }
 }
 
@@ -77,7 +79,7 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
   const DAY_MS = 86_400_000
   const series0 = new Date(todayStart.getTime() - 89 * DAY_MS) // 90 дней включая сегодня
 
-  const [allOrdersRes, recentRes, productsRes, reviewsRes, customersTotal, customersNew, customersPrev] =
+  const [allOrdersRes, recentRes, productsRes, reviewsRes, customersTotal, customersNew, customersPrev, topRefsRes] =
     await Promise.all([
       payload.find({ collection: 'orders', limit: 5000, depth: 0, sort: '-createdAt', pagination: false }),
       payload.find({ collection: 'orders', limit: 8, depth: 1, sort: '-createdAt' }),
@@ -102,6 +104,13 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
             { createdAt: { less_than: thisMonthStart.toISOString() } },
           ],
         },
+      }),
+      payload.find({
+        collection: 'customers',
+        where: { referralCount: { greater_than: 0 } },
+        sort: '-referralCount',
+        limit: 6,
+        depth: 0,
       }),
     ])
 
@@ -208,6 +217,16 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
   const avgRating = rated.length ? rated.reduce((s, r) => s + r.rating, 0) / rated.length : null
   const reviewsNewThisMonth = reviews.filter((r) => new Date(r.createdAt).getTime() >= thisMonthStart.getTime()).length
 
+  const topReferrers = (topRefsRes.docs as any[]).map((c) => {
+    const count = c.referralCount || 0
+    return {
+      id: String(c.id),
+      name: c.name || c.email || 'Клиент',
+      count,
+      tier: count >= 30 ? 'Золото' : count >= 10 ? 'Серебро' : '—',
+    }
+  })
+
   const avgThis = ordThis ? revThis / ordThis : 0
   const avgPrev = ordPrev ? revPrev / ordPrev : 0
 
@@ -230,12 +249,14 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
     statusDonut,
     recentActivity,
     lowStock,
+    topReferrers,
     flags: {
       revenueEmpty: revThis === 0 && revPrev === 0,
       ordersEmpty: totalOrders === 0,
       donutEmpty: statusDonut.length === 0,
       activityEmpty: recentActivity.length === 0,
       lowStockEmpty: stockRows.length === 0,
+      referrersEmpty: topReferrers.length === 0,
     },
   }
 }
