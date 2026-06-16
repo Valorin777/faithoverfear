@@ -24,8 +24,8 @@ export default function Logo() {
       <div style={{ textAlign: 'center' }}>
         <div
           style={{
-            fontFamily: 'Georgia, "Times New Roman", serif',
-            fontSize: '1.4rem',
+            fontFamily: 'var(--font-display), Georgia, serif',
+            fontSize: '1.5rem',
             fontWeight: 700,
             color: 'var(--theme-text)',
             lineHeight: 1.1,

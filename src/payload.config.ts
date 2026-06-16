@@ -60,8 +60,12 @@ export default buildConfig({
       titleSuffix: '— Faith over Fear',
     },
     components: {
-      // Сводка с реальными метриками над списком коллекций
-      beforeDashboard: ['/components/admin/DashboardStats#default'],
+      // Полностью кастомный дашборд (заменяет домашнюю страницу /admin)
+      views: {
+        dashboard: { Component: '/components/admin/dashboard/Dashboard#default' },
+      },
+      // Быстрые ссылки в навигации
+      afterNavLinks: ['/components/admin/AfterNavLinks#default'],
       // Фирменная графика вместо логотипа Payload
       graphics: {
         Logo: '/components/admin/Logo#default',
