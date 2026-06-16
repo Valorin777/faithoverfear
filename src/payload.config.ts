@@ -15,6 +15,7 @@ import { Reviews } from './collections/Reviews'
 import { Posts } from './collections/Posts'
 import { Promocodes } from './collections/Promocodes'
 import { Returns } from './collections/Returns'
+import { PaymentSystems } from './collections/PaymentSystems'
 import { Customers } from './collections/Customers'
 import { SiteSettings } from './globals/SiteSettings'
 
@@ -74,7 +75,7 @@ export default buildConfig({
     },
   },
   // Порядок задаёт группировку в навигации: Магазин · Аудитория · Контент · Маркетинг · Система
-  collections: [Products, Orders, Returns, Customers, Reviews, Posts, Media, Promocodes, Users],
+  collections: [Products, Orders, Returns, PaymentSystems, Customers, Reviews, Posts, Media, Promocodes, Users],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

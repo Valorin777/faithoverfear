@@ -1,6 +1,6 @@
 'use client'
 
-import { Wallet, ShoppingBag, Users, Receipt, Package, Star } from 'lucide-react'
+import { Wallet, ShoppingBag, Users, Receipt, Package, Star, Coins } from 'lucide-react'
 import type { DashboardData } from './getDashboardData'
 import KpiCard from './KpiCard'
 import RevenueChart from './RevenueChart'
@@ -41,6 +41,16 @@ export default function DashboardView({ data, userName, dateLabel }: Props) {
 
       <section className="fof-kpis">
         <KpiCard
+          label="Заработок сегодня"
+          value={k.revenueToday.value}
+          format="rub"
+          subnote={k.revenueToday.subnote}
+          icon={<Coins size={17} strokeWidth={1.9} />}
+          accent="#2FAE6E"
+          sparkId="kpi-today"
+          index={0}
+        />
+        <KpiCard
           label="Выручка за месяц"
           value={k.revenue.value}
           format="rub"
@@ -50,7 +60,7 @@ export default function DashboardView({ data, userName, dateLabel }: Props) {
           accent="#C9A84C"
           spark={rev30}
           sparkId="kpi-rev"
-          index={0}
+          index={1}
         />
         <KpiCard
           label="Заказы за месяц"

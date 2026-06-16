@@ -32,6 +32,7 @@ export interface KpiDelta {
 
 export interface DashboardData {
   kpis: {
+    revenueToday: { value: number; subnote: string }
     revenue: { value: number; deltaPct: number | null; subnote: string }
     orders: { value: number; deltaPct: number | null; subnote: string }
     customers: { value: number; newThisMonth: number; deltaPct: number | null }
@@ -112,11 +113,17 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
   let revThis = 0,
     revPrev = 0,
     ordThis = 0,
-    ordPrev = 0
+    ordPrev = 0,
+    revToday = 0,
+    ordToday = 0
   for (const o of orders) {
     if (!isPaid(o.status)) continue
     const t = new Date(o.createdAt).getTime()
     const total = typeof o.total === 'number' ? o.total : 0
+    if (t >= todayStart.getTime()) {
+      revToday += total
+      ordToday++
+    }
     if (t >= thisMonthStart.getTime()) {
       revThis += total
       ordThis++
@@ -206,6 +213,7 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
 
   return {
     kpis: {
+      revenueToday: { value: revToday, subnote: ordToday ? `${ordToday} заказ(ов) сегодня` : 'Пока нет за сегодня' },
       revenue: { value: revThis, deltaPct: pctDelta(revThis, revPrev), subnote: 'За месяц · по дате заказа' },
       orders: { value: ordThis, deltaPct: pctDelta(ordThis, ordPrev), subnote: 'Оплаченных за месяц' },
       customers: {

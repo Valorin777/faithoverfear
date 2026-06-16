@@ -45,24 +45,69 @@ export const Promocodes: CollectionConfig = {
       fields: [
         {
           name: 'discountType',
-          label: 'Тип скидки',
+          label: 'Тип',
           type: 'select',
           required: true,
           defaultValue: 'percent',
           options: [
             { label: 'Процент (%)', value: 'percent' },
-            { label: 'Фиксированная (₽)', value: 'fixed' },
+            { label: 'Фиксированная скидка (₽)', value: 'fixed' },
+            { label: 'Подарок', value: 'gift' },
+            { label: 'Бесплатная доставка', value: 'freeShipping' },
           ],
         },
         {
           name: 'discountValue',
           label: 'Размер скидки',
           type: 'number',
-          required: true,
           min: 0,
-          admin: { description: 'Для процента — например 10; для фикс. — например 500' },
+          admin: {
+            description: 'Для процента — например 10; для фикс. — например 500',
+            condition: (data) => data.discountType === 'percent' || data.discountType === 'fixed',
+          },
         },
       ],
+    },
+    {
+      name: 'giftDescription',
+      label: 'Что за подарок',
+      type: 'text',
+      admin: {
+        description: 'Напр.: бесплатный стикерпак к заказу',
+        condition: (data) => data.discountType === 'gift',
+      },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'scope',
+          label: 'Кому',
+          type: 'select',
+          defaultValue: 'all',
+          options: [
+            { label: 'Всем', value: 'all' },
+            { label: 'Конкретному клиенту', value: 'individual' },
+            { label: 'Компании / группе', value: 'company' },
+          ],
+        },
+        {
+          name: 'companyName',
+          label: 'Компания / группа',
+          type: 'text',
+          admin: { condition: (data) => data.scope === 'company' },
+        },
+      ],
+    },
+    {
+      name: 'assignedCustomer',
+      label: 'Клиент',
+      type: 'relationship',
+      relationTo: 'customers',
+      admin: {
+        description: 'Промокод сработает только у этого клиента',
+        condition: (data) => data.scope === 'individual',
+      },
     },
     {
       type: 'row',

@@ -78,11 +78,30 @@ export const Customers: CollectionConfig = {
       admin: { readOnly: true, description: 'Защита от повторного начисления' },
     },
     {
-      name: 'bonusBalance',
-      label: 'Бонусный баланс, ₽',
-      type: 'number',
-      defaultValue: 0,
-      admin: { readOnly: true },
+      type: 'row',
+      fields: [
+        {
+          name: 'bonusBalance',
+          label: 'Бонусный баланс, ₽',
+          type: 'number',
+          defaultValue: 0,
+          admin: { readOnly: true },
+        },
+        {
+          name: 'referralCount',
+          label: 'Приглашено друзей',
+          type: 'number',
+          defaultValue: 0,
+          admin: { readOnly: true, description: 'Сколько человек зарегистрировалось по ссылке' },
+        },
+      ],
+    },
+    {
+      name: 'referralTier',
+      label: 'Статус реферала',
+      type: 'text',
+      virtual: true,
+      admin: { readOnly: true, description: '10 друзей — Серебро, 30 — Золото' },
     },
   ],
   hooks: {
@@ -92,6 +111,33 @@ export const Customers: CollectionConfig = {
           data.referralCode = generateRefCode()
         }
         return data
+      },
+    ],
+    // Засчитываем приглашение пригласившему
+    afterChange: [
+      async ({ doc, operation, req }) => {
+        if (operation === 'create' && doc.referredBy) {
+          const refId = typeof doc.referredBy === 'object' ? doc.referredBy.id : doc.referredBy
+          try {
+            const ref = await req.payload.findByID({ collection: 'customers', id: refId, depth: 0 })
+            await req.payload.update({
+              collection: 'customers',
+              id: refId,
+              data: { referralCount: (ref.referralCount || 0) + 1 },
+              overrideAccess: true,
+            })
+          } catch {
+            /* пригласивший не найден — пропускаем */
+          }
+        }
+      },
+    ],
+    // Вычисляем статус по числу приглашённых
+    afterRead: [
+      ({ doc }) => {
+        const c = doc.referralCount || 0
+        doc.referralTier = c >= 30 ? 'Золото' : c >= 10 ? 'Серебро' : '—'
+        return doc
       },
     ],
   },
