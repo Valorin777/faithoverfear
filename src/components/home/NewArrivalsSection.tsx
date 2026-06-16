@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import ProductCard from '@/components/ui/ProductCard'
-import { products } from '@/data/products'
+import { Product } from '@/types'
 import { useLang } from '@/context/LanguageContext'
 
-export default function NewArrivalsSection() {
+export default function NewArrivalsSection({ products }: { products: Product[] }) {
   const { t } = useLang()
   const newProducts = products.filter(p => p.isNew).slice(0, 4)
 

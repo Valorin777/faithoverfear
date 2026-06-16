@@ -101,7 +101,7 @@ export default function ProductCard({ product }: { product: Product }) {
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
           }}>
-            {product.name}
+            {t(product.name, product.nameEn)}
           </h3>
         </Link>
 

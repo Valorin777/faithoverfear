@@ -2,8 +2,11 @@ export interface Product {
   id: string
   slug: string
   name: string
+  nameEn?: string
   description: string
+  descriptionEn?: string
   spiritualMeaning: string
+  spiritualMeaningEn?: string
   price: number
   salePrice?: number
   category: ProductCategory
@@ -20,6 +23,7 @@ export interface ProductVariant {
   id: string
   size: 'S' | 'M' | 'L' | 'XL' | 'XXL'
   color: string
+  colorEn?: string
   colorHex: string
   stock: number
   sku: string
@@ -76,6 +80,7 @@ export interface Review {
   author: string
   rating: number
   text: string
+  textEn?: string
   photo?: string
   productId?: string
   createdAt: string
@@ -85,7 +90,9 @@ export interface BlogPost {
   id: string
   slug: string
   title: string
+  titleEn?: string
   excerpt: string
+  excerptEn?: string
   content: string
   image?: string
   createdAt: string

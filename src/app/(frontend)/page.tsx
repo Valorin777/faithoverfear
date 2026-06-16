@@ -7,18 +7,20 @@ import CategoriesSection from '@/components/home/CategoriesSection'
 import ReviewsSection from '@/components/home/ReviewsSection'
 import AboutSection from '@/components/home/AboutSection'
 import MissionBlock from '@/components/home/MissionBlock'
+import { getProducts, getReviews } from '@/lib/cms'
 
-// Главная пересобирается раз в минуту — правки баннера из админки видны без деплоя
+// Главная пересобирается раз в минуту — правки из админки видны без деплоя
 export const revalidate = 60
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [products, reviews] = await Promise.all([getProducts(), getReviews()])
   return (
     <PageLayout>
       <HeroBanner />
-      <Reveal><BestsellersSection /></Reveal>
+      <Reveal><BestsellersSection products={products} /></Reveal>
       <Reveal><CategoriesSection /></Reveal>
-      <Reveal><NewArrivalsSection /></Reveal>
-      <Reveal><ReviewsSection /></Reveal>
+      <Reveal><NewArrivalsSection products={products} /></Reveal>
+      <Reveal><ReviewsSection reviews={reviews} /></Reveal>
       <Reveal><AboutSection /></Reveal>
       <Reveal><MissionBlock /></Reveal>
     </PageLayout>

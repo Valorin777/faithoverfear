@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import ProductCard from '@/components/ui/ProductCard'
-import { products } from '@/data/products'
+import { Product } from '@/types'
 import { useLang } from '@/context/LanguageContext'
 
-export default function BestsellersSection() {
+export default function BestsellersSection({ products }: { products: Product[] }) {
   const { t } = useLang()
   const bestsellers = products.filter(p => p.isBestseller).slice(0, 4)
 

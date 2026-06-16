@@ -2,8 +2,10 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
 import CatalogGrid from '@/components/catalog/CatalogGrid'
-import { products } from '@/data/products'
+import { getProducts } from '@/lib/cms'
 import { CATEGORY_LABELS, CATEGORY_LABELS_EN, ProductCategory } from '@/types'
+
+export const revalidate = 60
 
 const VALID_CATEGORIES = ['tshirts', 'polo', 'sweatshirts', 'sweaters', 'gift-sets', 'accessories']
 
@@ -35,6 +37,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const cat = category as ProductCategory
   const label = CATEGORY_LABELS[cat]
   const labelEn = CATEGORY_LABELS_EN[cat]
+  const products = await getProducts()
 
   return (
     <PageLayout>

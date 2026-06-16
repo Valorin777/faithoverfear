@@ -1,6 +1,6 @@
 'use client'
 
-import { reviews } from '@/data/products'
+import { Review } from '@/types'
 import { useLang } from '@/context/LanguageContext'
 
 function Stars({ rating }: { rating: number }) {
@@ -15,8 +15,8 @@ function Stars({ rating }: { rating: number }) {
   )
 }
 
-export default function ReviewsSection() {
-  const { t } = useLang()
+export default function ReviewsSection({ reviews }: { reviews: Review[] }) {
+  const { t, lang } = useLang()
   return (
     <section style={{ background: '#fff', padding: '6rem 0' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.25rem' }}>
@@ -85,7 +85,7 @@ export default function ReviewsSection() {
                 fontWeight: 300,
                 flex: 1,
               }}>
-                {r.text}
+                {t(r.text, r.textEn)}
               </p>
 
               {/* Подпись */}
@@ -114,7 +114,7 @@ export default function ReviewsSection() {
                       fontFamily: 'var(--font-inter), sans-serif',
                       fontSize: '0.68rem', color: '#bbb', marginTop: 2,
                     }}>
-                      {new Date(r.createdAt).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
+                      {new Date(r.createdAt).toLocaleDateString(lang === 'en' ? 'en-US' : 'ru-RU', { month: 'long', year: 'numeric' })}
                     </p>
                   </div>
                 </div>

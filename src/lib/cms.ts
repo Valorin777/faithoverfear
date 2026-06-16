@@ -1,0 +1,151 @@
+import 'server-only'
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { Product, ProductVariant, Review, BlogPost, ProductCategory } from '@/types'
+import { products as staticProducts, reviews as staticReviews } from '@/data/products'
+import { blogPosts as staticPosts } from '@/data/blog'
+
+const PLACEHOLDER_IMG = '/images/placeholder-product.jpg'
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+function mediaUrl(m: any): string | null {
+  if (!m) return null
+  if (typeof m === 'string') return m
+  if (typeof m === 'object' && typeof m.url === 'string') return m.url
+  return null
+}
+
+function mapProduct(doc: any): Product {
+  const images = Array.isArray(doc.images)
+    ? doc.images.map(mediaUrl).filter((u: string | null): u is string => !!u)
+    : []
+  const variants: ProductVariant[] = Array.isArray(doc.variants)
+    ? doc.variants.map((v: any, i: number) => ({
+        id: String(v.id ?? `${doc.id}-v${i}`),
+        size: v.size,
+        color: v.color ?? '',
+        colorEn: v.colorEn || undefined,
+        colorHex: v.colorHex ?? '#cccccc',
+        stock: typeof v.stock === 'number' ? v.stock : 0,
+        sku: v.sku ?? '',
+      }))
+    : []
+  return {
+    id: String(doc.id),
+    slug: doc.slug,
+    name: doc.name,
+    nameEn: doc.nameEn || undefined,
+    description: doc.description ?? '',
+    descriptionEn: doc.descriptionEn || undefined,
+    spiritualMeaning: doc.spiritualMeaning ?? '',
+    spiritualMeaningEn: doc.spiritualMeaningEn || undefined,
+    price: typeof doc.price === 'number' ? doc.price : 0,
+    salePrice: typeof doc.salePrice === 'number' ? doc.salePrice : undefined,
+    category: doc.category as ProductCategory,
+    images: images.length ? images : [PLACEHOLDER_IMG],
+    variants,
+    tags: Array.isArray(doc.tags) ? doc.tags.filter((t: any) => typeof t === 'string') : [],
+    isNew: !!doc.isNew,
+    isBestseller: !!doc.isBestseller,
+    wildberriesUrl: doc.wildberriesUrl || undefined,
+  }
+}
+
+function mapReview(doc: any): Review {
+  const productRel = doc.product
+  const productId =
+    productRel == null ? undefined : String(typeof productRel === 'object' ? productRel.id : productRel)
+  return {
+    id: String(doc.id),
+    author: doc.author ?? '',
+    rating: typeof doc.rating === 'number' ? doc.rating : 5,
+    text: doc.text ?? '',
+    textEn: doc.textEn || undefined,
+    photo: mediaUrl(doc.photo) || undefined,
+    productId,
+    createdAt: doc.createdAt ?? new Date(0).toISOString(),
+  }
+}
+
+function mapPost(doc: any): BlogPost {
+  return {
+    id: String(doc.id),
+    slug: doc.slug,
+    title: doc.title,
+    titleEn: doc.titleEn || undefined,
+    excerpt: doc.excerpt ?? '',
+    excerptEn: doc.excerptEn || undefined,
+    content: '',
+    image: mediaUrl(doc.image) || undefined,
+    createdAt: doc.createdAt ?? new Date(0).toISOString(),
+  }
+}
+
+/** Товары: из админки (Payload), с откатом на статические данные, если БД пуста/недоступна. */
+export async function getProducts(): Promise<Product[]> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({ collection: 'products', depth: 1, limit: 200, sort: 'createdAt' })
+    if (res.docs.length) return res.docs.map(mapProduct)
+  } catch {
+    // БД недоступна на этапе сборки/деплоя — используем статические данные
+  }
+  return staticProducts
+}
+
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({ collection: 'products', where: { slug: { equals: slug } }, depth: 1, limit: 1 })
+    if (res.docs.length) return mapProduct(res.docs[0])
+  } catch {
+    // откат ниже
+  }
+  return staticProducts.find(p => p.slug === slug) ?? null
+}
+
+export async function getReviews(): Promise<Review[]> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({
+      collection: 'reviews',
+      where: { published: { equals: true } },
+      depth: 1,
+      limit: 50,
+      sort: '-createdAt',
+    })
+    if (res.docs.length) return res.docs.map(mapReview)
+  } catch {
+    // откат ниже
+  }
+  return staticReviews
+}
+
+export async function getPosts(): Promise<BlogPost[]> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({
+      collection: 'posts',
+      where: { published: { equals: true } },
+      depth: 1,
+      limit: 100,
+      sort: '-createdAt',
+    })
+    if (res.docs.length) return res.docs.map(mapPost)
+  } catch {
+    // откат ниже
+  }
+  return staticPosts
+}
+
+export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({ collection: 'posts', where: { slug: { equals: slug } }, depth: 1, limit: 1 })
+    if (res.docs.length) return mapPost(res.docs[0])
+  } catch {
+    // откат ниже
+  }
+  return staticPosts.find(p => p.slug === slug) ?? null
+}

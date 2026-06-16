@@ -5,12 +5,18 @@ import { useLang } from '@/context/LanguageContext'
 
 interface HeroBannerViewProps {
   eyebrow: string
+  eyebrowEn?: string
   title1: string
+  title1En?: string
   title2: string
+  title2En?: string
   subtitle: string
+  subtitleEn?: string
 }
 
-export default function HeroBannerView({ eyebrow, title1, title2, subtitle }: HeroBannerViewProps) {
+export default function HeroBannerView({
+  eyebrow, eyebrowEn, title1, title1En, title2, title2En, subtitle, subtitleEn,
+}: HeroBannerViewProps) {
   const { t } = useLang()
 
   const tags: { label: string; labelEn: string; href: string | null }[] = [
@@ -51,7 +57,7 @@ export default function HeroBannerView({ eyebrow, title1, title2, subtitle }: He
             color: 'var(--gold)', fontSize: '0.6rem',
             letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 500,
           }}>
-            {eyebrow}
+            {t(eyebrow, eyebrowEn)}
           </span>
           <div style={{ width: 24, height: 1, background: 'var(--gold)', opacity: 0.5, flexShrink: 0 }} />
         </div>
@@ -64,7 +70,7 @@ export default function HeroBannerView({ eyebrow, title1, title2, subtitle }: He
           lineHeight: 1.1, marginBottom: '0.25rem',
           letterSpacing: '-0.02em', maxWidth: '100%',
         }}>
-          {title1}
+          {t(title1, title1En)}
         </h1>
         <h1 style={{
           fontFamily: 'var(--font-playfair), Georgia, serif',
@@ -73,7 +79,7 @@ export default function HeroBannerView({ eyebrow, title1, title2, subtitle }: He
           lineHeight: 1.1, marginBottom: '1.75rem',
           letterSpacing: '-0.02em', fontStyle: 'italic', maxWidth: '100%',
         }}>
-          {title2}
+          {t(title2, title2En)}
         </h1>
 
         {/* Описание */}
@@ -84,7 +90,7 @@ export default function HeroBannerView({ eyebrow, title1, title2, subtitle }: He
           fontWeight: 300, maxWidth: 440,
           lineHeight: 1.8, marginBottom: '2.5rem',
         }}>
-          {subtitle}
+          {t(subtitle, subtitleEn)}
         </p>
 
         {/* Кнопки */}

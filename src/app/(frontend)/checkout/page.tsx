@@ -377,11 +377,11 @@ export default function CheckoutPage() {
                             fontFamily: 'var(--font-inter), sans-serif',
                             fontSize: '0.8rem', fontWeight: 600, color: 'var(--navy)',
                             lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                          }}>{product.name}</p>
+                          }}>{t(product.name, product.nameEn)}</p>
                           <p style={{
                             fontFamily: 'var(--font-inter), sans-serif',
                             fontSize: '0.68rem', color: '#aaa', marginTop: 2,
-                          }}>{variant.size} · {variant.color} · {quantity} {t('шт.', 'pcs')}</p>
+                          }}>{variant.size} · {t(variant.color, variant.colorEn)} · {quantity} {t('шт.', 'pcs')}</p>
                         </div>
                         <span style={{
                           fontFamily: 'var(--font-inter), sans-serif',

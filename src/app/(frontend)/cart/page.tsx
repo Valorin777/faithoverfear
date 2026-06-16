@@ -136,13 +136,13 @@ export default function CartPage() {
                       fontSize: '0.95rem', fontWeight: 700, color: 'var(--navy)',
                       lineHeight: 1.3, marginBottom: '0.3rem', textDecoration: 'none',
                     }}>
-                      {product.name}
+                      {t(product.name, product.nameEn)}
                     </Link>
                     <p style={{
                       fontFamily: 'var(--font-inter), sans-serif',
                       fontSize: '0.72rem', color: '#aaa', marginBottom: 'auto',
                     }}>
-                      Размер: {variant.size} · Цвет: {variant.color}
+                      {t('Размер:', 'Size:')} {variant.size} · {t('Цвет:', 'Colour:')} {t(variant.color, variant.colorEn)}
                     </p>
 
                     <div style={{

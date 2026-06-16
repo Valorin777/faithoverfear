@@ -97,7 +97,7 @@ export default function ProductForm({ product }: ProductFormProps) {
             color: 'var(--navy)', marginBottom: '0.75rem',
             textTransform: 'uppercase', letterSpacing: '0.08em',
           }}>
-            {t('Цвет:', 'Colour:')}&nbsp;<span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>{selectedColor}</span>
+            {t('Цвет:', 'Colour:')}&nbsp;<span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>{t(selectedColor, colors.find(c => c.color === selectedColor)?.colorEn)}</span>
           </p>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             {colors.map(v => (
@@ -105,7 +105,7 @@ export default function ProductForm({ product }: ProductFormProps) {
                 key={v.color}
                 type="button"
                 onClick={() => setSelectedColor(v.color)}
-                title={v.color}
+                title={t(v.color, v.colorEn)}
                 style={{
                   width: 30, height: 30, borderRadius: '50%',
                   border: selectedColor === v.color

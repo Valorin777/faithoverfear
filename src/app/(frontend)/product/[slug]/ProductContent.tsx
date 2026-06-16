@@ -38,7 +38,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
         <span>/</span>
         <a href="/catalog" style={{ color: '#bbb', textDecoration: 'none' }}>{t('Каталог', 'Catalog')}</a>
         <span>/</span>
-        <span style={{ color: 'var(--navy)' }}>{product.name}</span>
+        <span style={{ color: 'var(--navy)' }}>{t(product.name, product.nameEn)}</span>
       </nav>
 
       {/* Основной блок */}
@@ -82,7 +82,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
             color: 'var(--navy)', fontWeight: 700,
             lineHeight: 1.2, marginBottom: '0.75rem',
           }}>
-            {product.name}
+            {t(product.name, product.nameEn)}
           </h1>
 
           <p style={{
@@ -91,7 +91,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
             lineHeight: 1.75, fontWeight: 300,
             marginBottom: '1.75rem',
           }}>
-            {product.description}
+            {t(product.description, product.descriptionEn)}
           </p>
 
           <ProductForm product={product} />
@@ -138,7 +138,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
               lineHeight: 1.8, fontWeight: 300,
               fontStyle: 'italic',
             }}>
-              {product.spiritualMeaning}
+              {t(product.spiritualMeaning, product.spiritualMeaningEn)}
             </p>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
                   lineHeight: 1.8, fontWeight: 300,
                   fontStyle: 'italic', marginBottom: '1.25rem',
                 }}>
-                  &laquo;{review.text}&raquo;
+                  &laquo;{t(review.text, review.textEn)}&raquo;
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <div style={{
