@@ -1,7 +1,9 @@
+'use client'
+
 import Link from 'next/link'
-import { Heart } from 'lucide-react'
 import { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
+import WishlistButton from './WishlistButton'
 
 export default function ProductCard({ product }: { product: Product }) {
   const hasDiscount = product.salePrice && product.salePrice < product.price
@@ -70,21 +72,9 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
 
           {/* Кнопка избранное */}
-          <button className="pc-fav" style={{
-            position: 'absolute', top: 8, right: 8,
-            width: 28, height: 28,
-            background: 'rgba(255,255,255,0.9)',
-            borderRadius: '50%',
-            border: 'none',
-            cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#bbb',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-          }}
-            aria-label="В избранное"
-          >
-            <Heart size={11} strokeWidth={1.75} />
-          </button>
+          <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}>
+            <WishlistButton productId={product.id} />
+          </div>
         </div>
       </Link>
 

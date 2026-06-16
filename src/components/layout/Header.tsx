@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ShoppingCart, User, Search, Menu, X, Heart } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
+import { useWishlist } from '@/context/WishlistContext'
 
 const navLinks = [
   { href: '/', label: 'Главная' },
@@ -26,6 +27,7 @@ export default function Header() {
   const [headerH, setHeaderH] = useState(92)
   const headerRef = useRef<HTMLElement>(null)
   const { count } = useCart()
+  const { count: wishCount } = useWishlist()
   const pathname = usePathname()
 
   useEffect(() => {
@@ -194,6 +196,17 @@ export default function Header() {
               {isDesktop && (
                 <Link href="/account/wishlist" style={iconBtn} className="header-icon-btn" aria-label="Избранное">
                   <Heart size={19} strokeWidth={1.75} />
+                  {wishCount > 0 && (
+                    <span style={{
+                      position: 'absolute', top: 7, right: 7,
+                      width: 14, height: 14, background: 'var(--burgundy)', color: '#fff',
+                      fontSize: '0.55rem', fontWeight: 700, borderRadius: '50%',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: 'var(--font-inter), sans-serif', pointerEvents: 'none',
+                    }}>
+                      {wishCount > 9 ? '9+' : wishCount}
+                    </span>
+                  )}
                 </Link>
               )}
 

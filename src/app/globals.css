@@ -278,6 +278,35 @@ input, textarea, select, button { font-family: inherit; }
 /* Ховер иконок в шапке */
 .header-icon-btn:hover { background: var(--beige) !important; }
 
+/* ── Избранное: пульс сердечка ── */
+@keyframes wishPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+.wish-pop { animation: wishPop 0.4s cubic-bezier(0.16,1,0.3,1); transform-origin: center; }
+.wish-btn:hover { transform: scale(1.14) !important; }
+.wish-btn:active { transform: scale(0.88) !important; }
+
+/* ── Люксовый «блик» на кнопках при наведении ── */
+.btn-shine { position: relative; overflow: hidden; }
+.btn-shine::after {
+  content: '';
+  position: absolute; top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(110deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.6s cubic-bezier(0.16,1,0.3,1);
+  pointer-events: none;
+}
+.btn-shine:hover::after { left: 130%; }
+
+/* ── Плавное «дыхание» акцентов ── */
+@keyframes softGlow {
+  0%,100% { opacity: 0.55; }
+  50%     { opacity: 1; }
+}
+
 /* ── Люксовый ховер карточки товара (Apple-стиль) ── */
 .product-card-lux {
   transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;

@@ -74,7 +74,7 @@ export default function HeroBanner() {
           display: 'flex', flexDirection: 'column',
           gap: '0.75rem', width: '100%', maxWidth: 320, alignItems: 'stretch',
         }}>
-          <Link href="/catalog" style={{
+          <Link href="/catalog" className="btn-shine" style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
             background: 'var(--gold)', color: 'var(--navy)',
             padding: '0.95rem 2rem', borderRadius: 2,

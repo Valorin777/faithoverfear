@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Product, ProductVariant } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { useCart } from '@/context/CartContext'
+import WishlistButton from '@/components/ui/WishlistButton'
 
 interface ProductFormProps {
   product: Product
@@ -17,7 +18,6 @@ export default function ProductForm({ product }: ProductFormProps) {
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]?.color ?? '')
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
-  const [wishlisted, setWishlisted] = useState(false)
   const { addItem } = useCart()
 
   const selectedVariant: ProductVariant | undefined = product.variants.find(
@@ -296,23 +296,9 @@ export default function ProductForm({ product }: ProductFormProps) {
           Купить в 1 клик
         </button>
 
-        <button
-          type="button"
-          onClick={() => setWishlisted(v => !v)}
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-            padding: '0.75rem',
-            background: 'none', border: 'none', cursor: 'pointer',
-            fontFamily: 'var(--font-inter), sans-serif',
-            fontSize: '0.78rem', color: wishlisted ? 'var(--burgundy)' : '#aaa',
-            transition: 'color 0.2s',
-          }}
-        >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill={wishlisted ? 'var(--burgundy)' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-          </svg>
-          {wishlisted ? 'В избранном' : 'Добавить в избранное'}
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <WishlistButton productId={product.id} variant="large" />
+        </div>
       </div>
 
       {/* Доставка */}

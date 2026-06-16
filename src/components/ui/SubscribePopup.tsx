@@ -1,76 +1,139 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
 
 export default function SubscribePopup() {
-  const [visible, setVisible] = useState(false)
+  const [show, setShow] = useState(false)
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [done, setDone] = useState(false)
+  const [closing, setClosing] = useState(false)
 
   useEffect(() => {
-    if (localStorage.getItem('fof_subscribed')) return
-    const timer = setTimeout(() => setVisible(true), 15000)
-    return () => clearTimeout(timer)
+    try {
+      if (localStorage.getItem('fof_subscribe_seen')) return
+    } catch {}
+    const t = setTimeout(() => setShow(true), 12000)
+    return () => clearTimeout(t)
   }, [])
 
-  function close() {
-    setVisible(false)
-    localStorage.setItem('fof_subscribed', '1')
+  function dismiss() {
+    setClosing(true)
+    try { localStorage.setItem('fof_subscribe_seen', '1') } catch {}
+    setTimeout(() => setShow(false), 300)
   }
 
   function submit(e: React.FormEvent) {
     e.preventDefault()
-    setSubmitted(true)
-    setTimeout(close, 2500)
+    if (!email) return
+    // Реальная отправка подключается при настройке email-сервиса.
+    setDone(true)
+    try { localStorage.setItem('fof_subscribe_seen', '1') } catch {}
+    setTimeout(() => { setClosing(true); setTimeout(() => setShow(false), 300) }, 2200)
   }
 
-  if (!visible) return null
+  if (!show) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={close} />
-      <div className="relative bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden">
-        <div className="bg-[var(--navy)] px-8 py-8 text-center text-white">
-          <svg width="32" height="44" viewBox="0 0 32 44" fill="none" className="mx-auto mb-4 opacity-40">
-            <rect x="13" y="0" width="6" height="44" rx="3" fill="var(--gold)" />
-            <rect x="0" y="12" width="32" height="6" rx="3" fill="var(--gold)" />
-          </svg>
-          <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
-            Получайте вдохновение
-          </h2>
-          <p className="text-gray-300 text-sm" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-            Подпишитесь и получите скидку 10% на первый заказ
-          </p>
+    <div
+      onClick={dismiss}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 500,
+        background: 'rgba(17,26,51,0.55)', backdropFilter: 'blur(3px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '1.25rem',
+        animation: closing ? 'fofFadeOut 0.3s ease forwards' : 'fofFadeIn 0.4s ease',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          position: 'relative', maxWidth: 420, width: '100%',
+          background: '#fff', borderRadius: 16, overflow: 'hidden',
+          boxShadow: '0 30px 80px rgba(0,0,0,0.35)',
+          animation: closing ? 'fofPopOut 0.3s ease forwards' : 'fofPopIn 0.5s cubic-bezier(0.16,1,0.3,1)',
+        }}
+      >
+        {/* Шапка navy */}
+        <div style={{ background: 'var(--navy)', padding: '2rem 2rem 1.75rem', textAlign: 'center', position: 'relative' }}>
+          <button onClick={dismiss} aria-label="Закрыть" style={{
+            position: 'absolute', top: 12, right: 12, width: 30, height: 30,
+            background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%',
+            color: 'rgba(255,255,255,0.7)', cursor: 'pointer', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+          <div style={{
+            width: 52, height: 52, borderRadius: 12, margin: '0 auto 1rem',
+            background: 'rgba(201,168,76,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/>
+            </svg>
+          </div>
+          <p style={{
+            fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.6rem',
+            letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.5rem',
+          }}>Будьте в курсе</p>
+          <h2 style={{
+            fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.5rem',
+            fontWeight: 700, color: '#fff', lineHeight: 1.2,
+          }}>Подпишитесь на новости</h2>
         </div>
-        <div className="px-8 py-6">
-          {submitted ? (
-            <div className="text-center py-4">
-              <p className="text-green-600 font-semibold mb-1" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>Спасибо за подписку!</p>
-              <p className="text-gray-500 text-sm" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>Скидка придёт на ваш email.</p>
+
+        {/* Тело */}
+        <div style={{ padding: '1.75rem' }}>
+          {done ? (
+            <div style={{ textAlign: 'center', padding: '0.5rem 0' }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: '50%', margin: '0 auto 1rem',
+                background: 'rgba(34,134,58,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22863a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <p style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--navy)' }}>Спасибо!</p>
+              <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.85rem', color: '#888', marginTop: '0.35rem' }}>Вы подписались на новинки и акции.</p>
             </div>
           ) : (
-            <form onSubmit={submit} className="flex flex-col gap-3">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Ваш email"
-                className="w-full border border-gray-300 rounded px-4 py-3 text-sm focus:outline-none focus:border-[var(--navy)]"
-                style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-              />
-              <button type="submit" className="btn-primary w-full py-3">Получить скидку 10%</button>
-              <button type="button" onClick={close} className="text-xs text-gray-400 hover:text-gray-600 text-center" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-                Нет, спасибо
-              </button>
-            </form>
+            <>
+              <p style={{
+                fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.88rem',
+                color: '#777', lineHeight: 1.6, textAlign: 'center', marginBottom: '1.25rem', fontWeight: 300,
+              }}>
+                Новинки, акции и вдохновляющие цитаты — первыми на вашу почту.
+              </p>
+              <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <input
+                  type="email" required value={email} onChange={e => setEmail(e.target.value)}
+                  placeholder="ваш@email.ru"
+                  style={{
+                    width: '100%', boxSizing: 'border-box', border: '1.5px solid #e8e8e8',
+                    borderRadius: 6, padding: '0.8rem 1rem', fontFamily: 'var(--font-inter), sans-serif',
+                    fontSize: '0.9rem', color: 'var(--navy)', outline: 'none', textAlign: 'center',
+                  }}
+                />
+                <button type="submit" className="btn-shine" style={{
+                  background: 'var(--burgundy)', color: '#fff', border: 'none', borderRadius: 6,
+                  padding: '0.9rem', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem',
+                  fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer',
+                }}>
+                  Подписаться
+                </button>
+              </form>
+              <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.68rem', color: '#bbb', textAlign: 'center', marginTop: '0.875rem' }}>
+                Без спама. Отписаться можно в любой момент.
+              </p>
+            </>
           )}
         </div>
-        <button onClick={close} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
-          <X size={16} />
-        </button>
       </div>
+
+      <style>{`
+        @keyframes fofFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fofFadeOut { from { opacity: 1; } to { opacity: 0; } }
+        @keyframes fofPopIn { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fofPopOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.96); } }
+      `}</style>
     </div>
   )
 }

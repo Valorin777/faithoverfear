@@ -2,6 +2,7 @@ import Header from './Header'
 import Footer from './Footer'
 import TelegramWidget from './TelegramWidget'
 import Analytics from './Analytics'
+import SubscribePopup from '@/components/ui/SubscribePopup'
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +14,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
       </main>
       <Footer />
       <TelegramWidget />
+      <SubscribePopup />
     </div>
   )
 }

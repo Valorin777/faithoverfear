@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { CartProvider } from '@/context/CartContext'
+import { WishlistProvider } from '@/context/WishlistContext'
 import '../globals.css'
 
 const playfair = Playfair_Display({
@@ -44,7 +45,9 @@ export default function FrontendLayout({
     <html lang="ru" className={`${playfair.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
         <CartProvider>
-          {children}
+          <WishlistProvider>
+            {children}
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>
