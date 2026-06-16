@@ -5,12 +5,13 @@ import { LayoutGrid, List } from 'lucide-react'
 import ProductCard from '@/components/ui/ProductCard'
 import CatalogFilters, { FilterState, DEFAULT_FILTERS } from './CatalogFilters'
 import { Product, ProductCategory } from '@/types'
+import { useLang } from '@/context/LanguageContext'
 
 const SORT_OPTIONS = [
-  { value: 'default', label: 'По умолчанию' },
-  { value: 'price_asc', label: 'Сначала дешевле' },
-  { value: 'price_desc', label: 'Сначала дороже' },
-  { value: 'new', label: 'Новинки' },
+  { value: 'default', label: 'По умолчанию', en: 'Default' },
+  { value: 'price_asc', label: 'Сначала дешевле', en: 'Price: low to high' },
+  { value: 'price_desc', label: 'Сначала дороже', en: 'Price: high to low' },
+  { value: 'new', label: 'Новинки', en: 'New In' },
 ]
 
 const COLOR_MAP: Record<string, string> = {
@@ -24,6 +25,7 @@ interface CatalogGridProps {
 }
 
 export default function CatalogGrid({ products, initialCategory, title = 'Каталог' }: CatalogGridProps) {
+  const { t } = useLang()
   const [filters, setFilters] = useState<FilterState>({
     ...DEFAULT_FILTERS,
     categories: initialCategory ? [initialCategory] : [],
@@ -98,8 +100,8 @@ export default function CatalogGrid({ products, initialCategory, title = 'Кат
           color: '#999',
           fontWeight: 300,
         }}>
-          Найдено:{' '}
-          <strong style={{ color: 'var(--navy)', fontWeight: 600 }}>{filtered.length}</strong> товаров
+          {t('Найдено:', 'Found:')}{' '}
+          <strong style={{ color: 'var(--navy)', fontWeight: 600 }}>{filtered.length}</strong> {t('товаров', 'products')}
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
@@ -115,7 +117,7 @@ export default function CatalogGrid({ products, initialCategory, title = 'Кат
             background: '#fff',
           }}>
             {SORT_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+              <option key={opt.value} value={opt.value}>{t(opt.label, opt.en)}</option>
             ))}
           </select>
 
@@ -168,7 +170,7 @@ export default function CatalogGrid({ products, initialCategory, title = 'Кат
                 fontFamily: 'var(--font-inter), sans-serif',
                 color: '#aaa', marginBottom: '1.5rem', fontWeight: 300,
               }}>
-                По выбранным фильтрам товаров не найдено
+                {t('По выбранным фильтрам товаров не найдено', 'No products match the selected filters')}
               </p>
               <button onClick={() => setFilters(DEFAULT_FILTERS)} style={{
                 padding: '0.7rem 1.75rem',
@@ -181,7 +183,7 @@ export default function CatalogGrid({ products, initialCategory, title = 'Кат
                 cursor: 'pointer',
                 letterSpacing: '0.06em', textTransform: 'uppercase',
               }}>
-                Сбросить фильтры
+                {t('Сбросить фильтры', 'Reset filters')}
               </button>
             </div>
           ) : (
