@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
+import { useLang } from '@/context/LanguageContext'
 import { formatPrice } from '@/lib/utils'
 
 interface Customer {
@@ -34,6 +35,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 
 export default function AccountPage() {
   const router = useRouter()
+  const { t } = useLang()
   const [customer, setCustomer] = useState<Customer | null>(null)
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
@@ -122,7 +124,7 @@ export default function AccountPage() {
                   fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.62rem',
                   letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--gold)',
                   marginBottom: '0.25rem',
-                }}>Личный кабинет</p>
+                }}>{t('Личный кабинет', 'My account')}</p>
                 <h1 style={{
                   fontFamily: 'var(--font-playfair), Georgia, serif',
                   fontSize: 'clamp(1.4rem, 4vw, 1.9rem)', color: '#fff', fontWeight: 700, lineHeight: 1.1,
@@ -133,7 +135,7 @@ export default function AccountPage() {
               background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)',
               color: 'rgba(255,255,255,0.7)', borderRadius: 6, padding: '0.5rem 1rem',
               fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem', cursor: 'pointer',
-            }}>Выйти</button>
+            }}>{t('Выйти', 'Sign out')}</button>
           </div>
 
           {/* Баланс */}
@@ -152,7 +154,7 @@ export default function AccountPage() {
               <p style={{
                 fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem',
                 color: 'rgba(255,255,255,0.5)', marginBottom: '0.2rem',
-              }}>Бонусный баланс</p>
+              }}>{t('Бонусный баланс', 'Bonus balance')}</p>
               <p style={{
                 fontFamily: 'var(--font-playfair), Georgia, serif',
                 fontSize: '1.75rem', fontWeight: 700, color: 'var(--gold)', lineHeight: 1,
@@ -176,16 +178,16 @@ export default function AccountPage() {
               </div>
               <div>
                 <h2 style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.2rem', fontWeight: 700, color: 'var(--navy)' }}>
-                  Приглашайте друзей
+                  {t('Приглашайте друзей', 'Invite friends')}
                 </h2>
                 <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.8rem', color: '#999' }}>
-                  Получайте <strong style={{ color: 'var(--burgundy)' }}>10%</strong> с заказа друга от 3 000 ₽
+                  {t('Получайте', 'Get')} <strong style={{ color: 'var(--burgundy)' }}>10%</strong> {t('с заказа друга от 3 000 ₽', 'from a friend’s order of 3 000 ₽+')}
                 </p>
               </div>
             </div>
 
             <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem', fontWeight: 600, color: '#888', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.6rem' }}>
-              Ваша реферальная ссылка
+              {t('Ваша реферальная ссылка', 'Your referral link')}
             </p>
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               <input
@@ -206,33 +208,33 @@ export default function AccountPage() {
                 whiteSpace: 'nowrap',
               }}>
                 {copied ? (
-                  <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Скопировано</>
+                  <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>{t('Скопировано', 'Copied')}</>
                 ) : (
-                  <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Копировать</>
+                  <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>{t('Копировать', 'Copy')}</>
                 )}
               </button>
             </div>
             <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem', color: '#aaa', marginTop: '0.6rem' }}>
-              Код: <strong style={{ color: 'var(--navy)' }}>{customer.referralCode}</strong> · Поделитесь ссылкой — друг зарегистрируется по ней, и после его заказа от 3 000 ₽ вам начислится бонус.
+              {t('Код:', 'Code:')} <strong style={{ color: 'var(--navy)' }}>{customer.referralCode}</strong> · {t('Поделитесь ссылкой — друг зарегистрируется по ней, и после его заказа от 3 000 ₽ вам начислится бонус.', 'Share the link — a friend registers via it, and after their order of 3 000 ₽+ you receive a bonus.')}
             </p>
           </div>
 
           {/* Заказы */}
           <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #ece9e3', padding: 'clamp(1.5rem, 4vw, 2rem)' }}>
             <h2 style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.2rem', fontWeight: 700, color: 'var(--navy)', marginBottom: '1.25rem' }}>
-              Мои заказы
+              {t('Мои заказы', 'My orders')}
             </h2>
             {orders.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                 <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.88rem', color: '#999', marginBottom: '1rem' }}>
-                  У вас пока нет заказов
+                  {t('У вас пока нет заказов', 'You have no orders yet')}
                 </p>
                 <Link href="/catalog" style={{
                   display: 'inline-flex', background: 'var(--navy)', color: '#fff',
                   padding: '0.75rem 1.75rem', borderRadius: 4, textDecoration: 'none',
                   fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.76rem', fontWeight: 700,
                   letterSpacing: '0.08em', textTransform: 'uppercase',
-                }}>В каталог</Link>
+                }}>{t('В каталог', 'To catalog')}</Link>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
