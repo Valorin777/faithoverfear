@@ -13,7 +13,8 @@ export const Media: CollectionConfig = {
     read: () => true,
   },
   upload: {
-    mimeTypes: ['image/*'],
+    // Разрешены изображения и видео
+    mimeTypes: ['image/*', 'video/*'],
   },
   fields: [
     {

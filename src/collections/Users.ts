@@ -10,9 +10,7 @@ export const Users: CollectionConfig = {
     // Защита от подбора пароля: после 5 неудачных попыток вход блокируется на 15 минут
     maxLoginAttempts: 5,
     lockTime: 15 * 60 * 1000,
-    // Время жизни сессии — 2 часа
     tokenExpiration: 2 * 60 * 60,
-    // Кука сессии недоступна из JavaScript и работает только по HTTPS
     cookies: {
       sameSite: 'Lax',
       secure: process.env.NODE_ENV === 'production',
@@ -23,14 +21,16 @@ export const Users: CollectionConfig = {
     group: 'Система',
   },
   access: {
-    // Создать аккаунт можно только если ни одного ещё нет (первичная настройка).
-    // После создания единственного администратора регистрация новых закрыта.
+    // Добавлять администраторов могут только уже вошедшие администраторы.
+    // Публичная самостоятельная регистрация закрыта.
+    // Исключение — самый первый аккаунт при первичной настройке (когда их ещё нет).
     create: async ({ req }) => {
+      if (req.user) return true
       const { totalDocs } = await req.payload.count({ collection: 'users' })
       return totalDocs === 0
     },
-    // Запрещаем удалять администратора, чтобы не потерять доступ к панели.
-    delete: () => false,
+    // Удалять администраторов может только вошедший администратор
+    delete: ({ req }) => Boolean(req.user),
   },
   fields: [
     {
