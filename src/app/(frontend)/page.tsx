@@ -8,6 +8,9 @@ import ReviewsSection from '@/components/home/ReviewsSection'
 import AboutSection from '@/components/home/AboutSection'
 import MissionBlock from '@/components/home/MissionBlock'
 
+// Главная пересобирается раз в минуту — правки баннера из админки видны без деплоя
+export const revalidate = 60
+
 export default function HomePage() {
   return (
     <PageLayout>

@@ -16,6 +16,7 @@ import { Posts } from './collections/Posts'
 import { Promocodes } from './collections/Promocodes'
 import { Returns } from './collections/Returns'
 import { Customers } from './collections/Customers'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -69,6 +70,7 @@ export default buildConfig({
     },
   },
   collections: [Products, Orders, Customers, Promocodes, Returns, Reviews, Posts, Media, Users],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

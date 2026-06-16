@@ -1,6 +1,27 @@
 import Link from 'next/link'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
-export default function HeroBanner() {
+export default async function HeroBanner() {
+  let s: {
+    heroEyebrow?: string
+    heroTitleLine1?: string
+    heroTitleLine2?: string
+    heroSubtitle?: string
+  } = {}
+  try {
+    const payload = await getPayload({ config })
+    s = await payload.findGlobal({ slug: 'settings', depth: 0 })
+  } catch {
+    // настройки ещё не заданы — используем значения по умолчанию
+  }
+  const eyebrow = s?.heroEyebrow || 'Православная одежда · Faith over Fear'
+  const title1 = s?.heroTitleLine1 || 'Одежда,'
+  const title2 = s?.heroTitleLine2 || 'которая несёт Свет'
+  const subtitle =
+    s?.heroSubtitle ||
+    'Футболки, поло, свитшоты и аксессуары с цитатами Священного Писания и православной символикой. Создано с молитвой.'
+
   return (
     <section style={{
       background: 'var(--navy)',
@@ -32,7 +53,7 @@ export default function HeroBanner() {
             color: 'var(--gold)', fontSize: '0.6rem',
             letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 500,
           }}>
-            Православная одежда · Faith over Fear
+            {eyebrow}
           </span>
           <div style={{ width: 24, height: 1, background: 'var(--gold)', opacity: 0.5, flexShrink: 0 }} />
         </div>
@@ -45,7 +66,7 @@ export default function HeroBanner() {
           lineHeight: 1.1, marginBottom: '0.25rem',
           letterSpacing: '-0.02em', maxWidth: '100%',
         }}>
-          Одежда,
+          {title1}
         </h1>
         <h1 style={{
           fontFamily: 'var(--font-playfair), Georgia, serif',
@@ -54,7 +75,7 @@ export default function HeroBanner() {
           lineHeight: 1.1, marginBottom: '1.75rem',
           letterSpacing: '-0.02em', fontStyle: 'italic', maxWidth: '100%',
         }}>
-          которая несёт Свет
+          {title2}
         </h1>
 
         {/* Описание */}
@@ -65,8 +86,7 @@ export default function HeroBanner() {
           fontWeight: 300, maxWidth: 440,
           lineHeight: 1.8, marginBottom: '2.5rem',
         }}>
-          Футболки, поло, свитшоты и аксессуары с цитатами Священного Писания
-          и православной символикой. Создано с молитвой.
+          {subtitle}
         </p>
 
         {/* Кнопки */}
