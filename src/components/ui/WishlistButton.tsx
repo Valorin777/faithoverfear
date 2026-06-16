@@ -1,6 +1,7 @@
 'use client'
 
 import { useWishlist } from '@/context/WishlistContext'
+import { useLang } from '@/context/LanguageContext'
 
 interface Props {
   productId: string
@@ -9,13 +10,14 @@ interface Props {
 
 export default function WishlistButton({ productId, variant = 'card' }: Props) {
   const { isWishlisted, toggle } = useWishlist()
+  const { t } = useLang()
   const active = isWishlisted(productId)
   const large = variant === 'large'
 
   return (
     <button
       type="button"
-      aria-label={active ? 'Убрать из избранного' : 'В избранное'}
+      aria-label={active ? t('Убрать из избранного', 'Remove from wishlist') : t('В избранное', 'Add to wishlist')}
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(productId) }}
       className="wish-btn"
       style={{
@@ -50,7 +52,7 @@ export default function WishlistButton({ productId, variant = 'card' }: Props) {
       >
         <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
       </svg>
-      {large && (active ? 'В избранном' : 'Добавить в избранное')}
+      {large && (active ? t('В избранном', 'In wishlist') : t('Добавить в избранное', 'Add to wishlist'))}
     </button>
   )
 }
