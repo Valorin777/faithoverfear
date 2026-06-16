@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function CatalogPage() {
   return (
     <PageLayout>
-      <CatalogGrid products={products} title="Каталог" />
+      <CatalogGrid products={products} title="Каталог" titleEn="Catalog" />
     </PageLayout>
   )
 }

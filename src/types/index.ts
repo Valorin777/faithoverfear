@@ -99,3 +99,12 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   'gift-sets': 'Подарочные наборы',
   accessories: 'Аксессуары',
 }
+
+export const CATEGORY_LABELS_EN: Record<ProductCategory, string> = {
+  tshirts: 'T-shirts',
+  polo: 'Polo',
+  sweatshirts: 'Sweatshirts / Hoodies',
+  sweaters: 'Sweaters',
+  'gift-sets': 'Gift Sets',
+  accessories: 'Accessories',
+}

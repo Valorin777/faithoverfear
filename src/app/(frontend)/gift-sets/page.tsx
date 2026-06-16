@@ -12,7 +12,7 @@ export default function GiftSetsPage() {
   const giftProducts = products.filter(p => p.category === 'gift-sets')
   return (
     <PageLayout>
-      <CatalogGrid products={giftProducts} title="Подарочные наборы" />
+      <CatalogGrid products={giftProducts} title="Подарочные наборы" titleEn="Gift Sets" />
     </PageLayout>
   )
 }

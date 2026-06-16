@@ -12,7 +12,7 @@ export default function SalePage() {
   const saleProducts = products.filter(p => p.salePrice && p.salePrice < p.price)
   return (
     <PageLayout>
-      <CatalogGrid products={saleProducts} title="Акции / Скидки" />
+      <CatalogGrid products={saleProducts} title="Акции / Скидки" titleEn="Sale" />
     </PageLayout>
   )
 }

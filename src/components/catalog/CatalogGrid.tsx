@@ -22,9 +22,10 @@ interface CatalogGridProps {
   products: Product[]
   initialCategory?: ProductCategory
   title?: string
+  titleEn?: string
 }
 
-export default function CatalogGrid({ products, initialCategory, title = 'Каталог' }: CatalogGridProps) {
+export default function CatalogGrid({ products, initialCategory, title = 'Каталог', titleEn = 'Catalog' }: CatalogGridProps) {
   const { t } = useLang()
   const [filters, setFilters] = useState<FilterState>({
     ...DEFAULT_FILTERS,
@@ -80,7 +81,7 @@ export default function CatalogGrid({ products, initialCategory, title = 'Кат
           color: 'var(--navy)',
           lineHeight: 1.2,
         }}>
-          {title}
+          {t(title, titleEn)}
         </h1>
         <div style={{ width: 40, height: 2, background: 'var(--gold)', marginTop: '0.5rem', borderRadius: 2 }} />
       </div>
