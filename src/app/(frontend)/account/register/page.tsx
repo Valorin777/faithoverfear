@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
 import { AuthShell, Field, ErrorBox, SubmitButton } from '../login/page'
+import { useLang } from '@/context/LanguageContext'
 
 export default function RegisterPage() {
   const router = useRouter()
+  const { t } = useLang()
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' })
   const [ref, setRef] = useState('')
   const [loading, setLoading] = useState(false)
@@ -51,13 +53,13 @@ export default function RegisterPage() {
   return (
     <PageLayout>
       <AuthShell
-        title="Регистрация"
-        subtitle="Создайте аккаунт и получите свою реферальную ссылку"
+        title={t('Регистрация', 'Sign up')}
+        subtitle={t('Создайте аккаунт и получите свою реферальную ссылку', 'Create an account and get your referral link')}
         footer={
           <>
-            Уже есть аккаунт?{' '}
+            {t('Уже есть аккаунт?', 'Already have an account?')}{' '}
             <Link href="/account/login" style={{ color: 'var(--burgundy)', fontWeight: 600, textDecoration: 'none' }}>
-              Войти
+              {t('Войти', 'Sign in')}
             </Link>
           </>
         }
@@ -71,17 +73,17 @@ export default function RegisterPage() {
               display: 'flex', alignItems: 'center', gap: '0.5rem',
             }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-              Вы регистрируетесь по приглашению — код <strong>{ref}</strong>
+              {t('Вы регистрируетесь по приглашению — код', 'You are signing up via invitation — code')} <strong>{ref}</strong>
             </div>
           )}
-          <Field label="Имя" type="text" value={form.name} onChange={set('name')} placeholder="Иван" />
+          <Field label={t('Имя', 'Name')} type="text" value={form.name} onChange={set('name')} placeholder="Иван" />
           <Field label="Email" type="email" value={form.email} onChange={set('email')} placeholder="ivan@mail.ru" required />
-          <Field label="Телефон" type="tel" value={form.phone} onChange={set('phone')} placeholder="+7 (999) 000-00-00" />
-          <Field label="Пароль" type="password" value={form.password} onChange={set('password')} placeholder="минимум 6 символов" required />
+          <Field label={t('Телефон', 'Phone')} type="tel" value={form.phone} onChange={set('phone')} placeholder="+7 (999) 000-00-00" />
+          <Field label={t('Пароль', 'Password')} type="password" value={form.password} onChange={set('password')} placeholder={t('минимум 6 символов', 'min. 6 characters')} required />
 
           {error && <ErrorBox>{error}</ErrorBox>}
 
-          <SubmitButton loading={loading} label="Создать аккаунт" />
+          <SubmitButton loading={loading} label={t('Создать аккаунт', 'Create account')} />
         </form>
       </AuthShell>
     </PageLayout>

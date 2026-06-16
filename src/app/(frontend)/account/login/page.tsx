@@ -4,9 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
+import { useLang } from '@/context/LanguageContext'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { t } = useLang()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -23,7 +25,7 @@ export default function LoginPage() {
         body: JSON.stringify({ email: email.toLowerCase(), password }),
       })
       if (!res.ok) {
-        throw new Error('Неверный email или пароль')
+        throw new Error(t('Неверный email или пароль', 'Invalid email or password'))
       }
       const redirect = new URLSearchParams(window.location.search).get('redirect')
       router.push(redirect && redirect.startsWith('/') ? redirect : '/account')
@@ -37,24 +39,24 @@ export default function LoginPage() {
   return (
     <PageLayout>
       <AuthShell
-        title="Вход в кабинет"
-        subtitle="Рады видеть вас снова"
+        title={t('Вход в кабинет', 'Sign in')}
+        subtitle={t('Рады видеть вас снова', 'Glad to see you again')}
         footer={
           <>
-            Нет аккаунта?{' '}
+            {t('Нет аккаунта?', 'No account?')}{' '}
             <Link href="/account/register" style={{ color: 'var(--burgundy)', fontWeight: 600, textDecoration: 'none' }}>
-              Зарегистрироваться
+              {t('Зарегистрироваться', 'Sign up')}
             </Link>
           </>
         }
       >
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="ivan@mail.ru" required />
-          <Field label="Пароль" type="password" value={password} onChange={setPassword} placeholder="••••••••" required />
+          <Field label={t('Пароль', 'Password')} type="password" value={password} onChange={setPassword} placeholder="••••••••" required />
 
           {error && <ErrorBox>{error}</ErrorBox>}
 
-          <SubmitButton loading={loading} label="Войти" />
+          <SubmitButton loading={loading} label={t('Войти', 'Sign in')} />
         </form>
       </AuthShell>
     </PageLayout>
