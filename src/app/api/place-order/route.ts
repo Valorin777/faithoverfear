@@ -208,7 +208,10 @@ export async function POST(request: Request) {
         depth: 0,
       })
       if (referrer) {
-        referralBonus = Math.round(goodsTotal * 0.1)
+        // Процент зависит от статуса пригласившего: Золото (30+) — 15%, Серебро (10+) — 12%, иначе 10%
+        const refCount = (referrer as { referralCount?: number }).referralCount || 0
+        const pct = refCount >= 30 ? 0.15 : refCount >= 10 ? 0.12 : 0.1
+        referralBonus = Math.round(goodsTotal * pct)
         await payload.update({
           collection: 'customers',
           id: referrerId,
