@@ -57,7 +57,7 @@ export default function SubscribePopup() {
       >
         {/* Шапка navy */}
         <div style={{ background: 'var(--navy)', padding: '2rem 2rem 1.75rem', textAlign: 'center', position: 'relative' }}>
-          <button onClick={dismiss} aria-label="Закрыть" style={{
+          <button onClick={dismiss} aria-label={t('Закрыть', 'Close')} style={{
             position: 'absolute', top: 12, right: 12, width: 30, height: 30,
             background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%',
             color: 'rgba(255,255,255,0.7)', cursor: 'pointer', display: 'flex',
@@ -107,7 +107,7 @@ export default function SubscribePopup() {
               <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                 <input
                   type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="ваш@email.ru"
+                  placeholder={t('ваш@email.ru', 'your@email.com')}
                   style={{
                     width: '100%', boxSizing: 'border-box', border: '1.5px solid #e8e8e8',
                     borderRadius: 6, padding: '0.8rem 1rem', fontFamily: 'var(--font-inter), sans-serif',

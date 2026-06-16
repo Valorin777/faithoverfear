@@ -158,7 +158,7 @@ export default function CartPage() {
                           type="button"
                           onClick={() => updateQuantity(product.id, variant.id, quantity - 1)}
                           style={qtyBtn}
-                          aria-label="Уменьшить"
+                          aria-label={t('Уменьшить', 'Decrease')}
                         >−</button>
                         <span style={{
                           minWidth: 32, textAlign: 'center',
@@ -169,7 +169,7 @@ export default function CartPage() {
                           type="button"
                           onClick={() => updateQuantity(product.id, variant.id, quantity + 1)}
                           style={qtyBtn}
-                          aria-label="Увеличить"
+                          aria-label={t('Увеличить', 'Increase')}
                         >+</button>
                       </div>
 
@@ -184,7 +184,7 @@ export default function CartPage() {
                         <button
                           type="button"
                           onClick={() => removeItem(product.id, variant.id)}
-                          aria-label="Удалить"
+                          aria-label={t('Удалить', 'Remove')}
                           style={{
                             background: 'none', border: 'none', cursor: 'pointer',
                             color: '#ccc', padding: 4, display: 'flex',

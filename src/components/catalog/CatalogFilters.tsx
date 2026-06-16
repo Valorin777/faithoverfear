@@ -204,7 +204,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
               padding: '0.5rem 0.625rem', fontSize: '0.8rem', outline: 'none',
               fontFamily: 'var(--font-inter), sans-serif', color: 'var(--navy)',
             }}
-            placeholder="от"
+            placeholder={t('от', 'from')}
           />
           <span style={{ color: '#ccc', fontSize: '0.75rem', flexShrink: 0 }}>—</span>
           <input type="number" min={filters.priceMin} max={10000}
@@ -215,7 +215,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
               padding: '0.5rem 0.625rem', fontSize: '0.8rem', outline: 'none',
               fontFamily: 'var(--font-inter), sans-serif', color: 'var(--navy)',
             }}
-            placeholder="до"
+            placeholder={t('до', 'to')}
           />
         </div>
       </div>

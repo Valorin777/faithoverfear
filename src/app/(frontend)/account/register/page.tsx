@@ -76,8 +76,8 @@ export default function RegisterPage() {
               {t('Вы регистрируетесь по приглашению — код', 'You are signing up via invitation — code')} <strong>{ref}</strong>
             </div>
           )}
-          <Field label={t('Имя', 'Name')} type="text" value={form.name} onChange={set('name')} placeholder="Иван" />
-          <Field label="Email" type="email" value={form.email} onChange={set('email')} placeholder="ivan@mail.ru" required />
+          <Field label={t('Имя', 'Name')} type="text" value={form.name} onChange={set('name')} placeholder={t('Иван', 'John')} />
+          <Field label="Email" type="email" value={form.email} onChange={set('email')} placeholder={t('ivan@mail.ru', 'john@mail.com')} required />
           <Field label={t('Телефон', 'Phone')} type="tel" value={form.phone} onChange={set('phone')} placeholder="+7 (999) 000-00-00" />
           <Field label={t('Пароль', 'Password')} type="password" value={form.password} onChange={set('password')} placeholder={t('минимум 6 символов', 'min. 6 characters')} required />
 

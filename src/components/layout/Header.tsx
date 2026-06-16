@@ -215,7 +215,7 @@ export default function Header() {
                 onClick={() => setSearchOpen(v => !v)}
                 style={iconBtn}
                 className="header-icon-btn"
-                aria-label="Поиск"
+                aria-label={t('Поиск', 'Search')}
                 type="button"
               >
                 <Search size={19} strokeWidth={1.75} />
@@ -223,7 +223,7 @@ export default function Header() {
 
               {/* Избранное — только на планшете+ */}
               {isDesktop && (
-                <Link href="/account/wishlist" style={iconBtn} className="header-icon-btn" aria-label="Избранное">
+                <Link href="/account/wishlist" style={iconBtn} className="header-icon-btn" aria-label={t('Избранное', 'Wishlist')}>
                   <Heart size={19} strokeWidth={1.75} />
                   {wishCount > 0 && (
                     <span style={{
@@ -241,13 +241,13 @@ export default function Header() {
 
               {/* Кабинет — только на планшете+ */}
               {isDesktop && (
-                <Link href="/account" style={iconBtn} className="header-icon-btn" aria-label="Личный кабинет">
+                <Link href="/account" style={iconBtn} className="header-icon-btn" aria-label={t('Личный кабинет', 'My account')}>
                   <User size={19} strokeWidth={1.75} />
                 </Link>
               )}
 
               {/* Корзина */}
-              <Link href="/cart" style={iconBtn} className="header-icon-btn" aria-label="Корзина">
+              <Link href="/cart" style={iconBtn} className="header-icon-btn" aria-label={t('Корзина', 'Cart')}>
                 <ShoppingCart size={19} strokeWidth={1.75} />
                 {count > 0 && (
                   <span style={{
