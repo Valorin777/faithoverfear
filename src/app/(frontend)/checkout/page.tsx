@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
 import { useCart } from '@/context/CartContext'
+import { useLang } from '@/context/LanguageContext'
 import { formatPrice } from '@/lib/utils'
 
 const DELIVERY_OPTIONS = [
@@ -26,6 +27,7 @@ const FREE_DELIVERY_FROM = 3500
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart()
+  const { t } = useLang()
   const router = useRouter()
 
   const [delivery, setDelivery] = useState('cdek')
@@ -201,7 +203,7 @@ export default function CheckoutPage() {
               fontSize: 'clamp(1.75rem, 4vw, 2.25rem)',
               fontWeight: 700, color: 'var(--navy)',
             }}>
-              Оформление заказа
+              {t('Оформление заказа', 'Checkout')}
             </h1>
           </div>
 
@@ -212,7 +214,7 @@ export default function CheckoutPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }} className="stagger">
 
                 {/* Контактные данные */}
-                <Section icon="user" title="Контактные данные">
+                <Section icon="user" title={t('Контактные данные', 'Contact details')}>
                   <div className="field-grid" style={{ display: 'grid', gap: '1rem' }}>
                     <Field label="Имя *" value={form.firstName} onChange={set('firstName')} placeholder="Иван" required />
                     <Field label="Фамилия *" value={form.lastName} onChange={set('lastName')} placeholder="Иванов" required />
@@ -222,7 +224,7 @@ export default function CheckoutPage() {
                 </Section>
 
                 {/* Доставка */}
-                <Section icon="truck" title="Доставка по России" titleLink="/delivery" titleLinkLabel="Все условия">
+                <Section icon="truck" title={t('Доставка по России', 'Delivery across Russia')} titleLink="/delivery" titleLinkLabel={t('Все условия', 'All terms')}>
                   <div className="delivery-grid" style={{ display: 'grid', gap: '0.6rem', marginBottom: '1rem' }}>
                     {DELIVERY_OPTIONS.map(opt => {
                       const active = delivery === opt.id
@@ -287,7 +289,7 @@ export default function CheckoutPage() {
                 </Section>
 
                 {/* Оплата */}
-                <Section icon="card" title="Способ оплаты">
+                <Section icon="card" title={t('Способ оплаты', 'Payment method')}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     {PAYMENT_OPTIONS.map(opt => {
                       const active = payment === opt.id
@@ -322,7 +324,7 @@ export default function CheckoutPage() {
                 </Section>
 
                 {/* Комментарий */}
-                <Section icon="message" title="Комментарий к заказу">
+                <Section icon="message" title={t('Комментарий к заказу', 'Order comment')}>
                   <textarea
                     value={form.comment}
                     onChange={set('comment')}
@@ -352,7 +354,7 @@ export default function CheckoutPage() {
                     marginBottom: '1.25rem', paddingBottom: '1rem',
                     borderBottom: '1px solid #f0f0f0',
                   }}>
-                    Ваш заказ
+                    {t('Ваш заказ', 'Your order')}
                   </h2>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', marginBottom: '1.25rem' }}>
@@ -395,7 +397,7 @@ export default function CheckoutPage() {
                       <input
                         value={promoInput}
                         onChange={e => setPromoInput(e.target.value.toUpperCase())}
-                        placeholder="Промокод"
+                        placeholder={t('Промокод', 'Promo code')}
                         disabled={!!promo}
                         style={{
                           flex: 1, boxSizing: 'border-box', border: '1.5px solid #e8e8e8',
@@ -408,17 +410,17 @@ export default function CheckoutPage() {
                       {promo ? (
                         <button type="button" onClick={() => { setPromo(null); setPromoInput(''); setPromoError('') }}
                           style={{ background: '#eee', color: '#888', border: 'none', borderRadius: 6, padding: '0 1rem', cursor: 'pointer', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem', fontWeight: 600 }}>
-                          Убрать
+                          {t('Убрать', 'Remove')}
                         </button>
                       ) : (
                         <button type="button" onClick={applyPromo} disabled={promoLoading}
                           style={{ background: 'var(--navy)', color: '#fff', border: 'none', borderRadius: 6, padding: '0 1rem', cursor: 'pointer', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
-                          {promoLoading ? '…' : 'Применить'}
+                          {promoLoading ? '…' : t('Применить', 'Apply')}
                         </button>
                       )}
                     </div>
                     {promoError && <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem', color: 'var(--burgundy)', marginTop: '0.4rem' }}>{promoError}</p>}
-                    {promo && <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem', color: '#22863a', marginTop: '0.4rem' }}>Промокод {promo.code} применён</p>}
+                    {promo && <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem', color: '#22863a', marginTop: '0.4rem' }}>{t('Промокод', 'Promo code')} {promo.code} {t('применён', 'applied')}</p>}
                   </div>
 
                   {/* Бонусы */}
@@ -426,17 +428,17 @@ export default function CheckoutPage() {
                     <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.875rem', cursor: 'pointer' }}>
                       <input type="checkbox" checked={useBonus} onChange={e => setUseBonus(e.target.checked)} style={{ accentColor: 'var(--burgundy)', width: 16, height: 16 }} />
                       <span style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.82rem', color: 'var(--navy)' }}>
-                        Списать бонусы <strong>(доступно {formatPrice(bonusBalance)})</strong>
+                        {t('Списать бонусы', 'Use bonuses')} <strong>({t('доступно', 'available')} {formatPrice(bonusBalance)})</strong>
                       </span>
                     </label>
                   )}
 
                   {/* Суммы */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingTop: '1rem', marginTop: '1rem', borderTop: '1px solid #f0f0f0' }}>
-                    <SummaryRow label="Товары" value={formatPrice(total)} />
-                    {promoDiscount > 0 && <SummaryRow label={`Скидка${promo ? ` (${promo.code})` : ''}`} value={`−${formatPrice(promoDiscount)}`} valueColor="#22863a" />}
-                    <SummaryRow label="Доставка" value={deliveryPrice === 0 ? 'Бесплатно' : formatPrice(deliveryPrice)} valueColor={deliveryPrice === 0 ? '#22863a' : undefined} />
-                    {bonusToUse > 0 && <SummaryRow label="Бонусами" value={`−${formatPrice(bonusToUse)}`} valueColor="#22863a" />}
+                    <SummaryRow label={t('Товары', 'Items')} value={formatPrice(total)} />
+                    {promoDiscount > 0 && <SummaryRow label={`${t('Скидка', 'Discount')}${promo ? ` (${promo.code})` : ''}`} value={`−${formatPrice(promoDiscount)}`} valueColor="#22863a" />}
+                    <SummaryRow label={t('Доставка', 'Delivery')} value={deliveryPrice === 0 ? t('Бесплатно', 'Free') : formatPrice(deliveryPrice)} valueColor={deliveryPrice === 0 ? '#22863a' : undefined} />
+                    {bonusToUse > 0 && <SummaryRow label={t('Бонусами', 'Bonuses')} value={`−${formatPrice(bonusToUse)}`} valueColor="#22863a" />}
                   </div>
 
                   <div style={{
@@ -448,7 +450,7 @@ export default function CheckoutPage() {
                       fontFamily: 'var(--font-inter), sans-serif',
                       fontSize: '0.85rem', fontWeight: 700, color: 'var(--navy)',
                       textTransform: 'uppercase', letterSpacing: '0.04em',
-                    }}>Итого</span>
+                    }}>{t('Итого', 'Total')}</span>
                     <span style={{
                       fontFamily: 'var(--font-playfair), Georgia, serif',
                       fontSize: '1.5rem', fontWeight: 700, color: 'var(--navy)',
@@ -487,12 +489,12 @@ export default function CheckoutPage() {
                           border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff',
                           display: 'inline-block', animation: 'spin 0.7s linear infinite',
                         }} />
-                        Обработка...
+                        {t('Обработка...', 'Processing...')}
                       </>
                     ) : (
                       <>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                        Оплатить {formatPrice(grandTotal)}
+                        {t('Оплатить', 'Pay')} {formatPrice(grandTotal)}
                       </>
                     )}
                   </button>
@@ -501,8 +503,8 @@ export default function CheckoutPage() {
                     fontFamily: 'var(--font-inter), sans-serif',
                     fontSize: '0.68rem', color: '#bbb', textAlign: 'center', marginTop: '0.875rem',
                   }}>
-                    Нажимая кнопку, вы соглашаетесь с{' '}
-                    <Link href="/offer" style={{ color: '#999', textDecoration: 'underline' }}>публичной офертой</Link>
+                    {t('Нажимая кнопку, вы соглашаетесь с', 'By clicking the button, you agree to the')}{' '}
+                    <Link href="/offer" style={{ color: '#999', textDecoration: 'underline' }}>{t('публичной офертой', 'public offer')}</Link>
                   </p>
                 </div>
               </div>
