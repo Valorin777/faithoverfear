@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Product, ProductVariant } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { useCart } from '@/context/CartContext'
+import { useLang } from '@/context/LanguageContext'
 import WishlistButton from '@/components/ui/WishlistButton'
 
 interface ProductFormProps {
@@ -19,6 +20,7 @@ export default function ProductForm({ product }: ProductFormProps) {
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
   const { addItem } = useCart()
+  const { t } = useLang()
 
   const selectedVariant: ProductVariant | undefined = product.variants.find(
     v => v.size === selectedSize && v.color === selectedColor
@@ -82,7 +84,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           fontSize: '0.72rem', color: '#ccc',
           marginTop: '0.5rem', fontWeight: 300,
         }}>
-          Включая НДС · Доставка рассчитывается отдельно
+          {t('Включая НДС · Доставка рассчитывается отдельно', 'VAT included · Delivery calculated separately')}
         </p>
       </div>
 
@@ -95,7 +97,7 @@ export default function ProductForm({ product }: ProductFormProps) {
             color: 'var(--navy)', marginBottom: '0.75rem',
             textTransform: 'uppercase', letterSpacing: '0.08em',
           }}>
-            Цвет:&nbsp;<span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>{selectedColor}</span>
+            {t('Цвет:', 'Colour:')}&nbsp;<span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>{selectedColor}</span>
           </p>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             {colors.map(v => (
@@ -132,7 +134,7 @@ export default function ProductForm({ product }: ProductFormProps) {
             color: 'var(--navy)',
             textTransform: 'uppercase', letterSpacing: '0.08em',
           }}>
-            Размер:&nbsp;<span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>{selectedSize ?? 'не выбран'}</span>
+            {t('Размер:', 'Size:')}&nbsp;<span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>{selectedSize ?? t('не выбран', 'not selected')}</span>
           </p>
           <button type="button" style={{
             fontFamily: 'var(--font-inter), sans-serif',
@@ -141,7 +143,7 @@ export default function ProductForm({ product }: ProductFormProps) {
             textDecoration: 'underline', textUnderlineOffset: 3,
             padding: 0,
           }}>
-            Таблица размеров
+            {t('Таблица размеров', 'Size chart')}
           </button>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -180,7 +182,7 @@ export default function ProductForm({ product }: ProductFormProps) {
             fontSize: '0.72rem', color: 'var(--burgundy)',
             marginTop: '0.5rem',
           }}>
-            Выберите размер для добавления в корзину
+            {t('Выберите размер для добавления в корзину', 'Select a size to add to cart')}
           </p>
         )}
       </div>
@@ -193,7 +195,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           color: 'var(--navy)', marginBottom: '0.75rem',
           textTransform: 'uppercase', letterSpacing: '0.08em',
         }}>
-          Количество
+          {t('Количество', 'Quantity')}
         </p>
         <div style={{
           display: 'flex', alignItems: 'center',
@@ -260,7 +262,7 @@ export default function ProductForm({ product }: ProductFormProps) {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 6L9 17l-5-5"/>
               </svg>
-              Добавлено в корзину
+              {t('Добавлено в корзину', 'Added to cart')}
             </>
           ) : (
             <>
@@ -269,7 +271,7 @@ export default function ProductForm({ product }: ProductFormProps) {
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
-              Добавить в корзину
+              {t('Добавить в корзину', 'Add to cart')}
             </>
           )}
         </button>
@@ -293,7 +295,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
           </svg>
-          Купить в 1 клик
+          {t('Купить в 1 клик', 'Buy in 1 click')}
         </button>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -304,9 +306,9 @@ export default function ProductForm({ product }: ProductFormProps) {
       {/* Доставка */}
       <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '1.25rem' }}>
         {[
-          { text: 'Доставка СДЭК, Boxberry, Почта России', icon: '🚚' },
-          { text: 'Самовывоз из пункта выдачи', icon: '📍' },
-          { text: 'Возврат в течение 14 дней', icon: '↩' },
+          { text: t('Доставка СДЭК, Boxberry, Почта России', 'Delivery by CDEK, Boxberry, Russian Post'), icon: '🚚' },
+          { text: t('Самовывоз из пункта выдачи', 'Pickup from a collection point'), icon: '📍' },
+          { text: t('Возврат в течение 14 дней', 'Returns within 14 days'), icon: '↩' },
         ].map(({ text }) => (
           <div key={text} style={{
             display: 'flex', alignItems: 'center', gap: '0.75rem',

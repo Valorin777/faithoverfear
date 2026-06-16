@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useLang } from '@/context/LanguageContext'
 
 export default function SubscribePopup() {
+  const { t } = useLang()
   const [show, setShow] = useState(false)
   const [email, setEmail] = useState('')
   const [done, setDone] = useState(false)
@@ -74,11 +76,11 @@ export default function SubscribePopup() {
           <p style={{
             fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.6rem',
             letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.5rem',
-          }}>Будьте в курсе</p>
+          }}>{t('Будьте в курсе', 'Stay in touch')}</p>
           <h2 style={{
             fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.5rem',
             fontWeight: 700, color: '#fff', lineHeight: 1.2,
-          }}>Подпишитесь на новости</h2>
+          }}>{t('Подпишитесь на новости', 'Subscribe to news')}</h2>
         </div>
 
         {/* Тело */}
@@ -91,8 +93,8 @@ export default function SubscribePopup() {
               }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22863a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
               </div>
-              <p style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--navy)' }}>Спасибо!</p>
-              <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.85rem', color: '#888', marginTop: '0.35rem' }}>Вы подписались на новинки и акции.</p>
+              <p style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--navy)' }}>{t('Спасибо!', 'Thank you!')}</p>
+              <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.85rem', color: '#888', marginTop: '0.35rem' }}>{t('Вы подписались на новинки и акции.', 'You are subscribed to new arrivals and sales.')}</p>
             </div>
           ) : (
             <>
@@ -100,7 +102,7 @@ export default function SubscribePopup() {
                 fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.88rem',
                 color: '#777', lineHeight: 1.6, textAlign: 'center', marginBottom: '1.25rem', fontWeight: 300,
               }}>
-                Новинки, акции и вдохновляющие цитаты — первыми на вашу почту.
+                {t('Новинки, акции и вдохновляющие цитаты — первыми на вашу почту.', 'New arrivals, sales and inspiring quotes — first to your inbox.')}
               </p>
               <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                 <input
@@ -117,11 +119,11 @@ export default function SubscribePopup() {
                   padding: '0.9rem', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem',
                   fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer',
                 }}>
-                  Подписаться
+                  {t('Подписаться', 'Subscribe')}
                 </button>
               </form>
               <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.68rem', color: '#bbb', textAlign: 'center', marginTop: '0.875rem' }}>
-                Без спама. Отписаться можно в любой момент.
+                {t('Без спама. Отписаться можно в любой момент.', 'No spam. Unsubscribe anytime.')}
               </p>
             </>
           )}
