@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
+  lockDocuments: false,
   labels: {
     singular: 'Статья',
     plural: 'Блог',

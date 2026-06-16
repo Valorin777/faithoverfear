@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const Returns: CollectionConfig = {
   slug: 'returns',
+  lockDocuments: false,
   labels: {
     singular: 'Возврат',
     plural: 'Возвраты',

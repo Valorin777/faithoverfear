@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const Promocodes: CollectionConfig = {
   slug: 'promocodes',
+  lockDocuments: false,
   labels: {
     singular: 'Промокод',
     plural: 'Промокоды',

@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
+  lockDocuments: false,
   labels: {
     singular: 'Заказ',
     plural: 'Заказы',
@@ -10,6 +11,16 @@ export const Orders: CollectionConfig = {
     useAsTitle: 'orderNumber',
     defaultColumns: ['orderNumber', 'customerName', 'total', 'status', 'createdAt'],
     group: 'Магазин',
+  },
+  access: {
+    // Администратор видит все заказы; покупатель — только свои; гость — никакие
+    read: ({ req }) => {
+      const u = req.user
+      if (!u) return false
+      if (u.collection === 'users') return true
+      if (u.collection === 'customers') return { customer: { equals: u.id } }
+      return false
+    },
   },
   fields: [
     {
@@ -87,6 +98,13 @@ export const Orders: CollectionConfig = {
         { label: 'СберПей', value: 'sber' },
         { label: 'Криптовалюта', value: 'crypto' },
       ],
+    },
+    {
+      name: 'customer',
+      label: 'Покупатель (аккаунт)',
+      type: 'relationship',
+      relationTo: 'customers',
+      admin: { readOnly: true, description: 'Если заказ оформлен из личного кабинета' },
     },
     {
       name: 'items',

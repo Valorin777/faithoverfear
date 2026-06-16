@@ -11,6 +11,12 @@ interface IncomingItem {
   quantity: number
 }
 
+interface AuthedCustomer {
+  id: string | number
+  referredBy?: string | number | { id: string | number } | null
+  referralRewarded?: boolean
+}
+
 interface OrderPayload {
   firstName: string
   lastName: string
@@ -54,6 +60,18 @@ export async function POST(request: Request) {
   }
 
   const payload = await getPayload({ config })
+
+  // Определяем вошедшего покупателя (если заказ из личного кабинета)
+  let customer: AuthedCustomer | null = null
+  try {
+    const authResult = await payload.auth({ headers: request.headers })
+    const u = authResult.user as ({ collection?: string } & AuthedCustomer) | null
+    if (u && u.collection === 'customers') {
+      customer = { id: u.id, referredBy: u.referredBy, referralRewarded: u.referralRewarded }
+    }
+  } catch {
+    // не залогинен — обычный гостевой заказ
+  }
 
   // Пересчёт суммы товаров по реальным ценам из базы (защита от подмены)
   let goodsTotal = 0
@@ -108,6 +126,7 @@ export async function POST(request: Request) {
         items: { goods: itemsSnapshot, goodsTotal, deliveryPrice },
         total,
         comment: body.comment,
+        customer: customer?.id,
       },
     })
   } catch (e) {
@@ -115,5 +134,41 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Не удалось создать заказ' }, { status: 500 })
   }
 
-  return Response.json({ success: true, orderNumber, total })
+  // Реферальный бонус: если покупатель пришёл по приглашению, заказ от 3000 ₽
+  // и бонус ещё не начислялся — начисляем пригласившему 10% от суммы заказа.
+  let referralBonus = 0
+  if (customer && customer.referredBy && !customer.referralRewarded && total >= 3000) {
+    const rb: unknown = customer.referredBy
+    const referrerId = (
+      typeof rb === 'object' && rb !== null ? (rb as { id: string | number }).id : rb
+    ) as string | number
+    try {
+      const referrer = await payload.findByID({
+        collection: 'customers',
+        id: referrerId,
+        depth: 0,
+      })
+      if (referrer) {
+        referralBonus = Math.round(total * 0.1)
+        await payload.update({
+          collection: 'customers',
+          id: referrerId,
+          data: { bonusBalance: ((referrer as { bonusBalance?: number }).bonusBalance || 0) + referralBonus },
+          overrideAccess: true,
+          overrideLock: true,
+        })
+        await payload.update({
+          collection: 'customers',
+          id: customer.id,
+          data: { referralRewarded: true },
+          overrideAccess: true,
+          overrideLock: true,
+        })
+      }
+    } catch (e) {
+      console.error('Referral bonus error:', e)
+    }
+  }
+
+  return Response.json({ success: true, orderNumber, total, referralBonus })
 }
