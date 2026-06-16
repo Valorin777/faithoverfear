@@ -148,11 +148,21 @@ export async function getPosts(): Promise<BlogPost[]> {
 
 /** Настройки сайта из админки. Поля, которые владелец не заполнил, остаются пустыми (на витрине — запасные значения). */
 export async function getSettings(): Promise<SiteSettingsData> {
-  const fallback: SiteSettingsData = { freeDeliveryFrom: 3500, socials: [], deliveryMethods: [], paymentMethods: [] }
+  const fallback: SiteSettingsData = { freeDeliveryFrom: 3500, socials: [], deliveryMethods: [], paymentMethods: [], paymentSystems: [] }
   try {
     const payload = await getPayload({ config })
-    const s = (await payload.findGlobal({ slug: 'settings', depth: 1 })) as any
+    const [s, ps] = await Promise.all([
+      payload.findGlobal({ slug: 'settings', depth: 1 }) as Promise<any>,
+      payload
+        .find({ collection: 'payment-systems', where: { enabled: { equals: true } }, sort: 'order', depth: 0, limit: 50, pagination: false })
+        .then((r) => r.docs)
+        .catch(() => []),
+    ])
+    const paymentSystems = (ps as any[]).map((p) => ({
+      code: p.code, name: p.name, nameEn: p.nameEn || undefined, hint: p.hint || undefined, hintEn: p.hintEn || undefined,
+    }))
     return {
+      paymentSystems,
       promoBarText: s.promoBarText || undefined,
       promoBarTextEn: s.promoBarTextEn || undefined,
       freeDeliveryFrom: typeof s.freeDeliveryFrom === 'number' ? s.freeDeliveryFrom : 3500,

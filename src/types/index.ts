@@ -124,6 +124,7 @@ export interface SiteSettingsData {
     descriptionEn?: string
   }[]
   paymentMethods: { ru: string; en?: string }[]
+  paymentSystems: { code: string; name: string; nameEn?: string; hint?: string; hintEn?: string }[]
   heroImage?: string
   heroVideo?: string
 }

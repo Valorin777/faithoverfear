@@ -3,7 +3,7 @@
 import { createContext, useContext, ReactNode } from 'react'
 import type { SiteSettingsData } from '@/types'
 
-const FALLBACK: SiteSettingsData = { freeDeliveryFrom: 3500, socials: [], deliveryMethods: [], paymentMethods: [] }
+const FALLBACK: SiteSettingsData = { freeDeliveryFrom: 3500, socials: [], deliveryMethods: [], paymentMethods: [], paymentSystems: [] }
 
 const SettingsContext = createContext<SiteSettingsData>(FALLBACK)
 

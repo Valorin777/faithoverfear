@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
 import { useCart } from '@/context/CartContext'
 import { useLang } from '@/context/LanguageContext'
+import { useSettings } from '@/context/SettingsContext'
 import { formatPrice } from '@/lib/utils'
 
 const DELIVERY_OPTIONS = [
@@ -28,10 +29,15 @@ const FREE_DELIVERY_FROM = 3500
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart()
   const { t } = useLang()
+  const settings = useSettings()
   const router = useRouter()
 
+  const paymentOptions = settings.paymentSystems.length
+    ? settings.paymentSystems.map((p) => ({ id: p.code, label: p.name, labelEn: p.nameEn, hint: p.hint || '', hintEn: p.hintEn }))
+    : PAYMENT_OPTIONS
+
   const [delivery, setDelivery] = useState('cdek')
-  const [payment, setPayment] = useState('yukassa')
+  const [payment, setPayment] = useState(paymentOptions[0]?.id || 'yukassa')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authState, setAuthState] = useState<'checking' | 'authed' | 'guest'>('checking')
@@ -293,7 +299,7 @@ export default function CheckoutPage() {
                 {/* Оплата */}
                 <Section icon="card" title={t('Способ оплаты', 'Payment method')}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {PAYMENT_OPTIONS.map(opt => {
+                    {paymentOptions.map(opt => {
                       const active = payment === opt.id
                       return (
                         <label key={opt.id} style={{
