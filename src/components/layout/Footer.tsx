@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useLang } from '@/context/LanguageContext'
 
 const socials = [
   {
@@ -29,27 +32,27 @@ const socials = [
 
 const nav = {
   catalog: [
-    { href: '/catalog/tshirts', label: 'Футболки' },
-    { href: '/catalog/polo', label: 'Поло' },
-    { href: '/catalog/sweatshirts', label: 'Свитшоты' },
-    { href: '/catalog/sweaters', label: 'Свитеры' },
-    { href: '/gift-sets', label: 'Подарочные наборы' },
-    { href: '/catalog/accessories', label: 'Аксессуары' },
+    { href: '/catalog/tshirts', label: 'Футболки', en: 'T-shirts' },
+    { href: '/catalog/polo', label: 'Поло', en: 'Polo' },
+    { href: '/catalog/sweatshirts', label: 'Свитшоты', en: 'Sweatshirts' },
+    { href: '/catalog/sweaters', label: 'Свитеры', en: 'Sweaters' },
+    { href: '/gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
+    { href: '/catalog/accessories', label: 'Аксессуары', en: 'Accessories' },
   ],
   info: [
-    { href: '/about', label: 'О проекте' },
-    { href: '/blog', label: 'Блог' },
-    { href: '/contacts', label: 'Контакты' },
-    { href: '/delivery', label: 'Доставка и оплата' },
-    { href: '/new', label: 'Новинки' },
-    { href: '/sale', label: 'Акции' },
+    { href: '/about', label: 'О проекте', en: 'About' },
+    { href: '/blog', label: 'Блог', en: 'Blog' },
+    { href: '/contacts', label: 'Контакты', en: 'Contacts' },
+    { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },
+    { href: '/new', label: 'Новинки', en: 'New In' },
+    { href: '/sale', label: 'Акции', en: 'Sale' },
   ],
 }
 
 const legal = [
-  { href: '/privacy', label: 'Политика конфиденциальности' },
-  { href: '/offer', label: 'Публичная оферта' },
-  { href: '/returns', label: 'Возврат и обмен' },
+  { href: '/privacy', label: 'Политика конфиденциальности', en: 'Privacy Policy' },
+  { href: '/offer', label: 'Публичная оферта', en: 'Terms of Offer' },
+  { href: '/returns', label: 'Возврат и обмен', en: 'Returns & Exchange' },
 ]
 
 const s: Record<string, React.CSSProperties> = {
@@ -76,6 +79,7 @@ const s: Record<string, React.CSSProperties> = {
 }
 
 export default function Footer() {
+  const { t } = useLang()
   return (
     <footer style={{ background: 'var(--navy-dark)', color: '#fff' }}>
 
@@ -109,7 +113,7 @@ export default function Footer() {
               textTransform: 'uppercase',
               marginBottom: '1.25rem',
             }}>
-              Православная одежда
+              {t('Православная одежда', 'Orthodox Clothing')}
             </div>
             <p style={{
               fontFamily: 'var(--font-inter), sans-serif',
@@ -120,7 +124,7 @@ export default function Footer() {
               fontWeight: 300,
               maxWidth: 260,
             }}>
-              Одежда, которая несёт Свет. Создана с молитвой и любовью для тех, кто живёт верой.
+              {t('Одежда, которая несёт Свет. Создана с молитвой и любовью для тех, кто живёт верой.', 'Clothing that carries the Light. Made with prayer and love for those who live by faith.')}
             </p>
 
             {/* Соцсети */}
@@ -147,23 +151,23 @@ export default function Footer() {
 
           {/* Каталог */}
           <div>
-            <span style={s.h}>Каталог</span>
+            <span style={s.h}>{t('Каталог', 'Catalog')}</span>
             {nav.catalog.map(l => (
-              <Link key={l.href} href={l.href} style={s.link}>{l.label}</Link>
+              <Link key={l.href} href={l.href} style={s.link}>{t(l.label, l.en)}</Link>
             ))}
           </div>
 
           {/* Информация */}
           <div>
-            <span style={s.h}>Информация</span>
+            <span style={s.h}>{t('Информация', 'Information')}</span>
             {nav.info.map(l => (
-              <Link key={l.href} href={l.href} style={s.link}>{l.label}</Link>
+              <Link key={l.href} href={l.href} style={s.link}>{t(l.label, l.en)}</Link>
             ))}
           </div>
 
           {/* Контакты */}
           <div>
-            <span style={s.h}>Контакты</span>
+            <span style={s.h}>{t('Контакты', 'Contacts')}</span>
             <div style={{
               fontFamily: 'var(--font-inter), sans-serif',
               fontSize: '0.82rem',
@@ -191,7 +195,7 @@ export default function Footer() {
                 marginBottom: '0.875rem',
                 fontWeight: 300,
               }}>
-                Подпишитесь на наш Telegram-канал — новинки и вдохновляющие цитаты
+                {t('Подпишитесь на наш Telegram-канал — новинки и вдохновляющие цитаты', 'Subscribe to our Telegram channel — new arrivals and inspiring quotes')}
               </p>
               <a href="https://t.me/" target="_blank" rel="noopener noreferrer"
                 style={{
@@ -213,7 +217,7 @@ export default function Footer() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.16 14.605l-2.963-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.659.981z"/>
                 </svg>
-                Подписаться в Telegram
+                {t('Подписаться в Telegram', 'Subscribe on Telegram')}
               </a>
             </div>
           </div>
@@ -237,7 +241,7 @@ export default function Footer() {
             color: 'rgba(255,255,255,0.25)',
             fontWeight: 300,
           }}>
-            © 2024–2025 Faith over Fear. Все права защищены.
+            © 2024–2025 Faith over Fear. {t('Все права защищены.', 'All rights reserved.')}
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem' }}>
             {legal.map(l => (
@@ -249,7 +253,7 @@ export default function Footer() {
                 fontWeight: 300,
                 transition: 'color 0.15s',
               }}>
-                {l.label}
+                {t(l.label, l.en)}
               </Link>
             ))}
           </div>
