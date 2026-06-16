@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import PageLayout from '@/components/layout/PageLayout'
 import { useCart } from '@/context/CartContext'
+import { useLang } from '@/context/LanguageContext'
 import { formatPrice } from '@/lib/utils'
 
 const DELIVERY_OPTIONS = [
@@ -17,6 +18,7 @@ const FREE_DELIVERY_FROM = 3500
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, total } = useCart()
+  const { t } = useLang()
   const [delivery, setDelivery] = useState('cdek')
 
   const deliveryPrice = total >= FREE_DELIVERY_FROM
@@ -51,14 +53,14 @@ export default function CartPage() {
             fontSize: '1.75rem', fontWeight: 700, color: 'var(--navy)',
             marginBottom: '0.75rem',
           }}>
-            Корзина пуста
+            {t('Корзина пуста', 'Your cart is empty')}
           </h1>
           <p style={{
             fontFamily: 'var(--font-inter), sans-serif',
             fontSize: '0.95rem', color: '#999', fontWeight: 300,
             marginBottom: '2rem',
           }}>
-            Добавьте товары из каталога, чтобы оформить заказ
+            {t('Добавьте товары из каталога, чтобы оформить заказ', 'Add products from the catalog to place an order')}
           </p>
           <Link href="/catalog" style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
@@ -69,7 +71,7 @@ export default function CartPage() {
             letterSpacing: '0.1em', textTransform: 'uppercase',
             textDecoration: 'none',
           }}>
-            Перейти в каталог
+            {t('Перейти в каталог', 'Go to catalog')}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
         </div>
@@ -90,7 +92,7 @@ export default function CartPage() {
               fontWeight: 700, color: 'var(--navy)',
               marginBottom: '0.35rem',
             }}>
-              Корзина
+              {t('Корзина', 'Cart')}
             </h1>
             <p style={{
               fontFamily: 'var(--font-inter), sans-serif',
@@ -210,7 +212,7 @@ export default function CartPage() {
                 textDecoration: 'none',
               }} className="nav-underline">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Продолжить покупки
+                {t('Продолжить покупки', 'Continue shopping')}
               </Link>
             </div>
 
@@ -226,7 +228,7 @@ export default function CartPage() {
                   marginBottom: '1.25rem', paddingBottom: '1rem',
                   borderBottom: '1px solid #f0f0f0',
                 }}>
-                  Итого
+                  {t('Итого', 'Summary')}
                 </h2>
 
                 {/* Прогресс бесплатной доставки */}
@@ -240,7 +242,7 @@ export default function CartPage() {
                       fontSize: '0.74rem', color: 'var(--navy)',
                       marginBottom: '0.6rem', lineHeight: 1.5,
                     }}>
-                      Добавьте ещё <strong style={{ color: 'var(--burgundy)' }}>{formatPrice(remaining)}</strong> до бесплатной доставки
+                      {t('Добавьте ещё', 'Add')} <strong style={{ color: 'var(--burgundy)' }}>{formatPrice(remaining)}</strong> {t('до бесплатной доставки', 'more for free delivery')}
                     </p>
                     <div style={{
                       height: 6, background: '#e8ddc8', borderRadius: 99, overflow: 'hidden',
@@ -263,7 +265,7 @@ export default function CartPage() {
                       fontFamily: 'var(--font-inter), sans-serif',
                       fontSize: '0.78rem', color: '#22863a', fontWeight: 600,
                     }}>
-                      Бесплатная доставка применена
+                      {t('Бесплатная доставка применена', 'Free delivery applied')}
                     </span>
                   </div>
                 )}
@@ -279,14 +281,14 @@ export default function CartPage() {
                       fontSize: '0.72rem', fontWeight: 700, color: 'var(--navy)',
                       textTransform: 'uppercase', letterSpacing: '0.06em',
                     }}>
-                      Способ доставки
+                      {t('Способ доставки', 'Delivery method')}
                     </p>
                     <Link href="/delivery" style={{
                       fontFamily: 'var(--font-inter), sans-serif',
                       fontSize: '0.68rem', color: 'var(--gold)', fontWeight: 600,
                       textDecoration: 'underline', textUnderlineOffset: 2,
                     }}>
-                      Подробнее
+                      {t('Подробнее', 'Details')}
                     </Link>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -318,7 +320,7 @@ export default function CartPage() {
                             fontSize: '0.78rem', fontWeight: 700,
                             color: free ? '#22863a' : 'var(--navy)',
                           }}>
-                            {free ? 'Бесплатно' : formatPrice(opt.price)}
+                            {free ? t('Бесплатно', 'Free') : formatPrice(opt.price)}
                           </span>
                         </label>
                       )
@@ -328,8 +330,8 @@ export default function CartPage() {
 
                 {/* Суммы */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingTop: '1rem', borderTop: '1px solid #f0f0f0' }}>
-                  <Row label={`Товары (${itemCount} шт.)`} value={formatPrice(total)} />
-                  <Row label="Доставка" value={deliveryPrice === 0 ? 'Бесплатно' : formatPrice(deliveryPrice)} valueColor={deliveryPrice === 0 ? '#22863a' : undefined} />
+                  <Row label={`${t('Товары', 'Items')} (${itemCount} ${t('шт.', 'pcs')})`} value={formatPrice(total)} />
+                  <Row label={t('Доставка', 'Delivery')} value={deliveryPrice === 0 ? t('Бесплатно', 'Free') : formatPrice(deliveryPrice)} valueColor={deliveryPrice === 0 ? '#22863a' : undefined} />
                 </div>
 
                 <div style={{
@@ -342,7 +344,7 @@ export default function CartPage() {
                     fontSize: '0.85rem', fontWeight: 700, color: 'var(--navy)',
                     textTransform: 'uppercase', letterSpacing: '0.04em',
                   }}>
-                    К оплате
+                    {t('К оплате', 'Total')}
                   </span>
                   <span style={{
                     fontFamily: 'var(--font-playfair), Georgia, serif',
@@ -365,7 +367,7 @@ export default function CartPage() {
                   onMouseEnter={e => { e.currentTarget.style.background = 'var(--burgundy-dk)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
                   onMouseLeave={e => { e.currentTarget.style.background = 'var(--burgundy)'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >
-                  Оформить заказ
+                  {t('Оформить заказ', 'Checkout')}
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </Link>
 
@@ -374,13 +376,13 @@ export default function CartPage() {
                   display: 'flex', justifyContent: 'center', gap: '1.25rem',
                   marginTop: '1.25rem', flexWrap: 'wrap',
                 }}>
-                  {['Безопасная оплата', 'Возврат 14 дней'].map(t => (
-                    <div key={t} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  {[{ ru: 'Безопасная оплата', en: 'Secure payment' }, { ru: 'Возврат 14 дней', en: '14-day returns' }].map(b => (
+                    <div key={b.ru} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                       <span style={{
                         fontFamily: 'var(--font-inter), sans-serif',
                         fontSize: '0.66rem', color: '#aaa',
-                      }}>{t}</span>
+                      }}>{t(b.ru, b.en)}</span>
                     </div>
                   ))}
                 </div>
