@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useLang } from '@/context/LanguageContext'
+import VideoPlayer from '@/components/ui/VideoPlayer'
 
 interface HeroBannerViewProps {
   eyebrow: string
@@ -12,10 +13,12 @@ interface HeroBannerViewProps {
   title2En?: string
   subtitle: string
   subtitleEn?: string
+  heroImage?: string
+  heroVideo?: string
 }
 
 export default function HeroBannerView({
-  eyebrow, eyebrowEn, title1, title1En, title2, title2En, subtitle, subtitleEn,
+  eyebrow, eyebrowEn, title1, title1En, title2, title2En, subtitle, subtitleEn, heroImage, heroVideo,
 }: HeroBannerViewProps) {
   const { t } = useLang()
 
@@ -32,6 +35,20 @@ export default function HeroBannerView({
       position: 'relative',
       overflow: 'hidden',
     }}>
+      {/* Фоновое медиа из админки (видео в приоритете) */}
+      {heroVideo ? (
+        <div style={{ position: 'absolute', inset: 0 }}>
+          <VideoPlayer src={heroVideo} poster={heroImage} autoPlay loop controls={false} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(17,29,51,0.72) 0%, rgba(17,29,51,0.82) 100%)' }} />
+        </div>
+      ) : heroImage ? (
+        <div style={{ position: 'absolute', inset: 0 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={heroImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(17,29,51,0.7) 0%, rgba(17,29,51,0.8) 100%)' }} />
+        </div>
+      ) : null}
+
       {/* Тонкий радиальный свет снизу */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',

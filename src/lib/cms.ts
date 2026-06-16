@@ -1,7 +1,7 @@
 import 'server-only'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { Product, ProductVariant, Review, BlogPost, ProductCategory } from '@/types'
+import { Product, ProductVariant, Review, BlogPost, ProductCategory, SiteSettingsData } from '@/types'
 import { products as staticProducts, reviews as staticReviews } from '@/data/products'
 import { blogPosts as staticPosts } from '@/data/blog'
 
@@ -44,6 +44,7 @@ function mapProduct(doc: any): Product {
     salePrice: typeof doc.salePrice === 'number' ? doc.salePrice : undefined,
     category: doc.category as ProductCategory,
     images: images.length ? images : [PLACEHOLDER_IMG],
+    video: mediaUrl(doc.video) || undefined,
     variants,
     tags: Array.isArray(doc.tags) ? doc.tags.filter((t: any) => typeof t === 'string') : [],
     isNew: !!doc.isNew,
@@ -137,6 +138,40 @@ export async function getPosts(): Promise<BlogPost[]> {
     // откат ниже
   }
   return staticPosts
+}
+
+/** Настройки сайта из админки. Поля, которые владелец не заполнил, остаются пустыми (на витрине — запасные значения). */
+export async function getSettings(): Promise<SiteSettingsData> {
+  const fallback: SiteSettingsData = { freeDeliveryFrom: 3500, socials: [], deliveryMethods: [], paymentMethods: [] }
+  try {
+    const payload = await getPayload({ config })
+    const s = (await payload.findGlobal({ slug: 'settings', depth: 1 })) as any
+    return {
+      promoBarText: s.promoBarText || undefined,
+      promoBarTextEn: s.promoBarTextEn || undefined,
+      freeDeliveryFrom: typeof s.freeDeliveryFrom === 'number' ? s.freeDeliveryFrom : 3500,
+      contactEmail: s.contactEmail || undefined,
+      contactPhone: s.contactPhone || undefined,
+      contactWebsite: s.contactWebsite || undefined,
+      workingHours: s.workingHours || undefined,
+      workingHoursEn: s.workingHoursEn || undefined,
+      socials: Array.isArray(s.socials) ? s.socials.filter((x: any) => x?.url).map((x: any) => ({ platform: x.platform, url: x.url })) : [],
+      telegramUrl: s.telegramUrl || undefined,
+      telegramPitch: s.telegramPitch || undefined,
+      telegramPitchEn: s.telegramPitchEn || undefined,
+      deliveryMethods: Array.isArray(s.deliveryMethods)
+        ? s.deliveryMethods.filter((x: any) => x?.name).map((x: any) => ({
+            name: x.name, nameEn: x.nameEn || undefined, price: x.price || '', priceEn: x.priceEn || undefined,
+            time: x.time || '', timeEn: x.timeEn || undefined, description: x.description || '', descriptionEn: x.descriptionEn || undefined,
+          }))
+        : [],
+      paymentMethods: Array.isArray(s.paymentMethods) ? s.paymentMethods.filter((x: any) => x?.ru).map((x: any) => ({ ru: x.ru, en: x.en || undefined })) : [],
+      heroImage: mediaUrl(s.heroImage) || undefined,
+      heroVideo: mediaUrl(s.heroVideo) || undefined,
+    }
+  } catch {
+    return fallback
+  }
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {

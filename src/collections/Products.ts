@@ -116,6 +116,15 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'video',
+      label: 'Видео товара',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Опционально: видео товара (MP4/WebM). Покажется первым в галерее.',
+      },
+    },
+    {
       name: 'variants',
       label: 'Варианты (размер / цвет / остаток)',
       type: 'array',

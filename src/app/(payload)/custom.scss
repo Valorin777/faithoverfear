@@ -440,3 +440,215 @@
     transform: none !important;
   }
 }
+
+/* ═════════════ ОФОРМЛЕНИЕ ВСЕХ СТРАНИЦ АДМИНКИ ═════════════
+   Эти правила вне @layer, поэтому уверенно перекрывают стили Payload.
+   custom.scss подключается только в админке — на витрину не влияет. */
+
+/* ── Навигация / сайдбар ── */
+.nav {
+  background: var(--bg-subtle);
+  border-right: 1px solid var(--border-hair);
+}
+.nav__link,
+.nav .nav__link {
+  border-radius: 9px;
+  margin: 1px 8px;
+  padding: 9px 11px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.nav__link:hover {
+  background: var(--accent-tint);
+  color: var(--text-primary);
+}
+.nav__link.active,
+.nav .nav__link.active {
+  background: var(--accent-tint);
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.nav-group__toggle,
+.nav-group__label {
+  font-size: 0.64rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase;
+  color: var(--text-muted) !important;
+}
+
+/* ── Верхняя панель ── */
+.app-header {
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--border-hair);
+}
+.step-nav {
+  font-size: 0.82rem;
+}
+
+/* ── Кнопки ── */
+.btn {
+  border-radius: 9px;
+  font-weight: 600;
+  transition: transform .16s var(--ease-out), box-shadow .2s, background .2s, border-color .2s;
+}
+.btn--style-primary {
+  --color: #fff;
+  --bg-color: var(--brand-navy);
+  --hover-bg: #233561;
+  --hover-color: #fff;
+}
+.btn--style-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.btn--style-secondary {
+  --color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.btn--style-secondary:hover {
+  border-color: var(--gold);
+  background: var(--gold-tint);
+}
+
+/* Кнопка «Сохранить» — золотая, заметная */
+.doc-controls .btn--style-primary,
+.form-submit .btn--style-primary {
+  --color: #2a2105;
+  --bg-color: var(--gold);
+  --hover-bg: #d8b85a;
+  --hover-color: #2a2105;
+}
+
+/* ── Поля ввода ── */
+input[type='text'],
+input[type='email'],
+input[type='number'],
+input[type='password'],
+input[type='tel'],
+input[type='search'],
+input[type='date'],
+textarea,
+.rs__control {
+  border-radius: 9px !important;
+  border-color: var(--border-soft) !important;
+  transition: border-color .15s, box-shadow .15s !important;
+}
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='password']:focus,
+input[type='tel']:focus,
+input[type='search']:focus,
+textarea:focus,
+.rs__control--is-focused {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, .18) !important;
+  outline: none !important;
+}
+.field-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.field-label .required {
+  color: var(--danger);
+}
+.field-description {
+  color: var(--text-muted);
+}
+
+/* ── Списки коллекций (таблицы) ── */
+.list-header__title,
+.collection-list__sub-header h1,
+h1.list-header__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+.table {
+  border: 1px solid var(--border-hair);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+.table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.table thead th {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted) !important;
+  background: var(--bg-subtle);
+  padding-top: 13px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--border-hair);
+}
+.table tbody td {
+  padding-top: 13px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--border-hair);
+  font-size: 0.86rem;
+}
+.table tbody tr:hover td {
+  background: var(--accent-tint);
+}
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Документ / форма редактирования ── */
+.doc-controls {
+  background: color-mix(in srgb, var(--surface-card) 86%, transparent);
+  border-bottom: 1px solid var(--border-hair);
+  backdrop-filter: saturate(1.4) blur(8px);
+}
+.group-field--gutter {
+  border-left: 1px solid var(--border-soft);
+}
+.collapsible-field {
+  border: 1px solid var(--border-hair);
+  border-radius: 12px;
+  padding: 4px 14px 10px;
+  margin-bottom: 14px;
+  background: var(--bg-subtle);
+}
+.array-field__draggable-rows > * {
+  border-radius: 12px;
+}
+.tabs-field__tab--active,
+.tabs-field__tab.tabs-field__tab--active {
+  box-shadow: inset 0 -2px 0 var(--gold);
+  color: var(--text-primary);
+}
+
+/* ── Пилюли статусов ── */
+.pill {
+  border-radius: 999px;
+  font-weight: 600;
+}
+.pill--style-success {
+  background: var(--success-tint);
+  color: var(--success);
+}
+.pill--style-warning {
+  background: var(--gold-tint);
+  color: var(--gold-ink);
+}
+.pill--style-error {
+  background: var(--danger-tint);
+  color: var(--danger);
+}
+
+/* ── Экран входа ── */
+.login__brand,
+.login__wrap {
+  background: var(--bg-base);
+}
+.login .form-submit .btn {
+  width: 100%;
+}

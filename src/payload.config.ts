@@ -73,7 +73,8 @@ export default buildConfig({
       },
     },
   },
-  collections: [Products, Orders, Customers, Promocodes, Returns, Reviews, Posts, Media, Users],
+  // Порядок задаёт группировку в навигации: Магазин · Аудитория · Контент · Маркетинг · Система
+  collections: [Products, Orders, Returns, Customers, Reviews, Posts, Media, Promocodes, Users],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

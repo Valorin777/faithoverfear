@@ -27,7 +27,7 @@ export const Customers: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['email', 'name', 'bonusBalance', 'referralCode', 'createdAt'],
-    group: 'Магазин',
+    group: 'Аудитория',
   },
   access: {
     // Регистрация открыта всем

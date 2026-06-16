@@ -44,7 +44,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
       {/* Основной блок */}
       <div className="product-layout" style={{ display: 'grid', gap: '3rem', marginBottom: '4rem' }}>
         {/* Галерея */}
-        <ProductGallery images={product.images} name={product.name} />
+        <ProductGallery images={product.images} video={product.video} name={product.name} />
 
         {/* Информация */}
         <div>

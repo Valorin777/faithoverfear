@@ -98,6 +98,34 @@ export interface BlogPost {
   createdAt: string
 }
 
+export interface SiteSettingsData {
+  promoBarText?: string
+  promoBarTextEn?: string
+  freeDeliveryFrom: number
+  contactEmail?: string
+  contactPhone?: string
+  contactWebsite?: string
+  workingHours?: string
+  workingHoursEn?: string
+  socials: { platform: string; url: string }[]
+  telegramUrl?: string
+  telegramPitch?: string
+  telegramPitchEn?: string
+  deliveryMethods: {
+    name: string
+    nameEn?: string
+    price: string
+    priceEn?: string
+    time: string
+    timeEn?: string
+    description: string
+    descriptionEn?: string
+  }[]
+  paymentMethods: { ru: string; en?: string }[]
+  heroImage?: string
+  heroVideo?: string
+}
+
 export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   tshirts: 'Футболки',
   polo: 'Поло',

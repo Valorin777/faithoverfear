@@ -3,7 +3,11 @@ import { Playfair_Display, Inter } from 'next/font/google'
 import { CartProvider } from '@/context/CartContext'
 import { WishlistProvider } from '@/context/WishlistContext'
 import { LanguageProvider } from '@/context/LanguageContext'
+import { SettingsProvider } from '@/context/SettingsContext'
+import { getSettings } from '@/lib/cms'
 import '../globals.css'
+
+export const revalidate = 60
 
 const playfair = Playfair_Display({
   variable: '--font-playfair',
@@ -37,21 +41,24 @@ export const metadata: Metadata = {
   },
 }
 
-export default function FrontendLayout({
+export default async function FrontendLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const settings = await getSettings()
   return (
     <html lang="ru" className={`${playfair.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
-        <LanguageProvider>
-          <CartProvider>
-            <WishlistProvider>
-              {children}
-            </WishlistProvider>
-          </CartProvider>
-        </LanguageProvider>
+        <SettingsProvider value={settings}>
+          <LanguageProvider>
+            <CartProvider>
+              <WishlistProvider>
+                {children}
+              </WishlistProvider>
+            </CartProvider>
+          </LanguageProvider>
+        </SettingsProvider>
       </body>
     </html>
   )
