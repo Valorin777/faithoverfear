@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { LayoutDashboard, PackagePlus, ShoppingBag, Bell } from 'lucide-react'
+import { LayoutDashboard, PackagePlus, ShoppingBag, Bell, Gift, CreditCard } from 'lucide-react'
 
 export default function AfterNavLinks() {
   const [orders, setOrders] = useState<number | null>(null)
@@ -76,6 +76,14 @@ export default function AfterNavLinks() {
       <Link href="/admin/collections/orders" className="fof-quicklink">
         <ShoppingBag size={15} strokeWidth={1.9} />
         Заказы
+      </Link>
+      <Link href="/admin/referrals" className="fof-quicklink">
+        <Gift size={15} strokeWidth={1.9} />
+        Реферальная программа
+      </Link>
+      <Link href="/admin/collections/payment-systems" className="fof-quicklink">
+        <CreditCard size={15} strokeWidth={1.9} />
+        Способы оплаты
       </Link>
     </div>
   )

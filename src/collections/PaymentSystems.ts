@@ -1,19 +1,21 @@
 import type { CollectionConfig } from 'payload'
 
 /**
- * Платёжные системы магазина. Владелец включает/добавляет их и вписывает
- * секретные ключи прямо в админке. Ключи доступны только администраторам
- * (на витрину и в публичный API не попадают).
+ * Способы оплаты на сайте. 6 систем уже созданы (ЮKassa, СБП, Тинькофф,
+ * СберПей, крипта, карта) — владельцу обычно нужно просто открыть нужную,
+ * включить её и вписать ключи из личного кабинета платёжной системы.
+ * Ключи видны только администраторам (на витрину и в публичный API не уходят).
  */
 export const PaymentSystems: CollectionConfig = {
   slug: 'payment-systems',
   lockDocuments: false,
-  labels: { singular: 'Платёжная система', plural: 'Платёжные системы' },
+  labels: { singular: 'Способ оплаты', plural: 'Способы оплаты' },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'code', 'enabled', 'order'],
     group: 'Магазин',
-    description: 'Способы оплаты на сайте. Порядок — по полю «Порядок».',
+    description:
+      'Способы оплаты, которые видит покупатель. Основные системы уже добавлены — откройте нужную, включите её переключателем и впишите ключи из личного кабинета платёжной системы. Порядок в списке задаёт поле «Порядок».',
   },
   access: {
     // Только администраторы — чтобы ключи не утекли через публичный API
@@ -26,8 +28,8 @@ export const PaymentSystems: CollectionConfig = {
     {
       type: 'row',
       fields: [
-        { name: 'name', label: 'Название (рус)', type: 'text', required: true },
-        { name: 'nameEn', label: 'Название (англ)', type: 'text' },
+        { name: 'name', label: 'Название (рус)', type: 'text', required: true, admin: { description: 'Как называется кнопка оплаты для покупателя. Напр.: ЮKassa' } },
+        { name: 'nameEn', label: 'Название (англ)', type: 'text', admin: { description: 'Для английской версии сайта' } },
       ],
     },
     {
@@ -35,12 +37,13 @@ export const PaymentSystems: CollectionConfig = {
       fields: [
         {
           name: 'code',
-          label: 'Код системы',
+          label: 'Тип системы',
           type: 'select',
           required: true,
+          admin: { description: 'Выберите провайдера — от этого зависит, какие ключи нужны ниже' },
           options: [
             { label: 'ЮKassa', value: 'yukassa' },
-            { label: 'СБП', value: 'sbp' },
+            { label: 'СБП (Система быстрых платежей)', value: 'sbp' },
             { label: 'Тинькофф Pay', value: 'tinkoff' },
             { label: 'СберПей', value: 'sber' },
             { label: 'Криптовалюта', value: 'crypto' },
@@ -48,33 +51,45 @@ export const PaymentSystems: CollectionConfig = {
             { label: 'Другое', value: 'other' },
           ],
         },
-        { name: 'order', label: 'Порядок', type: 'number', defaultValue: 0, admin: { description: 'Меньше — выше в списке' } },
+        { name: 'order', label: 'Порядок', type: 'number', defaultValue: 0, admin: { description: 'Меньше число — выше в списке оплаты' } },
       ],
+    },
+    {
+      name: 'enabled',
+      label: 'Показывать на сайте',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Выключенные способы не видны покупателям при оформлении заказа',
+        components: { Cell: '/components/admin/YesNoCell#default' },
+      },
     },
     {
       type: 'row',
       fields: [
-        { name: 'enabled', label: 'Включена на сайте', type: 'checkbox', defaultValue: true, admin: { components: { Cell: '/components/admin/YesNoCell#default' } } },
-        { name: 'hint', label: 'Подсказка (рус)', type: 'text', admin: { description: 'Напр.: Карты · SberPay · рассрочка' } },
+        { name: 'hint', label: 'Подсказка под кнопкой (рус)', type: 'text', admin: { description: 'Необязательно. Напр.: Карты · SberPay · рассрочка' } },
+        { name: 'hintEn', label: 'Подсказка (англ)', type: 'text' },
       ],
     },
-    { name: 'hintEn', label: 'Подсказка (англ)', type: 'text' },
     {
-      label: 'Ключи и доступы (секретно)',
+      label: '🔑 Ключи и доступы (видны только вам)',
       type: 'collapsible',
-      admin: { initCollapsed: true, description: 'Хранятся в базе, на сайте не показываются' },
+      admin: {
+        initCollapsed: true,
+        description: 'Скопируйте из личного кабинета платёжной системы. Заполняйте только те поля, что нужны выбранному типу — остальные оставьте пустыми. Эти данные нигде на сайте не показываются.',
+      },
       fields: [
         {
           type: 'row',
           fields: [
-            { name: 'shopId', label: 'Shop ID / идентификатор', type: 'text' },
-            { name: 'apiKey', label: 'API-ключ', type: 'text' },
+            { name: 'shopId', label: 'Shop ID / идентификатор магазина', type: 'text', admin: { description: 'ЮKassa, Тинькофф, Сбер: идентификатор магазина (shopId / TerminalKey)' } },
+            { name: 'apiKey', label: 'API-ключ', type: 'text', admin: { description: 'Публичный ключ интеграции, если он есть у системы' } },
           ],
         },
-        { name: 'secretKey', label: 'Секретный ключ', type: 'text' },
-        { name: 'webhookSecret', label: 'Webhook-секрет', type: 'text' },
-        { name: 'walletAddress', label: 'Крипто-кошелёк (для криптооплаты)', type: 'text' },
-        { name: 'extra', label: 'Доп. параметры (заметки)', type: 'textarea' },
+        { name: 'secretKey', label: 'Секретный ключ', type: 'text', admin: { description: 'ЮKassa: «Секретный ключ». Тинькофф: «Пароль». Главный ключ для приёма платежей' } },
+        { name: 'webhookSecret', label: 'Секрет вебхука / уведомлений', type: 'text', admin: { description: 'Если система присылает уведомления об оплате — ключ их проверки' } },
+        { name: 'walletAddress', label: 'Адрес крипто-кошелька', type: 'text', admin: { description: 'Только для типа «Криптовалюта» — кошелёк для приёма USDT/BTC/ETH' } },
+        { name: 'extra', label: 'Заметки / доп. параметры', type: 'textarea', admin: { description: 'Любые дополнительные данные или комментарии для себя' } },
       ],
     },
   ],

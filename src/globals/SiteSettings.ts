@@ -163,27 +163,5 @@ export const SiteSettings: GlobalConfig = {
         },
       ],
     },
-    {
-      label: 'Способы оплаты',
-      type: 'collapsible',
-      admin: { initCollapsed: true },
-      fields: [
-        {
-          name: 'paymentMethods',
-          label: 'Способы оплаты',
-          type: 'array',
-          labels: { singular: 'Способ', plural: 'Способы' },
-          fields: [
-            {
-              type: 'row',
-              fields: [
-                { name: 'ru', label: 'Название (рус)', type: 'text' },
-                { name: 'en', label: 'Название (англ)', type: 'text' },
-              ],
-            },
-          ],
-        },
-      ],
-    },
   ],
 }

@@ -25,7 +25,19 @@ export default function DeliveryContent() {
   const deliveryMethods = settings.deliveryMethods.length
     ? settings.deliveryMethods.map((m) => ({ name: m.name, nameEn: m.nameEn, time: m.time, timeEn: m.timeEn, price: m.price, priceEn: m.priceEn, desc: m.description, descEn: m.descriptionEn }))
     : DEFAULT_DELIVERY
-  const paymentMethods = settings.paymentMethods.length ? settings.paymentMethods : DEFAULT_PAYMENT
+  // Способы оплаты берём из коллекции «Способы оплаты» (включённые). Если пусто — запасной список.
+  const paymentMethods = settings.paymentSystems.length
+    ? settings.paymentSystems.map((p) => ({
+        ru: p.hint ? `${p.name} — ${p.hint}` : p.name,
+        en: p.nameEn
+          ? p.hintEn
+            ? `${p.nameEn} — ${p.hintEn}`
+            : p.nameEn
+          : p.hint
+            ? `${p.name} — ${p.hint}`
+            : p.name,
+      }))
+    : DEFAULT_PAYMENT
   return (
     <PageLayout>
       {/* Hero */}

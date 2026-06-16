@@ -1,6 +1,6 @@
 'use client'
 
-import { Wallet, ShoppingBag, Users, Receipt, Package, Star, Coins } from 'lucide-react'
+import { Wallet, ShoppingBag, Users, Receipt, Package, Star, Coins, PackagePlus, Send, Gift } from 'lucide-react'
 import type { DashboardData } from './getDashboardData'
 import KpiCard from './KpiCard'
 import RevenueChart from './RevenueChart'
@@ -27,17 +27,29 @@ export default function DashboardView({ data, userName, dateLabel }: Props) {
 
   return (
     <div className="fof-dashboard">
-      <header className="fof-head">
-        <div>
-          <p className="fof-head__eyebrow">Обзор · Сводка</p>
-          <h1 className="fof-head__title">Главная</h1>
-        </div>
-        <div className="fof-head__meta">
-          <p className="fof-head__greet">
+      <header className="fof-hero">
+        <span className="fof-hero__bg" aria-hidden />
+        <div className="fof-hero__main">
+          <p className="fof-hero__eyebrow">Faith over Fear · Панель управления</p>
+          <h1 className="fof-hero__title">
             {userName ? `Здравствуйте, ${userName}` : 'Добро пожаловать'}
-          </p>
-          <p className="fof-head__date">{dateLabel}</p>
+          </h1>
+          <p className="fof-hero__date">{dateLabel} · вот как идут дела сегодня</p>
         </div>
+        <nav className="fof-hero__actions">
+          <a href="/admin/collections/products/create" className="fof-act fof-act--gold">
+            <PackagePlus size={15} strokeWidth={2} /> Новый товар
+          </a>
+          <a href="/admin/collections/orders" className="fof-act">
+            <ShoppingBag size={15} strokeWidth={2} /> Заказы
+          </a>
+          <a href="/admin/collections/campaigns/create" className="fof-act">
+            <Send size={15} strokeWidth={2} /> Рассылка
+          </a>
+          <a href="/admin/referrals" className="fof-act">
+            <Gift size={15} strokeWidth={2} /> Рефералы
+          </a>
+        </nav>
       </header>
 
       <section className="fof-kpis">

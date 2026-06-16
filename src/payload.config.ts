@@ -64,8 +64,13 @@ export default buildConfig({
     },
     components: {
       // Полностью кастомный дашборд (заменяет домашнюю страницу /admin)
+      // + отдельная страница реферальной программы (/admin/referrals)
       views: {
         dashboard: { Component: '/components/admin/dashboard/Dashboard#default' },
+        referrals: {
+          Component: '/components/admin/referrals/Referrals#default',
+          path: '/referrals',
+        },
       },
       // Быстрые ссылки в навигации
       afterNavLinks: ['/components/admin/AfterNavLinks#default'],
