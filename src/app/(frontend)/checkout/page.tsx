@@ -9,18 +9,18 @@ import { useLang } from '@/context/LanguageContext'
 import { formatPrice } from '@/lib/utils'
 
 const DELIVERY_OPTIONS = [
-  { id: 'cdek', label: 'СДЭК', desc: '2–5 дней', price: 350 },
-  { id: 'boxberry', label: 'Boxberry', desc: '3–6 дней', price: 290 },
-  { id: 'russianpost', label: 'Почта России', desc: '5–14 дней', price: 200 },
-  { id: 'pickup', label: 'Самовывоз', desc: 'Бесплатно', price: 0 },
+  { id: 'cdek', label: 'СДЭК', labelEn: 'CDEK', desc: '2–5 дней', descEn: '2–5 days', price: 350 },
+  { id: 'boxberry', label: 'Boxberry', labelEn: 'Boxberry', desc: '3–6 дней', descEn: '3–6 days', price: 290 },
+  { id: 'russianpost', label: 'Почта России', labelEn: 'Russian Post', desc: '5–14 дней', descEn: '5–14 days', price: 200 },
+  { id: 'pickup', label: 'Самовывоз', labelEn: 'Pickup', desc: 'Бесплатно', descEn: 'Free', price: 0 },
 ]
 
 const PAYMENT_OPTIONS = [
-  { id: 'yukassa', label: 'ЮKassa', hint: 'Карты · SberPay · рассрочка' },
-  { id: 'sbp', label: 'СБП — Система быстрых платежей', hint: 'Без комиссии' },
-  { id: 'tinkoff', label: 'Тинькофф Pay', hint: '' },
-  { id: 'sber', label: 'СберПей', hint: '' },
-  { id: 'crypto', label: 'Криптовалюта', hint: 'USDT · BTC · ETH' },
+  { id: 'yukassa', label: 'ЮKassa', labelEn: 'YooKassa', hint: 'Карты · SberPay · рассрочка', hintEn: 'Cards · SberPay · instalments' },
+  { id: 'sbp', label: 'СБП — Система быстрых платежей', labelEn: 'SBP — Faster Payments', hint: 'Без комиссии', hintEn: 'No fees' },
+  { id: 'tinkoff', label: 'Тинькофф Pay', labelEn: 'Tinkoff Pay', hint: '', hintEn: '' },
+  { id: 'sber', label: 'СберПей', labelEn: 'SberPay', hint: '', hintEn: '' },
+  { id: 'crypto', label: 'Криптовалюта', labelEn: 'Cryptocurrency', hint: 'USDT · BTC · ETH', hintEn: 'USDT · BTC · ETH' },
 ]
 
 const FREE_DELIVERY_FROM = 3500
@@ -103,10 +103,10 @@ export default function CheckoutPage() {
         setPromoError('')
       } else {
         setPromo(null)
-        setPromoError(data.error || 'Промокод недействителен')
+        setPromoError(data.error || t('Промокод недействителен', 'Invalid promo code'))
       }
     } catch {
-      setPromoError('Ошибка проверки промокода')
+      setPromoError(t('Ошибка проверки промокода', 'Promo code check failed'))
     } finally {
       setPromoLoading(false)
     }
@@ -137,12 +137,12 @@ export default function CheckoutPage() {
       })
       const data = await res.json()
       if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Не удалось оформить заказ')
+        throw new Error(data.error || t('Не удалось оформить заказ', 'Could not place the order'))
       }
       clearCart()
       router.push(`/checkout/success?order=${encodeURIComponent(data.orderNumber)}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка оформления заказа')
+      setError(err instanceof Error ? err.message : t('Ошибка оформления заказа', 'Checkout error'))
       setLoading(false)
     }
   }
@@ -168,7 +168,7 @@ export default function CheckoutPage() {
       <PageLayout>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '5rem 1.25rem', textAlign: 'center' }} className="fade-in">
           <p style={{ fontFamily: 'var(--font-inter), sans-serif', color: '#888', marginBottom: '1.5rem' }}>
-            Корзина пуста. Добавьте товары перед оформлением.
+            {t('Корзина пуста. Добавьте товары перед оформлением.', 'Your cart is empty. Add items before checking out.')}
           </p>
           <Link href="/catalog" style={{
             display: 'inline-flex', background: 'var(--navy)', color: '#fff',
@@ -176,7 +176,7 @@ export default function CheckoutPage() {
             fontFamily: 'var(--font-inter), sans-serif',
             fontSize: '0.78rem', fontWeight: 700,
             letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none',
-          }}>Перейти в каталог</Link>
+          }}>{t('Перейти в каталог', 'Browse catalog')}</Link>
         </div>
       </PageLayout>
     )
@@ -194,9 +194,9 @@ export default function CheckoutPage() {
               fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.72rem',
               color: '#bbb', marginBottom: '0.75rem',
             }}>
-              <Link href="/cart" style={{ color: '#bbb', textDecoration: 'none' }}>Корзина</Link>
+              <Link href="/cart" style={{ color: '#bbb', textDecoration: 'none' }}>{t('Корзина', 'Cart')}</Link>
               <span>/</span>
-              <span style={{ color: 'var(--navy)' }}>Оформление</span>
+              <span style={{ color: 'var(--navy)' }}>{t('Оформление', 'Checkout')}</span>
             </nav>
             <h1 style={{
               fontFamily: 'var(--font-playfair), Georgia, serif',
@@ -216,10 +216,10 @@ export default function CheckoutPage() {
                 {/* Контактные данные */}
                 <Section icon="user" title={t('Контактные данные', 'Contact details')}>
                   <div className="field-grid" style={{ display: 'grid', gap: '1rem' }}>
-                    <Field label="Имя *" value={form.firstName} onChange={set('firstName')} placeholder="Иван" required />
-                    <Field label="Фамилия *" value={form.lastName} onChange={set('lastName')} placeholder="Иванов" required />
-                    <Field label="Телефон *" type="tel" value={form.phone} onChange={set('phone')} placeholder="+7 (999) 000-00-00" required />
-                    <Field label="Email *" type="email" value={form.email} onChange={set('email')} placeholder="ivan@mail.ru" required />
+                    <Field label={t('Имя *', 'First name *')} value={form.firstName} onChange={set('firstName')} placeholder={t('Иван', 'John')} required />
+                    <Field label={t('Фамилия *', 'Last name *')} value={form.lastName} onChange={set('lastName')} placeholder={t('Иванов', 'Smith')} required />
+                    <Field label={t('Телефон *', 'Phone *')} type="tel" value={form.phone} onChange={set('phone')} placeholder="+7 (999) 000-00-00" required />
+                    <Field label="Email *" type="email" value={form.email} onChange={set('email')} placeholder={t('ivan@mail.ru', 'john@mail.com')} required />
                   </div>
                 </Section>
 
@@ -246,16 +246,16 @@ export default function CheckoutPage() {
                             <p style={{
                               fontFamily: 'var(--font-inter), sans-serif',
                               fontSize: '0.85rem', fontWeight: 600, color: 'var(--navy)',
-                            }}>{opt.label}</p>
+                            }}>{t(opt.label, opt.labelEn)}</p>
                             <p style={{
                               fontFamily: 'var(--font-inter), sans-serif',
                               fontSize: '0.72rem', color: '#aaa', marginTop: 2,
-                            }}>{opt.desc}</p>
+                            }}>{t(opt.desc, opt.descEn)}</p>
                             <p style={{
                               fontFamily: 'var(--font-inter), sans-serif',
                               fontSize: '0.76rem', fontWeight: 700,
                               color: free ? '#22863a' : 'var(--burgundy)', marginTop: 4,
-                            }}>{free ? 'Бесплатно' : formatPrice(opt.price)}</p>
+                            }}>{free ? t('Бесплатно', 'Free') : formatPrice(opt.price)}</p>
                           </div>
                         </label>
                       )
@@ -275,15 +275,17 @@ export default function CheckoutPage() {
                       fontFamily: 'var(--font-inter), sans-serif',
                       fontSize: '0.74rem', color: '#8a7a3f', lineHeight: 1.5,
                     }}>
-                      Стоимость доставки не входит в цену товара и добавляется к заказу.
-                      При сумме от {formatPrice(FREE_DELIVERY_FROM)} — доставка бесплатно.
+                      {t(
+                        `Стоимость доставки не входит в цену товара и добавляется к заказу. При сумме от ${formatPrice(FREE_DELIVERY_FROM)} — доставка бесплатно.`,
+                        `Delivery cost is not included in the product price and is added to the order. On orders over ${formatPrice(FREE_DELIVERY_FROM)} — delivery is free.`
+                      )}
                     </p>
                   </div>
 
                   {delivery !== 'pickup' && (
                     <div className="field-grid" style={{ display: 'grid', gap: '1rem' }}>
-                      <Field label="Город *" value={form.city} onChange={set('city')} placeholder="Москва" required />
-                      <Field label="Адрес / пункт выдачи *" value={form.address} onChange={set('address')} placeholder="ул. Пушкина, д. 1" required />
+                      <Field label={t('Город *', 'City *')} value={form.city} onChange={set('city')} placeholder={t('Москва', 'Moscow')} required />
+                      <Field label={t('Адрес / пункт выдачи *', 'Address / pickup point *')} value={form.address} onChange={set('address')} placeholder={t('ул. Пушкина, д. 1', '1 Pushkin St.')} required />
                     </div>
                   )}
                 </Section>
@@ -309,13 +311,13 @@ export default function CheckoutPage() {
                           <span style={{
                             fontFamily: 'var(--font-inter), sans-serif',
                             fontSize: '0.85rem', fontWeight: 500, color: 'var(--navy)',
-                          }}>{opt.label}</span>
+                          }}>{t(opt.label, opt.labelEn)}</span>
                           {opt.hint && (
                             <span style={{
                               marginLeft: 'auto',
                               fontFamily: 'var(--font-inter), sans-serif',
                               fontSize: '0.68rem', color: '#bbb',
-                            }}>{opt.hint}</span>
+                            }}>{t(opt.hint, opt.hintEn)}</span>
                           )}
                         </label>
                       )
@@ -329,7 +331,7 @@ export default function CheckoutPage() {
                     value={form.comment}
                     onChange={set('comment')}
                     rows={3}
-                    placeholder="Пожелания по заказу, удобное время звонка..."
+                    placeholder={t('Пожелания по заказу, удобное время звонка...', 'Order notes, convenient time to call...')}
                     style={{
                       width: '100%', boxSizing: 'border-box',
                       border: '1.5px solid #e8e8e8', borderRadius: 6,
@@ -379,7 +381,7 @@ export default function CheckoutPage() {
                           <p style={{
                             fontFamily: 'var(--font-inter), sans-serif',
                             fontSize: '0.68rem', color: '#aaa', marginTop: 2,
-                          }}>{variant.size} · {variant.color} · {quantity} шт.</p>
+                          }}>{variant.size} · {variant.color} · {quantity} {t('шт.', 'pcs')}</p>
                         </div>
                         <span style={{
                           fontFamily: 'var(--font-inter), sans-serif',
