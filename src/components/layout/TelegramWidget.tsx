@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import { X } from 'lucide-react'
+import { useLang } from '@/context/LanguageContext'
 
 export default function TelegramWidget() {
+  const { t } = useLang()
   const [open, setOpen] = useState(false)
   const [dismissed, setDismissed] = useState(false)
 
@@ -39,7 +41,7 @@ export default function TelegramWidget() {
               </div>
               <div>
                 <p style={{ color: '#fff', fontFamily: 'var(--font-inter), sans-serif', fontWeight: 600, fontSize: '0.82rem' }}>Faith over Fear</p>
-                <p style={{ color: 'rgba(255,255,255,0.75)', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.68rem' }}>Telegram-канал</p>
+                <p style={{ color: 'rgba(255,255,255,0.75)', fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.68rem' }}>{t('Telegram-канал', 'Telegram channel')}</p>
               </div>
             </div>
             <button onClick={() => setOpen(false)} style={{
@@ -55,7 +57,7 @@ export default function TelegramWidget() {
               fontSize: '0.8rem', color: '#666', lineHeight: 1.6,
               marginBottom: '0.875rem', fontWeight: 300,
             }}>
-              Новинки, акции и вдохновляющие цитаты — каждый день в канале.
+              {t('Новинки, акции и вдохновляющие цитаты — каждый день в канале.', 'New arrivals, sales and inspiring quotes — every day in the channel.')}
             </p>
             <a href="https://t.me/" target="_blank" rel="noopener noreferrer" style={{
               display: 'block', textAlign: 'center',
@@ -65,7 +67,7 @@ export default function TelegramWidget() {
               fontSize: '0.78rem', fontWeight: 600,
               textDecoration: 'none',
             }}>
-              Открыть канал
+              {t('Открыть канал', 'Open channel')}
             </a>
             <button onClick={() => setDismissed(true)} style={{
               display: 'block', width: '100%', textAlign: 'center',
@@ -74,7 +76,7 @@ export default function TelegramWidget() {
               background: 'none', border: 'none', cursor: 'pointer',
               marginTop: '0.5rem', padding: '0.25rem',
             }}>
-              Не показывать
+              {t('Не показывать', 'Don’t show again')}
             </button>
           </div>
         </div>

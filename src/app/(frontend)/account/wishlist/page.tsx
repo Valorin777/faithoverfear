@@ -4,10 +4,12 @@ import Link from 'next/link'
 import PageLayout from '@/components/layout/PageLayout'
 import ProductCard from '@/components/ui/ProductCard'
 import { useWishlist } from '@/context/WishlistContext'
+import { useLang } from '@/context/LanguageContext'
 import { products } from '@/data/products'
 
 export default function WishlistPage() {
   const { ids } = useWishlist()
+  const { t } = useLang()
   const items = products.filter(p => ids.includes(p.id))
 
   return (
@@ -20,13 +22,13 @@ export default function WishlistPage() {
             letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)',
             fontWeight: 500, marginBottom: '0.75rem',
           }}>
-            Отложенные товары
+            {t('Отложенные товары', 'Saved items')}
           </p>
           <h1 style={{
             fontFamily: 'var(--font-playfair), Georgia, serif',
             fontSize: 'clamp(1.8rem, 5vw, 3rem)', color: '#fff', fontWeight: 700,
           }}>
-            Избранное
+            {t('Избранное', 'Wishlist')}
           </h1>
           <div style={{ width: 40, height: 2, background: 'var(--gold)', margin: '1.25rem auto 0', borderRadius: 2 }} />
         </div>
@@ -49,7 +51,7 @@ export default function WishlistPage() {
                 fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.95rem',
                 color: '#999', fontWeight: 300, marginBottom: '1.5rem',
               }}>
-                В избранном пока пусто. Нажмите ♥ на карточке товара, чтобы отложить его.
+                {t('В избранном пока пусто. Нажмите ♥ на карточке товара, чтобы отложить его.', 'Your wishlist is empty. Tap ♥ on a product card to save it.')}
               </p>
               <Link href="/catalog" style={{
                 display: 'inline-flex', background: 'var(--navy)', color: '#fff',
@@ -57,7 +59,7 @@ export default function WishlistPage() {
                 fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.78rem', fontWeight: 700,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
               }}>
-                Перейти в каталог
+                {t('Перейти в каталог', 'Go to catalog')}
               </Link>
             </div>
           ) : (
@@ -66,7 +68,7 @@ export default function WishlistPage() {
                 fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.85rem',
                 color: '#999', marginBottom: '1.5rem',
               }}>
-                {items.length} {items.length === 1 ? 'товар' : items.length < 5 ? 'товара' : 'товаров'}
+                {items.length} {t(items.length === 1 ? 'товар' : items.length < 5 ? 'товара' : 'товаров', items.length === 1 ? 'item' : 'items')}
               </p>
               <div className="wishlist-grid" style={{ display: 'grid', gap: '1rem' }}>
                 {items.map(p => <ProductCard key={p.id} product={p} />)}
