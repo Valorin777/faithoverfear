@@ -18,9 +18,15 @@ export const Posts: CollectionConfig = {
   fields: [
     {
       name: 'title',
-      label: 'Заголовок',
+      label: 'Заголовок (рус)',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'titleEn',
+      label: 'Title (English)',
+      type: 'text',
+      admin: { description: 'Если пусто — покажется русский заголовок.' },
     },
     {
       name: 'slug',
@@ -34,11 +40,17 @@ export const Posts: CollectionConfig = {
     },
     {
       name: 'excerpt',
-      label: 'Краткое описание',
+      label: 'Краткое описание (рус)',
       type: 'textarea',
       admin: {
         description: 'Короткий анонс для списка статей',
       },
+    },
+    {
+      name: 'excerptEn',
+      label: 'Excerpt (English)',
+      type: 'textarea',
+      admin: { description: 'Если пусто — покажется русский анонс.' },
     },
     {
       name: 'image',
@@ -48,7 +60,12 @@ export const Posts: CollectionConfig = {
     },
     {
       name: 'content',
-      label: 'Текст статьи',
+      label: 'Текст статьи (рус)',
+      type: 'richText',
+    },
+    {
+      name: 'contentEn',
+      label: 'Article text (English)',
       type: 'richText',
     },
     {

@@ -24,6 +24,7 @@ export const Reviews: CollectionConfig = {
           label: 'Автор',
           type: 'text',
           required: true,
+          admin: { description: 'Имя автора (одинаково на обоих языках)' },
         },
         {
           name: 'rating',
@@ -38,9 +39,15 @@ export const Reviews: CollectionConfig = {
     },
     {
       name: 'text',
-      label: 'Текст отзыва',
+      label: 'Текст отзыва (рус)',
       type: 'textarea',
       required: true,
+    },
+    {
+      name: 'textEn',
+      label: 'Review text (English)',
+      type: 'textarea',
+      admin: { description: 'Если пусто — на английской версии покажется русский текст.' },
     },
     {
       name: 'photo',

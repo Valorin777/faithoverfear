@@ -18,9 +18,17 @@ export const Products: CollectionConfig = {
   fields: [
     {
       name: 'name',
-      label: 'Название',
+      label: 'Название (рус)',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'nameEn',
+      label: 'Name (English)',
+      type: 'text',
+      admin: {
+        description: 'Английское название. Если пусто — на английской версии сайта покажется русское.',
+      },
     },
     {
       name: 'slug',
@@ -34,16 +42,32 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'description',
-      label: 'Описание',
+      label: 'Описание (рус)',
       type: 'textarea',
       required: true,
     },
     {
+      name: 'descriptionEn',
+      label: 'Description (English)',
+      type: 'textarea',
+      admin: {
+        description: 'Английское описание. Если пусто — покажется русское.',
+      },
+    },
+    {
       name: 'spiritualMeaning',
-      label: 'Духовный смысл',
+      label: 'Духовный смысл (рус)',
       type: 'textarea',
       admin: {
         description: 'Цитата из Писания или пояснение смысла принта',
+      },
+    },
+    {
+      name: 'spiritualMeaningEn',
+      label: 'Spiritual meaning (English)',
+      type: 'textarea',
+      admin: {
+        description: 'Английская версия. Если пусто — покажется русская.',
       },
     },
     {
@@ -112,9 +136,15 @@ export const Products: CollectionConfig = {
             },
             {
               name: 'color',
-              label: 'Цвет',
+              label: 'Цвет (рус)',
               type: 'text',
               required: true,
+            },
+            {
+              name: 'colorEn',
+              label: 'Color (English)',
+              type: 'text',
+              admin: { description: 'Напр.: White' },
             },
             {
               name: 'colorHex',

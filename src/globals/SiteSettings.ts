@@ -13,20 +13,37 @@ export const SiteSettings: GlobalConfig = {
       fields: [
         {
           name: 'heroEyebrow',
-          label: 'Надпись над заголовком',
+          label: 'Надпись над заголовком (рус)',
           type: 'text',
           admin: { description: 'Напр.: Православная одежда · Faith over Fear' },
         },
         {
+          name: 'heroEyebrowEn',
+          label: 'Eyebrow (English)',
+          type: 'text',
+        },
+        {
           type: 'row',
           fields: [
-            { name: 'heroTitleLine1', label: 'Заголовок — 1-я строка', type: 'text' },
-            { name: 'heroTitleLine2', label: 'Заголовок — 2-я строка (золотая)', type: 'text' },
+            { name: 'heroTitleLine1', label: 'Заголовок — 1-я строка (рус)', type: 'text' },
+            { name: 'heroTitleLine2', label: 'Заголовок — 2-я строка, золотая (рус)', type: 'text' },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'heroTitleLine1En', label: 'Title line 1 (English)', type: 'text' },
+            { name: 'heroTitleLine2En', label: 'Title line 2, gold (English)', type: 'text' },
           ],
         },
         {
           name: 'heroSubtitle',
-          label: 'Подзаголовок',
+          label: 'Подзаголовок (рус)',
+          type: 'textarea',
+        },
+        {
+          name: 'heroSubtitleEn',
+          label: 'Subtitle (English)',
           type: 'textarea',
         },
       ],
