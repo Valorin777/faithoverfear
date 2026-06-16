@@ -1,23 +1,50 @@
 'use client'
 
+import { useState } from 'react'
 import PageLayout from '@/components/layout/PageLayout'
 import { useLang } from '@/context/LanguageContext'
+import { useSettings } from '@/context/SettingsContext'
 
 export default function ContactsContent() {
   const { t } = useLang()
+  const settings = useSettings()
+  const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const data = Object.fromEntries(new FormData(e.currentTarget).entries())
+    setSending(true)
+    setError('')
+    try {
+      const r = await fetch('/api/support', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      if (r.ok) setSent(true)
+      else setError(t('Не удалось отправить. Попробуйте позже.', 'Could not send. Please try later.'))
+    } catch {
+      setError(t('Не удалось отправить. Попробуйте позже.', 'Could not send. Please try later.'))
+    } finally {
+      setSending(false)
+    }
+  }
 
   const fields = [
-    { label: 'Имя', labelEn: 'Name', type: 'text', placeholder: 'Иван', placeholderEn: 'John' },
-    { label: 'Email', labelEn: 'Email', type: 'email', placeholder: 'ivan@mail.ru', placeholderEn: 'john@mail.com' },
-    { label: 'Тема', labelEn: 'Subject', type: 'text', placeholder: 'Вопрос о заказе', placeholderEn: 'Question about an order' },
+    { label: 'Имя', labelEn: 'Name', field: 'name', type: 'text', placeholder: 'Иван', placeholderEn: 'John' },
+    { label: 'Email', labelEn: 'Email', field: 'email', type: 'email', placeholder: 'ivan@mail.ru', placeholderEn: 'john@mail.com' },
+    { label: 'Тема', labelEn: 'Subject', field: 'subject', type: 'text', placeholder: 'Вопрос о заказе', placeholderEn: 'Question about an order' },
   ]
 
+  const tg = settings.telegramUrl ? '@' + settings.telegramUrl.replace(/^https?:\/\/t\.me\//, '').replace(/\/$/, '') : '@faithoverfear'
   const rows = [
-    { label: 'Email', labelEn: 'Email', value: 'info@faithof.ru' },
-    { label: 'Сайт', labelEn: 'Website', value: 'faithof.ru' },
-    { label: 'Telegram', labelEn: 'Telegram', value: '@faithoverfear' },
-    { label: 'ВКонтакте', labelEn: 'VK', value: 'vk.com/faithoverfear' },
-    { label: 'Режим работы', labelEn: 'Working hours', value: 'Пн–Пт, 10:00–18:00 МСК', valueEn: 'Mon–Fri, 10:00–18:00 MSK' },
+    { label: 'Email', labelEn: 'Email', value: settings.contactEmail || 'info@faithof.ru' },
+    ...(settings.contactPhone ? [{ label: 'Телефон', labelEn: 'Phone', value: settings.contactPhone }] : []),
+    { label: 'Сайт', labelEn: 'Website', value: settings.contactWebsite || 'faithof.ru' },
+    { label: 'Telegram', labelEn: 'Telegram', value: tg },
+    { label: 'Режим работы', labelEn: 'Working hours', value: settings.workingHours || 'Пн–Пт, 10:00–18:00 МСК', valueEn: settings.workingHoursEn || 'Mon–Fri, 10:00–18:00 MSK' },
   ]
 
   return (
@@ -65,8 +92,8 @@ export default function ContactsContent() {
               }}>
                 {t('Напишите нам', 'Write to us')}
               </h2>
-              <form onSubmit={e => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {fields.map(({ label, labelEn, type, placeholder, placeholderEn }) => (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {fields.map(({ label, labelEn, field, type, placeholder, placeholderEn }) => (
                   <div key={label}>
                     <label style={{
                       display: 'block',
@@ -79,6 +106,7 @@ export default function ContactsContent() {
                     </label>
                     <input
                       type={type}
+                      name={field}
                       placeholder={t(placeholder, placeholderEn)}
                       style={{
                         width: '100%', boxSizing: 'border-box',
@@ -104,6 +132,8 @@ export default function ContactsContent() {
                   </label>
                   <textarea
                     rows={5}
+                    name="message"
+                    required
                     placeholder={t('Ваш вопрос...', 'Your question...')}
                     style={{
                       width: '100%', boxSizing: 'border-box',
@@ -115,16 +145,25 @@ export default function ContactsContent() {
                     }}
                   />
                 </div>
-                <button type="submit" style={{
-                  background: 'var(--navy)', color: '#fff',
+                <button type="submit" disabled={sending || sent} style={{
+                  background: sent ? '#22863a' : 'var(--navy)', color: '#fff',
                   border: 'none', borderRadius: 3, padding: '1rem',
                   fontFamily: 'var(--font-inter), sans-serif',
                   fontSize: '0.78rem', fontWeight: 700,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
-                  cursor: 'pointer',
+                  cursor: sending || sent ? 'default' : 'pointer',
+                  opacity: sending ? 0.7 : 1,
                 }}>
-                  {t('Отправить сообщение', 'Send message')}
+                  {sent ? t('✓ Отправлено', '✓ Sent') : sending ? t('Отправка…', 'Sending…') : t('Отправить сообщение', 'Send message')}
                 </button>
+                {sent && (
+                  <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.82rem', color: '#22863a' }}>
+                    {t('Спасибо! Мы получили ваше сообщение и скоро свяжемся с вами.', 'Thank you! We received your message and will get back to you soon.')}
+                  </p>
+                )}
+                {error && (
+                  <p style={{ fontFamily: 'var(--font-inter), sans-serif', fontSize: '0.82rem', color: 'var(--burgundy)' }}>{error}</p>
+                )}
               </form>
             </div>
 

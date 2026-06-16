@@ -9,7 +9,7 @@ export const Orders: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'orderNumber',
-    defaultColumns: ['orderNumber', 'customerName', 'total', 'status', 'createdAt'],
+    defaultColumns: ['orderNumber', 'customerName', 'customerPhone', 'paymentMethod', 'total', 'status', 'createdAt'],
     group: 'Магазин',
   },
   access: {
