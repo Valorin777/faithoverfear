@@ -16,7 +16,11 @@
   --text:        #2d2d2d;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Сброс в @layer base — иначе безслойный * { padding:0 } перебивал бы
+   слойные утилиты Tailwind (py-*, px-*, gap-* и т.д.) и они не работали. */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+}
 
 html {
   scroll-behavior: smooth;
@@ -181,13 +185,16 @@ input, textarea, select, button { font-family: inherit; }
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.25rem;
+  /* Только горизонтальные отступы — иначе shorthand padding обнулял бы
+     вертикальные py-* классы Tailwind (из-за этого страницы выглядели «скученно») */
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
 @media (min-width: 768px) {
-  .container { padding: 0 2rem; }
+  .container { padding-left: 2rem; padding-right: 2rem; }
 }
 @media (min-width: 1280px) {
-  .container { padding: 0 2.5rem; }
+  .container { padding-left: 2.5rem; padding-right: 2.5rem; }
 }
 
 /* ── Карточки товаров ── */
