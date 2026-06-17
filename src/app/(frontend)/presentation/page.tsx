@@ -12,9 +12,9 @@ const SLIDES = Array.from({ length: 8 }, (_, i) => `/presentation/slide${i + 1}.
 export default function PresentationPage() {
   return (
     <PageLayout>
-      <div className="bg-[var(--navy)] py-16">
+      <div className="bg-[var(--navy)] py-10">
         <div className="container text-center text-white">
-          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
+          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif', color: '#fff' }}>
             Презентация бренда
           </h1>
           <div className="w-12 h-[2px] bg-[var(--gold)] mx-auto mt-4" />
@@ -27,7 +27,7 @@ export default function PresentationPage() {
         </div>
       </div>
 
-      <div className="container py-16">
+      <div className="container py-12">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', maxWidth: 1000, margin: '0 auto' }}>
           {SLIDES.map((src, i) => (
             <div

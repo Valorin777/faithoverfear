@@ -9,13 +9,13 @@ export default function BlogContent({ posts }: { posts: BlogPost[] }) {
   const { t, lang } = useLang()
   return (
     <PageLayout>
-      <div className="bg-[var(--navy)] py-16">
+      <div className="bg-[var(--navy)] py-10">
         <div className="container text-center text-white">
-          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>{t('Блог', 'Blog')}</h1>
+          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif', color: '#fff' }}>{t('Блог', 'Blog')}</h1>
           <div className="w-12 h-[2px] bg-[var(--gold)] mx-auto mt-4" />
         </div>
       </div>
-      <div className="container py-16">
+      <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {posts.map(post => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="group bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-md transition-shadow">

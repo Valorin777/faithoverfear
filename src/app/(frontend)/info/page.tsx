@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function InfoPage() {
   return (
     <PageLayout>
-      <div className="bg-[var(--navy)] py-16">
+      <div className="bg-[var(--navy)] py-10">
         <div className="container text-center text-white">
-          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
+          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif', color: '#fff' }}>
             Информация
           </h1>
           <div className="w-12 h-[2px] bg-[var(--gold)] mx-auto mt-4" />
@@ -25,7 +25,7 @@ export default function InfoPage() {
           </p>
         </div>
       </div>
-      <div className="container py-16 max-w-3xl">
+      <div className="container py-12 max-w-3xl">
         <InfoHub />
       </div>
     </PageLayout>

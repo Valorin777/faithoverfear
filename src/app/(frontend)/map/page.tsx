@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function MapPage() {
   return (
     <PageLayout>
-      <div className="bg-[var(--navy)] py-16">
+      <div className="bg-[var(--navy)] py-10">
         <div className="container text-center text-white">
-          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
+          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif', color: '#fff' }}>
             Карта храмов
           </h1>
           <div className="w-12 h-[2px] bg-[var(--gold)] mx-auto mt-4" />

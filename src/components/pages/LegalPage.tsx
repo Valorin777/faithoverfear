@@ -22,13 +22,13 @@ export default function LegalPage({ title, titleEn, updated, updatedEn, sections
   const { t } = useLang()
   return (
     <PageLayout>
-      <div className="bg-[var(--navy)] py-16">
+      <div className="bg-[var(--navy)] py-10">
         <div className="container text-center text-white">
-          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>{t(title, titleEn)}</h1>
+          <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair), Georgia, serif', color: '#fff' }}>{t(title, titleEn)}</h1>
           <div className="w-12 h-[2px] bg-[var(--gold)] mx-auto mt-4" />
         </div>
       </div>
-      <div className="container py-16 max-w-3xl text-gray-600" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+      <div className="container py-12 max-w-3xl text-gray-600" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
         {updated && <p className="text-sm text-gray-400 mb-10">{t(updated, updatedEn)}</p>}
         {sections.map((s, i) => (
           <div key={i} className="mb-10 pb-10 border-b border-gray-100 last:border-0 last:pb-0">
