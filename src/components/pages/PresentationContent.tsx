@@ -101,18 +101,22 @@ export default function PresentationContent() {
 
       {/* 6 — Основатели */}
       <section style={{ ...section, background: '#fff' }}>
-        <div style={{ ...inner(1040), display: 'grid', gap: 'clamp(1.75rem, 5vw, 3.5rem)', alignItems: 'center' }} className="pres-founders">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/presentation/church.jpg" alt={t('Основатели в храме', 'Founders in a church')}
-            style={{ width: '100%', height: '100%', minHeight: 280, maxHeight: 460, objectFit: 'cover', borderRadius: 14, boxShadow: '0 16px 40px rgba(27,42,74,0.16)' }} />
-          <div>
+        <div style={inner(980)}>
+          <div style={{ display: 'flex', gap: 'clamp(0.75rem, 2.5vw, 1.4rem)', justifyContent: 'center', marginBottom: 'clamp(2rem, 5vw, 3rem)' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/presentation/founder2.jpg" alt={t('Основатель', 'Founder')}
+              style={{ flex: 1, minWidth: 0, maxWidth: 320, aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: 14, boxShadow: '0 16px 40px rgba(27,42,74,0.16)' }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/presentation/church.jpg" alt={t('Основатель', 'Founder')}
+              style={{ flex: 1, minWidth: 0, maxWidth: 320, aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: 14, boxShadow: '0 16px 40px rgba(27,42,74,0.16)' }} />
+          </div>
+          <div style={{ textAlign: 'center' }}>
             <Eyebrow>{t('Основатели', 'Founders')}</Eyebrow>
-            <h2 style={{ fontFamily: SERIF, fontSize: 'clamp(1.5rem, 3.5vw, 2rem)', fontWeight: 700, color: 'var(--navy)', lineHeight: 1.25 }}>
-              Кочетов Даниил Сергеевич
-              <br />
-              <span style={{ color: '#9a958a', fontWeight: 600, fontSize: '0.8em' }}>&amp;</span> Соболев Денис Максимович
+            <h2 style={{ fontFamily: SERIF, fontSize: 'clamp(1.5rem, 3.8vw, 2.1rem)', fontWeight: 700, color: 'var(--navy)', lineHeight: 1.3 }}>
+              Кочетов Даниил Сергеевич{' '}
+              <span style={{ color: 'var(--gold)', fontWeight: 400 }}>&amp;</span> Соболев Денис Максимович
             </h2>
-            <p style={{ fontFamily: SANS, fontSize: '1.02rem', color: '#555', lineHeight: 1.85, fontWeight: 300, marginTop: '1.1rem' }}>
+            <p style={{ fontFamily: SANS, fontSize: '1.02rem', color: '#555', lineHeight: 1.85, fontWeight: 300, marginTop: '1.1rem', maxWidth: 560, marginLeft: 'auto', marginRight: 'auto' }}>
               {t('Объединённые общей верой и стремлением создавать смысл.',
                  'United by a shared faith and a drive to create meaning.')}
             </p>
