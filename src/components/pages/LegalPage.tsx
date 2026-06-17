@@ -28,12 +28,12 @@ export default function LegalPage({ title, titleEn, updated, updatedEn, sections
           <div className="w-12 h-[2px] bg-[var(--gold)] mx-auto mt-4" />
         </div>
       </div>
-      <div className="container py-14 max-w-3xl text-gray-600" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-        {updated && <p className="text-sm text-gray-400 mb-8">{t(updated, updatedEn)}</p>}
+      <div className="container py-16 max-w-3xl text-gray-600" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+        {updated && <p className="text-sm text-gray-400 mb-10">{t(updated, updatedEn)}</p>}
         {sections.map((s, i) => (
-          <div key={i} className="mb-6 pb-6 border-b border-gray-100 last:border-0">
-            <h2 className="text-lg font-bold text-[var(--navy)] mb-3" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>{t(s.title, s.titleEn)}</h2>
-            <p className="leading-relaxed text-sm">{t(s.text, s.textEn)}</p>
+          <div key={i} className="mb-10 pb-10 border-b border-gray-100 last:border-0 last:pb-0">
+            <h2 className="text-xl font-bold text-[var(--navy)] mb-4" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>{t(s.title, s.titleEn)}</h2>
+            <p className="text-[15px] leading-8 whitespace-pre-line">{t(s.text, s.textEn)}</p>
           </div>
         ))}
       </div>

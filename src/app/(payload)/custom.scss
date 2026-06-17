@@ -562,6 +562,42 @@
   .fof-hero__actions { width: 100%; }
 }
 
+/* ── Телефоны ── */
+@media (max-width: 600px) {
+  .fof-hero {
+    padding: 18px;
+    border-radius: 16px;
+    gap: 1rem;
+  }
+  .fof-hero__title { font-size: 1.45rem; }
+  .fof-hero__eyebrow { font-size: .62rem; }
+  .fof-hero__actions { gap: 8px; }
+  /* Кнопки действий — по две в ряд, во всю ширину: удобно нажимать пальцем */
+  .fof-act {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+    padding: 11px 10px;
+  }
+  /* Заголовок страницы и подпись — в одну колонку, по левому краю */
+  .fof-head { gap: .5rem; }
+  .fof-head__meta { text-align: left; }
+  /* Показатели — по две карточки в ряд, чтобы не было длинной простыни */
+  .fof-kpis { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .fof-kpi { padding: 14px 14px 12px; }
+  .fof-kpi__value { font-size: 1.5rem; }
+  .fof-ref-stats { grid-template-columns: repeat(2, 1fr); }
+  /* Карточки графиков/списков — компактнее по бокам */
+  .fof-card { padding: 16px 16px; }
+  .fof-ref-table-wrap { margin: 0 -16px -16px; }
+}
+
+/* ── Очень узкие экраны ── */
+@media (max-width: 380px) {
+  .fof-kpis { grid-template-columns: 1fr; }
+  .fof-ref-stats { grid-template-columns: 1fr; }
+  .fof-act { flex-basis: 100%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fof-dashboard *,
   .fof-dashboard *::before,
@@ -702,7 +738,9 @@ h1.list-header__title {
 .table {
   border: 1px solid var(--border-hair);
   border-radius: 14px;
-  overflow: hidden;
+  /* Горизонтальная прокрутка широких таблиц на узких экранах
+     (раньше было overflow:hidden — на телефоне колонки просто обрезались) */
+  overflow-x: auto;
   background: var(--surface-card);
   box-shadow: var(--shadow-sm);
 }

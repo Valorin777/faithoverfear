@@ -61,6 +61,9 @@ export const Customers: CollectionConfig = {
       type: 'text',
       unique: true,
       index: true,
+      // Покупатель не может переписать свой код/баланс через API — только администратор
+      // (или сервер с overrideAccess). admin.readOnly — лишь подсказка интерфейса, не защита.
+      access: { update: ({ req }) => req.user?.collection === 'users' },
       admin: { readOnly: true, description: 'Генерируется автоматически при регистрации' },
     },
     {
@@ -68,6 +71,7 @@ export const Customers: CollectionConfig = {
       label: 'Приглашён покупателем',
       type: 'relationship',
       relationTo: 'customers',
+      access: { update: ({ req }) => req.user?.collection === 'users' },
       admin: { readOnly: true },
     },
     {
@@ -75,7 +79,12 @@ export const Customers: CollectionConfig = {
       label: 'Бонус за приглашение начислен',
       type: 'checkbox',
       defaultValue: false,
-      admin: { readOnly: true, description: 'Защита от повторного начисления' },
+      access: { update: ({ req }) => req.user?.collection === 'users' },
+      admin: {
+        readOnly: true,
+        description: 'Защита от повторного начисления',
+        components: { Cell: '/components/admin/YesNoCell#default' },
+      },
     },
     {
       type: 'row',
@@ -85,6 +94,7 @@ export const Customers: CollectionConfig = {
           label: 'Бонусный баланс, ₽',
           type: 'number',
           defaultValue: 0,
+          access: { update: ({ req }) => req.user?.collection === 'users' },
           admin: { readOnly: true },
         },
         {
@@ -92,6 +102,7 @@ export const Customers: CollectionConfig = {
           label: 'Приглашено друзей',
           type: 'number',
           defaultValue: 0,
+          access: { update: ({ req }) => req.user?.collection === 'users' },
           admin: { readOnly: true, description: 'Сколько человек зарегистрировалось по ссылке' },
         },
       ],
@@ -101,7 +112,7 @@ export const Customers: CollectionConfig = {
       label: 'Статус реферала',
       type: 'text',
       virtual: true,
-      admin: { readOnly: true, description: '10 друзей — Серебро, 30 — Золото' },
+      admin: { readOnly: true, description: 'Старт 10% · Серебро 12% (от 10 друзей) · Золото 15% (от 30 друзей)' },
     },
   ],
   hooks: {
@@ -136,7 +147,7 @@ export const Customers: CollectionConfig = {
     afterRead: [
       ({ doc }) => {
         const c = doc.referralCount || 0
-        doc.referralTier = c >= 30 ? 'Золото' : c >= 10 ? 'Серебро' : '—'
+        doc.referralTier = c >= 30 ? 'Золото' : c >= 10 ? 'Серебро' : 'Старт'
         return doc
       },
     ],

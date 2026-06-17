@@ -13,7 +13,10 @@ export const Promocodes: CollectionConfig = {
     group: 'Маркетинг',
   },
   access: {
-    read: () => true,
+    // Список промокодов (включая персональные и привязку к клиентам) виден
+    // только администратору. Проверка кода на витрине идёт через серверный
+    // роут validate-promo, поэтому покупателям прямой доступ не нужен.
+    read: ({ req }) => req.user?.collection === 'users',
   },
   fields: [
     {
@@ -32,6 +35,7 @@ export const Promocodes: CollectionConfig = {
           label: 'Активен',
           type: 'checkbox',
           defaultValue: true,
+          admin: { components: { Cell: '/components/admin/YesNoCell#default' } },
         },
       ],
     },

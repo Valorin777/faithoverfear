@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ADDRESS_KEY } from '@/components/account/ProfileForms'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
@@ -46,6 +47,28 @@ export default function CheckoutPage() {
     firstName: '', lastName: '', phone: '', email: '',
     city: '', address: '', comment: '',
   })
+
+  // Подставляем сохранённый адрес доставки из личного кабинета (если есть на этом устройстве)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(ADDRESS_KEY)
+      if (!raw) return
+      const a = JSON.parse(raw) as { recipient?: string; phone?: string; city?: string; street?: string }
+      setForm((f) => {
+        const [first, ...rest] = String(a.recipient || '').trim().split(' ')
+        return {
+          ...f,
+          firstName: f.firstName || first || '',
+          lastName: f.lastName || rest.join(' ') || '',
+          phone: f.phone || a.phone || '',
+          city: f.city || a.city || '',
+          address: f.address || a.street || '',
+        }
+      })
+    } catch {
+      /* нет сохранённого адреса */
+    }
+  }, [])
 
   // Промокод и бонусы
   const [promoInput, setPromoInput] = useState('')

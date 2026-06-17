@@ -25,6 +25,9 @@ const nav = {
   ],
   info: [
     { href: '/about', label: 'О проекте', en: 'About' },
+    { href: '/presentation', label: 'Презентация бренда', en: 'Brand deck' },
+    { href: '/info', label: 'Информация', en: 'Information' },
+    { href: '/map', label: 'Карта храмов', en: 'Churches map' },
     { href: '/blog', label: 'Блог', en: 'Blog' },
     { href: '/contacts', label: 'Контакты', en: 'Contacts' },
     { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },

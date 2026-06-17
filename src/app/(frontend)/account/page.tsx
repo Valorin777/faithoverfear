@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
 import { useLang } from '@/context/LanguageContext'
 import { formatPrice } from '@/lib/utils'
+import ProfileForms from '@/components/account/ProfileForms'
 
 interface Customer {
   id: string | number
@@ -218,6 +219,9 @@ export default function AccountPage() {
               {t('Код:', 'Code:')} <strong style={{ color: 'var(--navy)' }}>{customer.referralCode}</strong> · {t('Поделитесь ссылкой — друг зарегистрируется по ней, и после его заказа от 3 000 ₽ вам начислится бонус.', 'Share the link — a friend registers via it, and after their order of 3 000 ₽+ you receive a bonus.')}
             </p>
           </div>
+
+          {/* Профиль и адрес доставки */}
+          <ProfileForms customer={customer} onSaved={load} />
 
           {/* Заказы */}
           <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #ece9e3', padding: 'clamp(1.5rem, 4vw, 2rem)' }}>

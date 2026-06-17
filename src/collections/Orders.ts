@@ -1,4 +1,70 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, CollectionAfterChangeHook } from 'payload'
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// Статусы, означающие подтверждённую оплату/исполнение заказа
+const PAID_STATUSES = ['paid', 'processing', 'shipped', 'delivered']
+
+/**
+ * Когда заказ ВПЕРВЫЕ переходит в оплаченный статус:
+ *  1) списываем остатки со склада по позициям заказа;
+ *  2) начисляем реферальный бонус пригласившему (один раз — защита referralRewarded).
+ * На неоплаченных и отменённых заказах ничего не происходит, поэтому за брошенные
+ * корзины и отмены комиссия не платится, а склад не уменьшается зря.
+ */
+const orderPaidEffects: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
+  const d = doc as any
+  const pd = previousDoc as any
+  const becamePaid = PAID_STATUSES.includes(d.status) && !(pd && PAID_STATUSES.includes(pd.status))
+  if (!becamePaid) return
+
+  const payload = req.payload
+
+  // 1. Списание остатков со склада по факту оплаты
+  const goods: any[] = Array.isArray(d.items?.goods) ? d.items.goods : []
+  for (const g of goods) {
+    try {
+      const found = await payload.find({ collection: 'products', where: { slug: { equals: g.slug } }, limit: 1, depth: 0 })
+      const product = found.docs[0] as any
+      if (!product || !Array.isArray(product.variants)) continue
+      let changed = false
+      const variants = product.variants.map((v: any) => {
+        if (v.size === g.size && v.color === g.color) {
+          changed = true
+          return { ...v, stock: Math.max(0, (Number(v.stock) || 0) - (Number(g.quantity) || 1)) }
+        }
+        return v
+      })
+      if (changed) {
+        await payload.update({ collection: 'products', id: product.id, data: { variants }, overrideAccess: true, overrideLock: true })
+      }
+    } catch (e) {
+      console.error('Stock decrement error:', e)
+    }
+  }
+
+  // 2. Реферальный бонус пригласившему — один раз, только с оплаченного заказа от 3000 ₽
+  try {
+    const custId = typeof d.customer === 'object' && d.customer ? d.customer.id : d.customer
+    if (!custId) return
+    const buyer = (await payload.findByID({ collection: 'customers', id: custId, depth: 0 })) as any
+    const goodsTotal = Number(d.items?.goodsTotal) || 0
+    if (buyer && buyer.referredBy && !buyer.referralRewarded && goodsTotal >= 3000) {
+      const referrerId = typeof buyer.referredBy === 'object' ? buyer.referredBy.id : buyer.referredBy
+      const referrer = (await payload.findByID({ collection: 'customers', id: referrerId, depth: 0 })) as any
+      if (referrer) {
+        // Процент по статусу пригласившего: Золото (30+) — 15%, Серебро (10+) — 12%, иначе 10%
+        const refCount = Number(referrer.referralCount) || 0
+        const pct = refCount >= 30 ? 0.15 : refCount >= 10 ? 0.12 : 0.1
+        const bonus = Math.round(goodsTotal * pct)
+        await payload.update({ collection: 'customers', id: referrerId, data: { bonusBalance: (Number(referrer.bonusBalance) || 0) + bonus }, overrideAccess: true, overrideLock: true })
+        await payload.update({ collection: 'customers', id: custId, data: { referralRewarded: true }, overrideAccess: true, overrideLock: true })
+      }
+    }
+  } catch (e) {
+    console.error('Referral bonus error:', e)
+  }
+}
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -21,6 +87,12 @@ export const Orders: CollectionConfig = {
       if (u.collection === 'customers') return { customer: { equals: u.id } }
       return false
     },
+    // Заказы создаёт сервер при оформлении (роут place-order с overrideAccess),
+    // поэтому здесь create/update/delete закрыты для всех, кроме администратора —
+    // иначе вошедший покупатель мог бы через API изменить чужой заказ или статус оплаты.
+    create: ({ req }) => req.user?.collection === 'users',
+    update: ({ req }) => req.user?.collection === 'users',
+    delete: ({ req }) => req.user?.collection === 'users',
   },
   fields: [
     {
@@ -102,6 +174,7 @@ export const Orders: CollectionConfig = {
         { label: 'Тинькофф Pay', value: 'tinkoff' },
         { label: 'СберПей', value: 'sber' },
         { label: 'Криптовалюта', value: 'crypto' },
+        { label: 'Банковская карта', value: 'card' },
       ],
     },
     {
@@ -123,6 +196,7 @@ export const Orders: CollectionConfig = {
       name: 'total',
       label: 'Сумма заказа, ₽',
       type: 'number',
+      min: 0,
     },
     {
       name: 'comment',
@@ -130,4 +204,7 @@ export const Orders: CollectionConfig = {
       type: 'textarea',
     },
   ],
+  hooks: {
+    afterChange: [orderPaidEffects],
+  },
 }

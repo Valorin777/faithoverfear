@@ -56,6 +56,12 @@ export async function POST(request: Request) {
       },
     })
   } catch (e) {
+    // Гонка: если этот e-mail заняли между проверкой и созданием, уникальный индекс
+    // не даст создать дубль — отдаём понятную ошибку вместо общего 500.
+    const msg = String((e as { message?: string })?.message || e).toLowerCase()
+    if (msg.includes('unique') || msg.includes('duplicate') || msg.includes('email')) {
+      return Response.json({ error: 'Этот email уже зарегистрирован' }, { status: 400 })
+    }
     console.error('Register error:', e)
     return Response.json({ error: 'Не удалось зарегистрироваться' }, { status: 500 })
   }

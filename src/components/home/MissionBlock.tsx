@@ -40,7 +40,7 @@ export default function MissionBlock() {
           lineHeight: 1.65,
           marginBottom: '1.25rem',
         }}>
-          {t('«Все средства от продажи одежды направляются на поддержку православных общин и социальных проектов»', '“All proceeds from clothing sales go to support Orthodox communities and social projects”')}
+          {t('«Часть средств от продажи одежды направляется на поддержку православных общин и социальных проектов»', '“Part of the proceeds from clothing sales goes to support Orthodox communities and social projects”')}
         </p>
 
         <p style={{
@@ -53,7 +53,7 @@ export default function MissionBlock() {
           maxWidth: 560,
           margin: '0 auto 3.5rem',
         }}>
-          {t('Покупая нашу одежду, вы участвуете в добром деле. Часть прибыли идёт на помощь нуждающимся и развитие православных инициатив в России.', 'By buying our clothing, you take part in a good cause. Part of the profit goes to helping those in need and developing Orthodox initiatives in Russia.')}
+          {t('Покупая нашу одежду, вы участвуете в добром деле. Часть прибыли идёт на строительство храмов, поддержку приходов и благотворительность в России.', 'By buying our clothing, you take part in a good cause. Part of the profit goes to building churches, supporting parishes and charity in Russia.')}
         </p>
 
         {/* Статистика */}
@@ -64,9 +64,9 @@ export default function MissionBlock() {
           flexWrap: 'wrap',
         }}>
           {[
-            { title: t('Помощь общинам', 'Helping communities'), desc: t('Поддержка православных приходов', 'Support for Orthodox parishes') },
-            { title: t('Социальные проекты', 'Social projects'), desc: t('Помощь нуждающимся семьям', 'Help for families in need') },
-            { title: t('Духовное просвещение', 'Spiritual education'), desc: t('Распространение Слова Божия', 'Spreading the Word of God') },
+            { title: t('Строительство церкви', 'Church construction'), desc: t('Возведение и восстановление храмов', 'Building and restoring churches') },
+            { title: t('Приходы церкви', 'Church parishes'), desc: t('Поддержка православных приходов', 'Support for Orthodox parishes') },
+            { title: t('Благотворительность', 'Charity'), desc: t('Добрые дела и милосердие', 'Good deeds and mercy') },
           ].map(({ title, desc }, i) => (
             <div key={title} style={{
               flex: '1 1 200px',

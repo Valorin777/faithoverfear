@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type FormEvent } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { ShoppingCart, User, Search, Menu, X, Heart } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
@@ -16,6 +16,7 @@ const navLinks = [
   { href: '/sale', label: 'Акции', en: 'Sale' },
   { href: '/gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
   { href: '/about', label: 'О проекте', en: 'About' },
+  { href: '/info', label: 'Информация', en: 'Information' },
   { href: '/contacts', label: 'Контакты', en: 'Contacts' },
   { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },
   { href: '/blog', label: 'Блог', en: 'Blog' },
@@ -34,6 +35,17 @@ export default function Header() {
   const settings = useSettings()
   const freeFrom = (settings.freeDeliveryFrom || 3500).toLocaleString('ru-RU')
   const pathname = usePathname()
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const submitSearch = (e: FormEvent) => {
+    e.preventDefault()
+    const q = searchQuery.trim()
+    if (!q) return
+    setSearchOpen(false)
+    setMenuOpen(false)
+    router.push(`/search?q=${encodeURIComponent(q)}`)
+  }
 
   useEffect(() => {
     const checkWidth = () => setIsDesktop(window.innerWidth >= 1280)
@@ -299,9 +311,11 @@ export default function Header() {
           {/* Строка поиска */}
           {searchOpen && (
             <div style={{ paddingBottom: '0.875rem' }}>
-              <div style={{ position: 'relative' }}>
+              <form onSubmit={submitSearch} style={{ position: 'relative' }}>
                 <input
                   type="search"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
                   placeholder={t('Поиск товаров...', 'Search products...')}
                   autoFocus
                   style={{
@@ -315,11 +329,14 @@ export default function Header() {
                     color: 'var(--text)',
                   }}
                 />
-                <Search
-                  size={15}
-                  style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: '#ccc', pointerEvents: 'none' }}
-                />
-              </div>
+                <button
+                  type="submit"
+                  aria-label={t('Найти', 'Search')}
+                  style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 8, lineHeight: 0, color: '#999' }}
+                >
+                  <Search size={15} />
+                </button>
+              </form>
             </div>
           )}
         </div>

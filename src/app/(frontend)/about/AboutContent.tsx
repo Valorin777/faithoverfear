@@ -34,7 +34,7 @@ export default function AboutContent() {
   ]
 
   const values = [
-    { num: '✝', title: 'Православный смысл', titleEn: 'Orthodox meaning', desc: 'Каждый принт — живое слово Евангелия', descEn: 'Every print is a living word of the Gospel' },
+    { num: '+', title: 'Православный смысл', titleEn: 'Orthodox meaning', desc: 'Каждый принт — живое слово Евангелия', descEn: 'Every print is a living word of the Gospel' },
     { num: '◎', title: '100% натуральный хлопок', titleEn: '100% natural cotton', desc: 'Стойкий принт, бережный уход', descEn: 'Durable print, gentle care' },
     { num: '♡', title: 'Благотворительность', titleEn: 'Charity', desc: 'Часть выручки идёт в православные общины', descEn: 'Part of the revenue goes to Orthodox communities' },
   ]

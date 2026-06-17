@@ -21,7 +21,7 @@ export default function ProductContent({ product, related, productReviews }: Pro
     { label: 'Уход', labelEn: 'Care', value: 'Стирка при 30°C, не отбеливать, гладить при низкой температуре', valueEn: 'Wash at 30°C, do not bleach, iron at low temperature' },
     { label: 'Страна производства', labelEn: 'Country of origin', value: 'Россия', valueEn: 'Russia' },
     { label: 'Тип печати', labelEn: 'Print type', value: 'Шелкография / DTG — стойкий принт', valueEn: 'Silkscreen / DTG — durable print' },
-    { label: 'Крой', labelEn: 'Cut', value: 'Прямой, унисекс', valueEn: 'Straight, unisex' },
+    { label: 'Крой', labelEn: 'Cut', value: 'Прямой', valueEn: 'Straight' },
   ]
   const specs = product.specifications && product.specifications.length ? product.specifications : DEFAULT_SPECS
 

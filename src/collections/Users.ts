@@ -22,16 +22,21 @@ export const Users: CollectionConfig = {
     group: 'Система',
   },
   access: {
-    // Добавлять администраторов могут только уже вошедшие администраторы.
+    // Список администраторов и их данные (email, и т.п.) видны только администраторам.
+    read: ({ req }) => req.user?.collection === 'users',
+    // Добавлять администраторов может только уже вошедший администратор.
     // Публичная самостоятельная регистрация закрыта.
     // Исключение — самый первый аккаунт при первичной настройке (когда их ещё нет).
     create: async ({ req }) => {
-      if (req.user) return true
+      if (req.user?.collection === 'users') return true
+      if (req.user) return false // вошедший покупатель не может заводить администраторов
       const { totalDocs } = await req.payload.count({ collection: 'users' })
       return totalDocs === 0
     },
-    // Удалять администраторов может только вошедший администратор
-    delete: ({ req }) => Boolean(req.user),
+    // Редактировать (в т.ч. сменить email/пароль) и удалять администраторов
+    // может только администратор — иначе вошедший покупатель смог бы захватить аккаунт.
+    update: ({ req }) => req.user?.collection === 'users',
+    delete: ({ req }) => req.user?.collection === 'users',
   },
   fields: [
     {

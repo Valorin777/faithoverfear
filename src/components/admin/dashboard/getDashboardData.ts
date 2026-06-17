@@ -223,7 +223,7 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
       id: String(c.id),
       name: c.name || c.email || 'Клиент',
       count,
-      tier: count >= 30 ? 'Золото' : count >= 10 ? 'Серебро' : '—',
+      tier: count >= 30 ? 'Золото' : count >= 10 ? 'Серебро' : 'Старт',
     }
   })
 

@@ -12,6 +12,14 @@ export const Returns: CollectionConfig = {
     defaultColumns: ['orderNumber', 'customerName', 'status', 'amount', 'createdAt'],
     group: 'Магазин',
   },
+  access: {
+    // Возвраты заводит и видит только администратор (формы возврата на витрине нет).
+    // Без этого блока Payload по умолчанию открывал доступ любому вошедшему — включая покупателей.
+    read: ({ req }) => req.user?.collection === 'users',
+    create: ({ req }) => req.user?.collection === 'users',
+    update: ({ req }) => req.user?.collection === 'users',
+    delete: ({ req }) => req.user?.collection === 'users',
+  },
   fields: [
     {
       type: 'row',

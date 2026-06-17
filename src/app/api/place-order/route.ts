@@ -93,7 +93,10 @@ export async function POST(request: Request) {
     })
     const product = found.docs[0] as { price?: number; salePrice?: number } | undefined
     if (!product) continue
-    const unitPrice = product.salePrice ?? product.price ?? 0
+    // Скидочная цена учитывается только если она положительная (0 / пусто — скидки нет)
+    const sale = typeof product.salePrice === 'number' && product.salePrice > 0 ? product.salePrice : undefined
+    const unitPrice = sale ?? product.price ?? 0
+    if (unitPrice <= 0) continue // товар без корректной цены в заказ не добавляем
     const qty = Math.max(1, Number(item.quantity) || 1)
     const lineTotal = unitPrice * qty
     goodsTotal += lineTotal
@@ -112,19 +115,23 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Товары не найдены' }, { status: 400 })
   }
 
-  const deliveryPrice =
+  const baseDelivery =
     goodsTotal >= FREE_DELIVERY_FROM ? 0 : DELIVERY_PRICES[body.delivery] ?? 0
 
   // Промокод — скидка на товары (пересчёт на сервере, клиент не может подделать)
   let promoDiscount = 0
   let appliedPromo: string | undefined
+  let freeShipping = false
   if (body.promoCode) {
-    const promoRes = await checkPromo(body.promoCode, goodsTotal)
+    const promoRes = await checkPromo(body.promoCode, goodsTotal, customer.id)
     if (promoRes.valid) {
       promoDiscount = promoRes.discount
       appliedPromo = promoRes.code
+      if (promoRes.discountType === 'freeShipping') freeShipping = true
     }
   }
+  // Промокод «бесплатная доставка» обнуляет стоимость доставки
+  const deliveryPrice = freeShipping ? 0 : baseDelivery
 
   const afterPromo = Math.max(0, goodsTotal - promoDiscount) + deliveryPrice
 
@@ -153,7 +160,7 @@ export async function POST(request: Request) {
         deliveryMethod: body.delivery as 'cdek' | 'boxberry' | 'russianpost' | 'pickup',
         city: body.city,
         address: body.address,
-        paymentMethod: body.payment as 'yukassa' | 'sbp' | 'tinkoff' | 'sber' | 'crypto',
+        paymentMethod: body.payment as 'yukassa' | 'sbp' | 'tinkoff' | 'sber' | 'crypto' | 'card',
         items: { goods: itemsSnapshot, goodsTotal, deliveryPrice, promoCode: appliedPromo, promoDiscount, bonusUsed },
         total,
         comment: body.comment,
@@ -193,44 +200,9 @@ export async function POST(request: Request) {
     } catch (e) { console.error('Bonus spend error:', e) }
   }
 
-  // Реферальный бонус: покупатель пришёл по приглашению, товаров на 3000 ₽+,
-  // бонус ещё не начислялся — начисляем пригласившему 10% от стоимости товаров.
-  let referralBonus = 0
-  if (customer && customer.referredBy && !customer.referralRewarded && goodsTotal >= 3000) {
-    const rb: unknown = customer.referredBy
-    const referrerId = (
-      typeof rb === 'object' && rb !== null ? (rb as { id: string | number }).id : rb
-    ) as string | number
-    try {
-      const referrer = await payload.findByID({
-        collection: 'customers',
-        id: referrerId,
-        depth: 0,
-      })
-      if (referrer) {
-        // Процент зависит от статуса пригласившего: Золото (30+) — 15%, Серебро (10+) — 12%, иначе 10%
-        const refCount = (referrer as { referralCount?: number }).referralCount || 0
-        const pct = refCount >= 30 ? 0.15 : refCount >= 10 ? 0.12 : 0.1
-        referralBonus = Math.round(goodsTotal * pct)
-        await payload.update({
-          collection: 'customers',
-          id: referrerId,
-          data: { bonusBalance: ((referrer as { bonusBalance?: number }).bonusBalance || 0) + referralBonus },
-          overrideAccess: true,
-          overrideLock: true,
-        })
-        await payload.update({
-          collection: 'customers',
-          id: customer.id,
-          data: { referralRewarded: true },
-          overrideAccess: true,
-          overrideLock: true,
-        })
-      }
-    } catch (e) {
-      console.error('Referral bonus error:', e)
-    }
-  }
+  // Реферальный бонус пригласившему здесь НЕ начисляется: это происходит, когда
+  // заказ переходит в оплаченный статус (хук afterChange коллекции Orders) —
+  // чтобы не платить комиссию за неоплаченные или отменённые заказы.
 
-  return Response.json({ success: true, orderNumber, total, referralBonus, promoDiscount, bonusUsed })
+  return Response.json({ success: true, orderNumber, total, promoDiscount, bonusUsed })
 }

@@ -2,6 +2,7 @@
 
 import { Review } from '@/types'
 import { useLang } from '@/context/LanguageContext'
+import LeaveReviewButton from '@/components/reviews/LeaveReviewButton'
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -161,6 +162,11 @@ export default function ReviewsSection({ reviews }: { reviews: Review[] }) {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Призыв оставить отзыв */}
+        <div style={{ textAlign: 'center', marginTop: '2.75rem' }}>
+          <LeaveReviewButton />
         </div>
 
       </div>
