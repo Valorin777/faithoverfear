@@ -18,6 +18,17 @@ function Stars({ rating }: { rating: number }) {
 
 export default function ReviewsSection({ reviews }: { reviews: Review[] }) {
   const { t, lang } = useLang()
+
+  // Реальные показатели из опубликованных отзывов (без выдуманных цифр)
+  const ratings = reviews.map((r) => r.rating).filter((n): n is number => typeof n === 'number')
+  const avg = ratings.length ? ratings.reduce((s, n) => s + n, 0) / ratings.length : 0
+  const recommendPct = ratings.length ? Math.round((ratings.filter((n) => n >= 4).length / ratings.length) * 100) : 0
+  const stats = [
+    { num: avg ? avg.toFixed(1).replace('.', ',') : '—', label: t('Средняя оценка', 'Average rating') },
+    { num: String(reviews.length), label: t('Довольных покупателей', 'Happy customers') },
+    { num: `${recommendPct}%`, label: t('Рекомендуют нас', 'Would recommend us') },
+  ]
+
   return (
     <section style={{ background: '#fff', padding: '6rem 0' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.25rem' }}>
@@ -136,11 +147,7 @@ export default function ReviewsSection({ reviews }: { reviews: Review[] }) {
           borderRadius: 6,
           flexWrap: 'wrap',
         }}>
-          {[
-            { num: '4.9', label: t('Средняя оценка', 'Average rating') },
-            { num: '200+', label: t('Довольных покупателей', 'Happy customers') },
-            { num: '98%', label: t('Рекомендуют нас', 'Would recommend us') },
-          ].map(({ num, label }) => (
+          {stats.map(({ num, label }) => (
             <div key={label} style={{ textAlign: 'center' }}>
               <p style={{
                 fontFamily: 'var(--font-playfair), Georgia, serif',

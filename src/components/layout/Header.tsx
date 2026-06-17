@@ -16,6 +16,7 @@ const navLinks = [
   { href: '/sale', label: 'Акции', en: 'Sale' },
   { href: '/gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
   { href: '/about', label: 'О проекте', en: 'About' },
+  { href: '/presentation', label: 'Презентация проекта', en: 'Brand deck' },
   { href: '/info', label: 'Информация', en: 'Information' },
   { href: '/contacts', label: 'Контакты', en: 'Contacts' },
   { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },
@@ -141,28 +142,30 @@ export default function Header() {
             display: 'flex',
             alignItems: 'center',
             height: 64,
-            gap: '1rem',
+            gap: isDesktop ? '1rem' : '0.5rem',
           }}>
 
             {/* Логотип */}
             <Link href="/" style={{ textDecoration: 'none', flexShrink: 0, lineHeight: 1 }}>
               <div style={{
                 fontFamily: 'var(--font-playfair), Georgia, serif',
-                fontSize: '1.25rem',
+                fontSize: isDesktop ? '1.25rem' : '1.02rem',
                 fontWeight: 700,
                 color: 'var(--navy)',
                 letterSpacing: '0.01em',
                 lineHeight: 1.2,
+                whiteSpace: 'nowrap',
               }}>
                 Faith over Fear
               </div>
               <div style={{
                 fontFamily: 'var(--font-inter), sans-serif',
-                fontSize: '0.56rem',
+                fontSize: isDesktop ? '0.56rem' : '0.48rem',
                 color: 'var(--gold)',
-                letterSpacing: '0.3em',
+                letterSpacing: isDesktop ? '0.3em' : '0.16em',
                 textTransform: 'uppercase',
                 marginTop: 2,
+                whiteSpace: 'nowrap',
               }}>
                 Православная одежда
               </div>
