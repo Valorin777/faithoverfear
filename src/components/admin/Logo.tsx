@@ -1,8 +1,8 @@
 /**
  * Фирменный логотип на экране входа в админку.
- * Чёрный круг · золотой православный крест · засечный шрифт.
+ * Чёрный круг · золотой христианский крест · засечный шрифт.
  */
-function OrthodoxCross({ size }: { size: number }) {
+function ChristianCross({ size }: { size: number }) {
   return (
     <svg width={size} height={size * 1.5} viewBox="0 0 100 150" fill="none" aria-hidden="true">
       <g stroke="#c9a84c" strokeLinecap="round">
@@ -31,7 +31,7 @@ export default function Logo() {
           boxShadow: '0 14px 40px rgba(0,0,0,0.35), inset 0 0 0 6px rgba(201,168,76,0.08)',
         }}
       >
-        <OrthodoxCross size={40} />
+        <ChristianCross size={40} />
       </div>
       <div style={{ textAlign: 'center' }}>
         <div
@@ -55,7 +55,7 @@ export default function Logo() {
             marginTop: 7,
           }}
         >
-          Православная одежда
+          Христианская одежда
         </div>
       </div>
     </div>

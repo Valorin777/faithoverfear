@@ -5,7 +5,7 @@ import { getProducts } from '@/lib/cms'
 
 export const metadata: Metadata = {
   title: 'Акции и скидки',
-  description: 'Товары со скидкой в магазине православной одежды Faith over Fear.',
+  description: 'Товары со скидкой в магазине христианской одежды Faith over Fear.',
 }
 
 export const revalidate = 60

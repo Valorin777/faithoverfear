@@ -10,8 +10,8 @@ export default function AboutContent() {
     {
       title: 'Откуда мы',
       titleEn: 'Where we come from',
-      text: '<strong>Faith over Fear</strong> — проект православной одежды, созданный людьми, которые сами живут верой. Мы не просто печатаем слова на ткани — мы несём свидетельство живой веры в мир, где всё больше людей ищут смысл и опору.',
-      textEn: '<strong>Faith over Fear</strong> is an Orthodox clothing project created by people who live their faith. We don’t just print words on fabric — we carry a testimony of living faith into a world where more and more people are searching for meaning and a foundation.',
+      text: '<strong>Faith over Fear</strong> — проект христианской одежды, созданный людьми, которые сами живут верой. Мы не просто печатаем слова на ткани — мы несём свидетельство живой веры в мир, где всё больше людей ищут смысл и опору.',
+      textEn: '<strong>Faith over Fear</strong> is a Christian clothing project created by people who live their faith. We don’t just print words on fabric — we carry a testimony of living faith into a world where more and more people are searching for meaning and a foundation.',
     },
     {
       title: 'Наша миссия',
@@ -22,21 +22,21 @@ export default function AboutContent() {
     {
       title: 'Как мы создаём одежду',
       titleEn: 'How we make our clothing',
-      text: 'Каждый дизайн проходит духовное осмысление. Мы выбираем только те цитаты и образы, которые несут подлинный православный смысл — без китча, без поверхностности. Производство находится в России, ткани — натуральный хлопок от проверенных поставщиков.',
-      textEn: 'Every design is spiritually considered. We choose only those quotes and images that carry genuine Orthodox meaning — without kitsch, without superficiality. Production is based in Russia, and the fabrics are natural cotton from trusted suppliers.',
+      text: 'Каждый дизайн проходит духовное осмысление. Мы выбираем только те цитаты и образы, которые несут подлинный христианский смысл — без китча, без поверхностности. Производство находится в России, ткани — натуральный хлопок от проверенных поставщиков.',
+      textEn: 'Every design is spiritually considered. We choose only those quotes and images that carry genuine Christian meaning — without kitsch, without superficiality. Production is based in Russia, and the fabrics are natural cotton from trusted suppliers.',
     },
     {
       title: 'Благотворительность',
       titleEn: 'Charity',
-      text: 'Часть средств от каждой продажи направляется на поддержку православных общин и социальных проектов. Покупая нашу одежду, вы не просто приобретаете вещь — вы участвуете в добром деле.',
-      textEn: 'A part of the proceeds from every sale goes to support Orthodox communities and social projects. By buying our clothing you don’t just acquire an item — you take part in a good deed.',
+      text: 'Часть средств от каждой продажи направляется на поддержку христианских общин и социальных проектов. Покупая нашу одежду, вы не просто приобретаете вещь — вы участвуете в добром деле.',
+      textEn: 'A part of the proceeds from every sale goes to support Christian communities and social projects. By buying our clothing you don’t just acquire an item — you take part in a good deed.',
     },
   ]
 
   const values = [
-    { num: '+', title: 'Православный смысл', titleEn: 'Orthodox meaning', desc: 'Каждый принт — живое слово Евангелия', descEn: 'Every print is a living word of the Gospel' },
+    { num: '+', title: 'Христианский смысл', titleEn: 'Christian meaning', desc: 'Каждый принт — живое слово Евангелия', descEn: 'Every print is a living word of the Gospel' },
     { num: '◎', title: '100% натуральный хлопок', titleEn: '100% natural cotton', desc: 'Стойкий принт, бережный уход', descEn: 'Durable print, gentle care' },
-    { num: '♡', title: 'Благотворительность', titleEn: 'Charity', desc: 'Часть выручки идёт в православные общины', descEn: 'Part of the revenue goes to Orthodox communities' },
+    { num: '♡', title: 'Благотворительность', titleEn: 'Charity', desc: 'Часть выручки идёт в христианские общины', descEn: 'Part of the revenue goes to Christian communities' },
   ]
 
   return (

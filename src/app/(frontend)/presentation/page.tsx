@@ -5,7 +5,7 @@ import PresentationContent from '@/components/pages/PresentationContent'
 export const metadata: Metadata = {
   title: 'Манифест бренда Faith over Fear',
   description:
-    'Манифест бренда православной одежды Faith over Fear: вера сильнее страха, внутренняя опора, основатели и ценности.',
+    'Манифест бренда христианской одежды Faith over Fear: вера сильнее страха, внутренняя опора, основатели и ценности.',
 }
 
 export default function PresentationPage() {

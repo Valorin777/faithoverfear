@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const label = CATEGORY_LABELS[category as ProductCategory]
   if (!label) return {}
   return {
-    title: `${label} — православная одежда`,
-    description: `${label} с православными дизайнами, цитатами Иисуса Христа и христианской символикой.`,
+    title: `${label} — христианская одежда`,
+    description: `${label} с христианскими дизайнами, цитатами Иисуса Христа и христианской символикой.`,
   }
 }
 

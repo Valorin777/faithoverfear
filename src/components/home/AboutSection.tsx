@@ -5,7 +5,7 @@ import { useLang } from '@/context/LanguageContext'
 
 const values = [
   {
-    title: 'Православный смысл', titleEn: 'Orthodox meaning',
+    title: 'Христианский смысл', titleEn: 'Christian meaning',
     text: 'Каждый принт — живое слово Евангелия и цитата из Священного Писания.',
     textEn: 'Every print is a living word of the Gospel and a quote from Scripture.',
     icon: (
@@ -28,8 +28,8 @@ const values = [
   },
   {
     title: 'Благотворительность', titleEn: 'Charity',
-    text: 'Часть средств от каждой покупки идёт на поддержку православных общин.',
-    textEn: 'Part of every purchase goes to support Orthodox communities.',
+    text: 'Часть средств от каждой покупки идёт на поддержку христианских общин.',
+    textEn: 'Part of every purchase goes to support Christian communities.',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
@@ -91,7 +91,7 @@ export default function AboutSection() {
                 fontFamily: 'var(--font-playfair), Georgia, serif',
                 fontWeight: 600,
                 color: 'var(--navy)',
-              }}>Faith over Fear</strong>{t(' — это проект для тех, кто живёт верой каждый день. Мы создаём одежду с православным смыслом: цитаты из Евангелия, образы православной традиции, символы веры.', ' is a project for those who live by faith every day. We create clothing with Orthodox meaning: quotes from the Gospel, images of Orthodox tradition, symbols of faith.')}
+              }}>Faith over Fear</strong>{t(' — это проект для тех, кто живёт верой каждый день. Мы создаём одежду с христианским смыслом: цитаты из Евангелия, образы христианской традиции, символы веры.', ' is a project for those who live by faith every day. We create clothing with Christian meaning: quotes from the Gospel, images of Christian tradition, symbols of faith.')}
             </p>
             <p style={{
               fontFamily: 'var(--font-inter), sans-serif',

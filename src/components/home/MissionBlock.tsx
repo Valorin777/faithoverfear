@@ -40,7 +40,7 @@ export default function MissionBlock() {
           lineHeight: 1.65,
           marginBottom: '1.25rem',
         }}>
-          {t('«Часть средств от продажи одежды направляется на поддержку православных общин и социальных проектов»', '“Part of the proceeds from clothing sales goes to support Orthodox communities and social projects”')}
+          {t('«Часть средств от продажи одежды направляется на поддержку христианских общин и социальных проектов»', '“Part of the proceeds from clothing sales goes to support Christian communities and social projects”')}
         </p>
 
         <p style={{
@@ -65,7 +65,7 @@ export default function MissionBlock() {
         }}>
           {[
             { title: t('Строительство церкви', 'Church construction'), desc: t('Возведение и восстановление храмов', 'Building and restoring churches') },
-            { title: t('Приходы церкви', 'Church parishes'), desc: t('Поддержка православных приходов', 'Support for Orthodox parishes') },
+            { title: t('Приходы церкви', 'Church parishes'), desc: t('Поддержка христианских приходов', 'Support for Christian parishes') },
             { title: t('Благотворительность', 'Charity'), desc: t('Добрые дела и милосердие', 'Good deeds and mercy') },
           ].map(({ title, desc }, i) => (
             <div key={title} style={{

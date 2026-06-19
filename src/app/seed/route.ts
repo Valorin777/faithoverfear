@@ -116,16 +116,16 @@ export async function GET(request: Request) {
     await payload.updateGlobal({
       slug: 'settings',
       data: {
-        heroEyebrow: 'Православная одежда · Faith over Fear',
-        heroEyebrowEn: 'Orthodox clothing · Faith over Fear',
+        heroEyebrow: 'Христианская одежда · Faith over Fear',
+        heroEyebrowEn: 'Christian clothing · Faith over Fear',
         heroTitleLine1: 'Одежда,',
         heroTitleLine1En: 'Clothing',
         heroTitleLine2: 'которая несёт Свет',
         heroTitleLine2En: 'that carries the Light',
         heroSubtitle:
-          'Футболки, поло, свитшоты и аксессуары с цитатами Священного Писания и православной символикой. Создано с молитвой.',
+          'Футболки, поло, свитшоты и аксессуары с цитатами Священного Писания и христианской символикой. Создано с молитвой.',
         heroSubtitleEn:
-          'T-shirts, polos, sweatshirts and accessories with quotes from Holy Scripture and Orthodox symbolism. Made with prayer.',
+          'T-shirts, polos, sweatshirts and accessories with quotes from Holy Scripture and Christian symbolism. Made with prayer.',
       },
     })
   } catch (err) {

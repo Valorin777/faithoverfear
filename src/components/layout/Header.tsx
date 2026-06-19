@@ -133,7 +133,7 @@ export default function Header() {
         }}>
           {settings.promoBarText
             ? t(settings.promoBarText, settings.promoBarTextEn)
-            : <>{t(`Бесплатная доставка от ${freeFrom} ₽`, `Free delivery from ${freeFrom} ₽`)}&nbsp;&nbsp;·&nbsp;&nbsp;{t('Православная одежда', 'Orthodox clothing')}&nbsp;&nbsp;·&nbsp;&nbsp;{settings.contactWebsite || 'faithof.ru'}</>}
+            : <>{t(`Бесплатная доставка от ${freeFrom} ₽`, `Free delivery from ${freeFrom} ₽`)}&nbsp;&nbsp;·&nbsp;&nbsp;{t('Христианская одежда', 'Christian clothing')}&nbsp;&nbsp;·&nbsp;&nbsp;{settings.contactWebsite || 'faithof.ru'}</>}
         </Link>
 
         {/* Основная строка */}
@@ -167,7 +167,7 @@ export default function Header() {
                 marginTop: 2,
                 whiteSpace: 'nowrap',
               }}>
-                Православная одежда
+                Христианская одежда
               </div>
             </Link>
 

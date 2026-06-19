@@ -5,7 +5,7 @@ import { getProducts } from '@/lib/cms'
 
 export const metadata: Metadata = {
   title: 'Новинки',
-  description: 'Новые поступления православной одежды.',
+  description: 'Новые поступления христианской одежды.',
 }
 
 export const revalidate = 60

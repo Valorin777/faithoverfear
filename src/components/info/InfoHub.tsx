@@ -8,8 +8,8 @@ const FONT = 'var(--font-inter), sans-serif'
 const SERIF = 'var(--font-playfair), Georgia, serif'
 
 const TITLE_EN: Record<string, string> = {
-  'bible-quotes': 'Bible quotes', faq: 'FAQ', traditions: 'Orthodox traditions',
-  symbols: 'Orthodox symbols', holidays: 'Christian holidays', commandments: 'Commandments',
+  'bible-quotes': 'Bible quotes', faq: 'FAQ', traditions: 'Christian traditions',
+  symbols: 'Christian symbols', holidays: 'Christian holidays', commandments: 'Commandments',
 }
 
 // Тонкие line-иконки вместо эмодзи (наводим премиальный вид)

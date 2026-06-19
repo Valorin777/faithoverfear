@@ -4,8 +4,8 @@ import CatalogGrid from '@/components/catalog/CatalogGrid'
 import { getProducts } from '@/lib/cms'
 
 export const metadata: Metadata = {
-  title: 'Каталог православной одежды',
-  description: 'Все товары: футболки, поло, свитшоты, свитеры и аксессуары с православными дизайнами.',
+  title: 'Каталог христианской одежды',
+  description: 'Все товары: футболки, поло, свитшоты, свитеры и аксессуары с христианскими дизайнами.',
 }
 
 export const revalidate = 60

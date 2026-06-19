@@ -25,12 +25,12 @@ export default async function HeroBanner() {
     !m ? undefined : typeof m === 'string' ? m : m.url || undefined
   const heroImage = mediaUrl(s?.heroImage)
   const heroVideo = mediaUrl(s?.heroVideo)
-  const eyebrow = s?.heroEyebrow || 'Православная одежда · Faith over Fear'
+  const eyebrow = s?.heroEyebrow || 'Христианская одежда · Faith over Fear'
   const title1 = s?.heroTitleLine1 || 'Одежда,'
   const title2 = s?.heroTitleLine2 || 'которая несёт Свет'
   const subtitle =
     s?.heroSubtitle ||
-    'Футболки, поло, свитшоты и аксессуары с цитатами Священного Писания и православной символикой. Создано с молитвой.'
+    'Футболки, поло, свитшоты и аксессуары с цитатами Священного Писания и христианской символикой. Создано с молитвой.'
 
   return (
     <HeroBannerView

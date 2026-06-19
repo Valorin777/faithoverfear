@@ -5,7 +5,7 @@ import { getProducts } from '@/lib/cms'
 
 export const metadata: Metadata = {
   title: 'Подарочные наборы',
-  description: 'Подарочные наборы православной одежды. Идеальный подарок для близких.',
+  description: 'Подарочные наборы христианской одежды. Идеальный подарок для близких.',
 }
 
 export const revalidate = 60

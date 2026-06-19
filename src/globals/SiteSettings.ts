@@ -15,7 +15,7 @@ export const SiteSettings: GlobalConfig = {
           name: 'heroEyebrow',
           label: 'Надпись над заголовком (рус)',
           type: 'text',
-          admin: { description: 'Напр.: Православная одежда · Faith over Fear' },
+          admin: { description: 'Напр.: Христианская одежда · Faith over Fear' },
         },
         { name: 'heroEyebrowEn', label: 'Eyebrow (English)', type: 'text' },
         {
@@ -54,7 +54,7 @@ export const SiteSettings: GlobalConfig = {
       type: 'collapsible',
       admin: { initCollapsed: true },
       fields: [
-        { name: 'promoBarText', label: 'Текст промо-полосы (рус)', type: 'text', admin: { description: 'Напр.: Бесплатная доставка · Православная одежда · faithof.ru' } },
+        { name: 'promoBarText', label: 'Текст промо-полосы (рус)', type: 'text', admin: { description: 'Напр.: Бесплатная доставка · Христианская одежда · faithof.ru' } },
         { name: 'promoBarTextEn', label: 'Promo bar text (English)', type: 'text' },
         {
           name: 'freeDeliveryFrom',
@@ -113,6 +113,10 @@ export const SiteSettings: GlobalConfig = {
                     { label: 'YouTube', value: 'youtube' },
                     { label: 'TikTok', value: 'tiktok' },
                     { label: 'Rutube', value: 'rutube' },
+                    { label: 'Facebook', value: 'facebook' },
+                    { label: 'Threads', value: 'threads' },
+                    { label: 'Дзен (Яндекс)', value: 'dzen' },
+                    { label: 'MAX', value: 'max' },
                   ],
                 },
                 { name: 'url', label: 'Ссылка', type: 'text' },
