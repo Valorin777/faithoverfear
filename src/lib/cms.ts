@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { Product, ProductVariant, Review, BlogPost, ProductCategory, SiteSettingsData } from '@/types'
 import { products as staticProducts, reviews as staticReviews } from '@/data/products'
+import { INFO_TOPICS, type InfoTopic } from '@/data/infoSections'
 import { blogPosts as staticPosts } from '@/data/blog'
 
 const PLACEHOLDER_IMG = '/images/placeholder-product.jpg'
@@ -182,12 +183,39 @@ export async function getSettings(): Promise<SiteSettingsData> {
           }))
         : [],
       paymentMethods: Array.isArray(s.paymentMethods) ? s.paymentMethods.filter((x: any) => x?.ru).map((x: any) => ({ ru: x.ru, en: x.en || undefined })) : [],
+      aboutQuote: s.aboutQuote || undefined,
+      aboutQuoteEn: s.aboutQuoteEn || undefined,
+      aboutQuoteSource: s.aboutQuoteSource || undefined,
+      aboutQuoteSourceEn: s.aboutQuoteSourceEn || undefined,
+      aboutSections: Array.isArray(s.aboutSections) ? s.aboutSections.filter((x: any) => x?.title || x?.text).map((x: any) => ({ title: x.title || '', titleEn: x.titleEn || undefined, text: x.text || '', textEn: x.textEn || undefined })) : [],
+      aboutValues: Array.isArray(s.aboutValues) ? s.aboutValues.filter((x: any) => x?.title).map((x: any) => ({ title: x.title || '', titleEn: x.titleEn || undefined, desc: x.desc || '', descEn: x.descEn || undefined })) : [],
       heroImage: mediaUrl(s.heroImage) || undefined,
       heroVideo: mediaUrl(s.heroVideo) || undefined,
     }
   } catch {
     return fallback
   }
+}
+
+/** Разделы «Информация» из админки; если коллекция пуста — встроенный текст. */
+export async function getInfoTopics(): Promise<InfoTopic[]> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({ collection: 'info-topics', sort: 'order', depth: 0, limit: 50, pagination: false })
+    if (res.docs.length) {
+      return (res.docs as any[]).map((d) => ({
+        slug: d.slug || String(d.id),
+        title: d.title || '',
+        intro: d.intro || '',
+        blocks: Array.isArray(d.blocks)
+          ? d.blocks.filter((b: any) => b?.text).map((b: any) => ({ type: b.type || 'text', text: b.text }))
+          : [],
+      }))
+    }
+  } catch {
+    // откат к встроенному тексту
+  }
+  return INFO_TOPICS
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {

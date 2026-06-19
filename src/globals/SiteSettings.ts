@@ -130,6 +130,68 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      label: 'Страница «О проекте»',
+      type: 'collapsible',
+      admin: { initCollapsed: true, description: 'Текст страницы «О проекте». Пустые поля — показываются значения по умолчанию.' },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'aboutQuote', label: 'Цитата (рус)', type: 'text', admin: { description: 'Напр.: «Не бойся, только веруй»' } },
+            { name: 'aboutQuoteEn', label: 'Quote (English)', type: 'text' },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'aboutQuoteSource', label: 'Источник цитаты (рус)', type: 'text', admin: { description: 'Напр.: Евангелие от Марка, 5:36' } },
+            { name: 'aboutQuoteSourceEn', label: 'Quote source (English)', type: 'text' },
+          ],
+        },
+        {
+          name: 'aboutSections',
+          label: 'Разделы текста',
+          type: 'array',
+          labels: { singular: 'Раздел', plural: 'Разделы' },
+          admin: { description: 'Блоки: «Откуда мы», «Наша миссия» и т.д.' },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'title', label: 'Заголовок (рус)', type: 'text' },
+                { name: 'titleEn', label: 'Title (English)', type: 'text' },
+              ],
+            },
+            { name: 'text', label: 'Текст (рус)', type: 'textarea' },
+            { name: 'textEn', label: 'Text (English)', type: 'textarea' },
+          ],
+        },
+        {
+          name: 'aboutValues',
+          label: 'Принципы',
+          type: 'array',
+          labels: { singular: 'Принцип', plural: 'Принципы' },
+          admin: { description: 'Карточки «Что нами движет» (показываются три)' },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'title', label: 'Название (рус)', type: 'text' },
+                { name: 'titleEn', label: 'Title (English)', type: 'text' },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                { name: 'desc', label: 'Описание (рус)', type: 'text' },
+                { name: 'descEn', label: 'Description (English)', type: 'text' },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
       label: 'Способы доставки',
       type: 'collapsible',
       admin: { initCollapsed: true },

@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { products, reviews } from '@/data/products'
 import { blogPosts } from '@/data/blog'
+import { INFO_TOPICS } from '@/data/infoSections'
 
 export const dynamic = 'force-dynamic'
 
@@ -154,7 +155,27 @@ export async function GET(request: Request) {
     console.error('Seed payment-systems error:', err)
   }
 
+  // ── Разделы «Информация» (создаём из встроенного текста, если коллекция пуста) ──
+  let info_created = 0
+  try {
+    const ex = await payload.count({ collection: 'info-topics' })
+    if (ex.totalDocs === 0) {
+      for (let i = 0; i < INFO_TOPICS.length; i++) {
+        const tp = INFO_TOPICS[i]
+        await payload.create({
+          collection: 'info-topics',
+          data: { slug: tp.slug, title: tp.title, intro: tp.intro, order: i, blocks: tp.blocks } as never,
+          overrideAccess: true,
+        })
+        info_created++
+      }
+    }
+  } catch (err) {
+    console.error('Seed info-topics error:', err)
+  }
+
   return Response.json({
+    info_created,
     success: true,
     products_created,
     products_updated,

@@ -2,11 +2,15 @@
 
 import PageLayout from '@/components/layout/PageLayout'
 import { useLang } from '@/context/LanguageContext'
+import { useSettings } from '@/context/SettingsContext'
+
+const VALUE_ICONS = ['+', '◎', '♡']
 
 export default function AboutContent() {
   const { t } = useLang()
+  const settings = useSettings()
 
-  const sections = [
+  const DEFAULT_SECTIONS = [
     {
       title: 'Откуда мы',
       titleEn: 'Where we come from',
@@ -33,11 +37,18 @@ export default function AboutContent() {
     },
   ]
 
-  const values = [
-    { num: '+', title: 'Христианский смысл', titleEn: 'Christian meaning', desc: 'Каждый принт — живое слово Евангелия', descEn: 'Every print is a living word of the Gospel' },
-    { num: '◎', title: '100% натуральный хлопок', titleEn: '100% natural cotton', desc: 'Стойкий принт, бережный уход', descEn: 'Durable print, gentle care' },
-    { num: '♡', title: 'Благотворительность', titleEn: 'Charity', desc: 'Часть выручки идёт в христианские общины', descEn: 'Part of the revenue goes to Christian communities' },
+  const DEFAULT_VALUES = [
+    { title: 'Христианский смысл', titleEn: 'Christian meaning', desc: 'Каждый принт — живое слово Евангелия', descEn: 'Every print is a living word of the Gospel' },
+    { title: '100% натуральный хлопок', titleEn: '100% natural cotton', desc: 'Стойкий принт, бережный уход', descEn: 'Durable print, gentle care' },
+    { title: 'Благотворительность', titleEn: 'Charity', desc: 'Часть выручки идёт в христианские общины', descEn: 'Part of the revenue goes to Christian communities' },
   ]
+
+  const sections = settings.aboutSections?.length ? settings.aboutSections : DEFAULT_SECTIONS
+  const values = settings.aboutValues?.length ? settings.aboutValues : DEFAULT_VALUES
+  const aQuote = settings.aboutQuote || '«Не бойся, только веруй»'
+  const aQuoteEn = settings.aboutQuoteEn || '“Do not be afraid; only believe”'
+  const aSource = settings.aboutQuoteSource || 'Евангелие от Марка, 5:36'
+  const aSourceEn = settings.aboutQuoteSourceEn || 'Gospel of Mark, 5:36'
 
   return (
     <PageLayout>
@@ -80,13 +91,13 @@ export default function AboutContent() {
               color: 'var(--navy)', fontStyle: 'italic',
               fontWeight: 700, lineHeight: 1.4, marginBottom: '0.75rem',
             }}>
-              {t('«Не бойся, только веруй»', '“Do not be afraid; only believe”')}
+              {t(aQuote, aQuoteEn)}
             </p>
             <p style={{
               fontFamily: 'var(--font-inter), sans-serif',
               fontSize: '0.8rem', color: '#aaa', fontWeight: 300,
             }}>
-              {t('Евангелие от Марка, 5:36', 'Gospel of Mark, 5:36')}
+              {t(aSource, aSourceEn)}
             </p>
           </div>
 
@@ -139,7 +150,7 @@ export default function AboutContent() {
               {t('Что нами движет', 'What drives us')}
             </h2>
             <div className="values-grid" style={{ display: 'grid', gap: '1rem' }}>
-              {values.map(v => (
+              {values.map((v, i) => (
                 <div key={v.title} style={{
                   background: 'var(--beige)', borderRadius: 8,
                   padding: '1.5rem', border: '1px solid #ece9e3',
@@ -149,7 +160,7 @@ export default function AboutContent() {
                     fontSize: '1.25rem', color: 'var(--gold)',
                     marginBottom: '0.75rem',
                   }}>
-                    {v.num}
+                    {VALUE_ICONS[i]}
                   </div>
                   <h3 style={{
                     fontFamily: 'var(--font-inter), sans-serif',

@@ -19,6 +19,7 @@ import { PaymentSystems } from './collections/PaymentSystems'
 import { SupportMessages } from './collections/SupportMessages'
 import { Campaigns } from './collections/Campaigns'
 import { Customers } from './collections/Customers'
+import { InfoTopics } from './collections/InfoTopics'
 import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -82,7 +83,7 @@ export default buildConfig({
     },
   },
   // Порядок задаёт группировку в навигации: Магазин · Аудитория · Контент · Маркетинг · Система
-  collections: [Products, Orders, Returns, PaymentSystems, Customers, Reviews, SupportMessages, Posts, Media, Promocodes, Campaigns, Users],
+  collections: [Products, Orders, Returns, PaymentSystems, Customers, Reviews, SupportMessages, Posts, InfoTopics, Media, Promocodes, Campaigns, Users],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

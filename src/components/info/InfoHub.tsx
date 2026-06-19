@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type CSSProperties, type ReactNode } from 'react'
-import { INFO_TOPICS, type InfoBlock } from '@/data/infoSections'
+import { INFO_TOPICS, type InfoBlock, type InfoTopic } from '@/data/infoSections'
 import { useLang } from '@/context/LanguageContext'
 
 const FONT = 'var(--font-inter), sans-serif'
@@ -88,13 +88,13 @@ function Block({ block }: { block: InfoBlock }) {
   )
 }
 
-export default function InfoHub() {
+export default function InfoHub({ topics = INFO_TOPICS }: { topics?: InfoTopic[] }) {
   const { lang } = useLang()
   const [open, setOpen] = useState<string | null>(null)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {INFO_TOPICS.map((topic) => {
+      {topics.map((topic) => {
         const isOpen = open === topic.slug
         return (
           <div

@@ -125,6 +125,12 @@ export interface SiteSettingsData {
   }[]
   paymentMethods: { ru: string; en?: string }[]
   paymentSystems: { code: string; name: string; nameEn?: string; hint?: string; hintEn?: string }[]
+  aboutQuote?: string
+  aboutQuoteEn?: string
+  aboutQuoteSource?: string
+  aboutQuoteSourceEn?: string
+  aboutSections?: { title: string; titleEn?: string; text: string; textEn?: string }[]
+  aboutValues?: { title: string; titleEn?: string; desc: string; descEn?: string }[]
   heroImage?: string
   heroVideo?: string
 }

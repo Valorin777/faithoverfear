@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import PageLayout from '@/components/layout/PageLayout'
 import InfoHub from '@/components/info/InfoHub'
+import { getInfoTopics } from '@/lib/cms'
 
 export const metadata: Metadata = {
   title: 'Информация о вере — справочник',
@@ -8,7 +9,10 @@ export const metadata: Metadata = {
     'Библейские цитаты, популярные вопросы о вере и религии, христианские традиции, символы православия, христианские праздники и заповеди.',
 }
 
-export default function InfoPage() {
+export const revalidate = 60
+
+export default async function InfoPage() {
+  const topics = await getInfoTopics()
   return (
     <PageLayout>
       <div className="bg-[var(--navy)] py-10">
@@ -26,7 +30,7 @@ export default function InfoPage() {
         </div>
       </div>
       <div className="container py-12 max-w-3xl">
-        <InfoHub />
+        <InfoHub topics={topics} />
       </div>
     </PageLayout>
   )
