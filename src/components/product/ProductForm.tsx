@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Product, ProductVariant } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { useCart } from '@/context/CartContext'
@@ -21,6 +22,7 @@ export default function ProductForm({ product }: ProductFormProps) {
   const [addedToCart, setAddedToCart] = useState(false)
   const { addItem } = useCart()
   const { t } = useLang()
+  const router = useRouter()
 
   const selectedVariant: ProductVariant | undefined = product.variants.find(
     v => v.size === selectedSize && v.color === selectedColor
@@ -33,6 +35,13 @@ export default function ProductForm({ product }: ProductFormProps) {
     addItem(product, selectedVariant, quantity)
     setAddedToCart(true)
     setTimeout(() => setAddedToCart(false), 2500)
+  }
+
+  // Купить в 1 клик: добавляем выбранный вариант в корзину и сразу к оформлению
+  function handleBuyNow() {
+    if (!selectedSize || !selectedVariant) return
+    addItem(product, selectedVariant, quantity)
+    router.push('/checkout')
   }
 
   const price = product.salePrice ?? product.price
@@ -278,6 +287,7 @@ export default function ProductForm({ product }: ProductFormProps) {
 
         <button
           type="button"
+          onClick={handleBuyNow}
           disabled={!selectedSize || !inStock}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.625rem',
