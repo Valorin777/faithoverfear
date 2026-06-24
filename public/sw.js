@@ -3,7 +3,7 @@
    - страницы: network-first (всегда свежее онлайн; из кэша/офлайн-страницы — только без сети);
    - неизменяемая статика (_next/static, иконки, шрифты, картинки): cache-first;
    - админка, API, оплата, seed — НЕ кэшируем (всегда из сети). */
-const VERSION = 'fof-v1'
+const VERSION = 'fof-v2'
 const STATIC_CACHE = `${VERSION}-static`
 const PAGE_CACHE = `${VERSION}-pages`
 const OFFLINE_URL = '/offline.html'
@@ -34,6 +34,8 @@ function isBypassed(url) {
     url.pathname.startsWith('/api') ||
     url.pathname.startsWith('/seed') ||
     url.pathname.startsWith('/checkout') ||
+    // Личный кабинет — персональные данные, никогда не кэшируем (защита на общих устройствах)
+    url.pathname.startsWith('/account') ||
     url.pathname.startsWith('/_next/data')
   )
 }
@@ -60,7 +62,7 @@ self.addEventListener('fetch', (event) => {
           fetch(request).then((res) => {
             if (res && res.status === 200 && res.type === 'basic') {
               const copy = res.clone()
-              caches.open(STATIC_CACHE).then((c) => c.put(request, copy))
+              caches.open(STATIC_CACHE).then((c) => c.put(request, copy)).catch(() => {})
             }
             return res
           }),
@@ -76,7 +78,7 @@ self.addEventListener('fetch', (event) => {
         .then((res) => {
           if (res && res.status === 200) {
             const copy = res.clone()
-            caches.open(PAGE_CACHE).then((c) => c.put(request, copy))
+            caches.open(PAGE_CACHE).then((c) => c.put(request, copy)).catch(() => {})
           }
           return res
         })
