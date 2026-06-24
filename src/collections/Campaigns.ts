@@ -86,7 +86,7 @@ export const Campaigns: CollectionConfig = {
       async ({ doc, req }) => {
         if (doc.status !== 'send') return
         const payload = req.payload
-        let status = 'sent'
+        let status: 'draft' | 'send' | 'sent' | 'error' = 'sent'
         let log = ''
         let count = 0
         try {

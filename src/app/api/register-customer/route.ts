@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   }
 
   // Резолвим реферальный код
-  let referredBy: string | number | undefined
+  let referredBy: number | undefined
   if (ref) {
     const referrer = await payload.find({
       collection: 'customers',
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       limit: 1,
       depth: 0,
     })
-    if (referrer.docs[0]) referredBy = referrer.docs[0].id
+    if (referrer.docs[0]) referredBy = referrer.docs[0].id as number
   }
 
   try {

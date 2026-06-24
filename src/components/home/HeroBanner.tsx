@@ -17,7 +17,7 @@ export default async function HeroBanner() {
   } = {}
   try {
     const payload = await getPayload({ config })
-    s = await payload.findGlobal({ slug: 'settings', depth: 1 })
+    s = (await payload.findGlobal({ slug: 'settings', depth: 1 })) as unknown as typeof s
   } catch {
     // настройки ещё не заданы — используем значения по умолчанию
   }

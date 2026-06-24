@@ -164,7 +164,7 @@ export async function POST(request: Request) {
         items: { goods: itemsSnapshot, goodsTotal, deliveryPrice, promoCode: appliedPromo, promoDiscount, bonusUsed },
         total,
         comment: body.comment,
-        customer: customer?.id,
+        customer: customer?.id as number | undefined,
       },
     })
   } catch (e) {
