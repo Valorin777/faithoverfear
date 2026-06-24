@@ -386,6 +386,7 @@ export default function Header() {
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '1.25rem 1.25rem 1rem',
+              paddingTop: 'calc(1.25rem + env(safe-area-inset-top, 0px))',
               borderBottom: '1px solid #f2f2f2',
             }}>
               <span style={{
@@ -399,17 +400,19 @@ export default function Header() {
               <button
                 onClick={() => setMenuOpen(false)}
                 type="button"
+                aria-label="Закрыть меню"
                 style={{
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
                   color: 'var(--navy)',
-                  padding: '0.25rem',
+                  padding: '0.5rem',
+                  margin: '-0.25rem',
                   display: 'flex',
                   alignItems: 'center',
                 }}
               >
-                <X size={20} strokeWidth={1.75} />
+                <X size={22} strokeWidth={1.75} />
               </button>
             </div>
 

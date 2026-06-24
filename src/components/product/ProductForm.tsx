@@ -7,6 +7,7 @@ import { formatPrice } from '@/lib/utils'
 import { useCart } from '@/context/CartContext'
 import { useLang } from '@/context/LanguageContext'
 import WishlistButton from '@/components/ui/WishlistButton'
+import SizeChartModal from '@/components/product/SizeChartModal'
 
 interface ProductFormProps {
   product: Product
@@ -20,6 +21,7 @@ export default function ProductForm({ product }: ProductFormProps) {
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]?.color ?? '')
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [sizeChartOpen, setSizeChartOpen] = useState(false)
   const { addItem } = useCart()
   const { t } = useLang()
   const router = useRouter()
@@ -145,7 +147,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           }}>
             {t('Размер:', 'Size:')}&nbsp;<span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>{selectedSize ?? t('не выбран', 'not selected')}</span>
           </p>
-          <button type="button" style={{
+          <button type="button" onClick={() => setSizeChartOpen(true)} style={{
             fontFamily: 'var(--font-inter), sans-serif',
             fontSize: '0.72rem', color: 'var(--gold)',
             background: 'none', border: 'none', cursor: 'pointer',
@@ -337,6 +339,8 @@ export default function ProductForm({ product }: ProductFormProps) {
           </div>
         ))}
       </div>
+
+      <SizeChartModal open={sizeChartOpen} onClose={() => setSizeChartOpen(false)} />
     </div>
   )
 }
