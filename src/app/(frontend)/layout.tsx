@@ -1,10 +1,12 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { CartProvider } from '@/context/CartContext'
 import { WishlistProvider } from '@/context/WishlistContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { SettingsProvider } from '@/context/SettingsContext'
 import { CategoriesProvider } from '@/context/CategoriesContext'
+import PWARegister from '@/components/pwa/PWARegister'
+import InstallPrompt from '@/components/pwa/InstallPrompt'
 import { getSettings, getCategories } from '@/lib/cms'
 import '../globals.css'
 
@@ -23,12 +25,26 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://faithof.ru'),
+  applicationName: 'Faith over Fear',
   title: {
     default: 'Faith over Fear — христианская одежда с христианскими мотивами',
     template: '%s | Faith over Fear',
   },
   description: 'Интернет-магазин христианской одежды. Футболки, поло, свитшоты и аксессуары с цитатами Иисуса Христа, крестами и христианской символикой.',
   keywords: ['христианская одежда', 'христианская одежда', 'одежда с крестом', 'футболка с молитвой', 'faith over fear'],
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    title: 'Faith over Fear',
+    statusBarStyle: 'black-translucent',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/icons/apple-touch-icon.png',
+  },
+  formatDetection: { telephone: false },
   openGraph: {
     title: 'Faith over Fear — христианская одежда',
     description: 'Одежда, которая несёт Свет',
@@ -40,6 +56,14 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#1B2A4A',
+  colorScheme: 'light',
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 }
 
 export default async function FrontendLayout({
@@ -57,11 +81,13 @@ export default async function FrontendLayout({
               <CartProvider>
                 <WishlistProvider>
                   {children}
+                  <InstallPrompt />
                 </WishlistProvider>
               </CartProvider>
             </LanguageProvider>
           </CategoriesProvider>
         </SettingsProvider>
+        <PWARegister />
       </body>
     </html>
   )

@@ -127,6 +127,7 @@ export default function Header() {
           textAlign: 'center',
           fontSize: '0.67rem',
           padding: '6px 16px',
+          paddingTop: 'calc(6px + env(safe-area-inset-top, 0px))',
           letterSpacing: '0.1em',
           fontFamily: 'var(--font-inter), sans-serif',
           lineHeight: 1,

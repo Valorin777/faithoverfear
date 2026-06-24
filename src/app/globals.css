@@ -42,6 +42,14 @@ body {
   overflow-x: clip;
   max-width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ── PWA / режим приложения ── */
+html { -webkit-tap-highlight-color: transparent; }
+@media all and (display-mode: standalone) {
+  /* В установленном приложении — мягкая прокрутка без «оттяжки» за края */
+  body { overscroll-behavior-y: contain; }
 }
 
 h1, h2, h3, h4, h5, h6 {
