@@ -1,16 +1,20 @@
 import { MetadataRoute } from 'next'
 import { products } from '@/data/products'
 import { blogPosts } from '@/data/blog'
+import { getCategories } from '@/lib/cms'
 
 const BASE_URL = 'https://faithof.ru'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = [
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const cats = await getCategories()
+
+  const basePaths = [
     '', '/catalog', '/new', '/sale', '/gift-sets', '/about',
-    '/blog', '/contacts', '/delivery', '/privacy', '/offer', '/returns',
-    '/catalog/tshirts', '/catalog/polo', '/catalog/sweatshirts',
-    '/catalog/sweaters', '/catalog/accessories',
-  ].map(path => ({
+    '/blog', '/contacts', '/delivery', '/cases', '/privacy', '/offer', '/returns',
+  ]
+  const categoryPaths = cats.map(c => `/catalog/${c.slug}`)
+
+  const staticPages = [...basePaths, ...categoryPaths].map(path => ({
     url: `${BASE_URL}${path}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,

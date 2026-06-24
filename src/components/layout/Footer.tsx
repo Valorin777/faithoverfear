@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useLang } from '@/context/LanguageContext'
 import { useSettings } from '@/context/SettingsContext'
+import { useCategories } from '@/context/CategoriesContext'
 
 const SOCIAL_ICONS: Record<string, React.ReactNode> = {
   telegram: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.16 14.605l-2.963-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.659.981z"/></svg>,
@@ -18,27 +19,18 @@ const SOCIAL_ICONS: Record<string, React.ReactNode> = {
 }
 const SOCIAL_LABELS: Record<string, string> = { telegram: 'Telegram', vk: 'ВКонтакте', instagram: 'Instagram', rutube: 'Rutube', tiktok: 'TikTok', youtube: 'YouTube', facebook: 'Facebook', threads: 'Threads', dzen: 'Дзен', max: 'MAX' }
 
-const nav = {
-  catalog: [
-    { href: '/catalog/tshirts', label: 'Футболки', en: 'T-shirts' },
-    { href: '/catalog/polo', label: 'Поло', en: 'Polo' },
-    { href: '/catalog/sweatshirts', label: 'Свитшоты', en: 'Sweatshirts' },
-    { href: '/catalog/sweaters', label: 'Свитеры', en: 'Sweaters' },
-    { href: '/gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
-    { href: '/catalog/accessories', label: 'Аксессуары', en: 'Accessories' },
-  ],
-  info: [
-    { href: '/about', label: 'О проекте', en: 'About' },
-    { href: '/presentation', label: 'Презентация бренда', en: 'Brand deck' },
-    { href: '/info', label: 'Информация', en: 'Information' },
-    { href: '/map', label: 'Карта храмов', en: 'Churches map' },
-    { href: '/blog', label: 'Блог', en: 'Blog' },
-    { href: '/contacts', label: 'Контакты', en: 'Contacts' },
-    { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },
-    { href: '/new', label: 'Новинки', en: 'New In' },
-    { href: '/sale', label: 'Акции', en: 'Sale' },
-  ],
-}
+const navInfo = [
+  { href: '/about', label: 'О проекте', en: 'About' },
+  { href: '/presentation', label: 'Презентация бренда', en: 'Brand deck' },
+  { href: '/info', label: 'Информация', en: 'Information' },
+  { href: '/map', label: 'Карта храмов', en: 'Churches map' },
+  { href: '/blog', label: 'Блог', en: 'Blog' },
+  { href: '/contacts', label: 'Контакты', en: 'Contacts' },
+  { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },
+  { href: '/cases', label: 'Чехлы на заказ', en: 'Custom cases' },
+  { href: '/new', label: 'Новинки', en: 'New In' },
+  { href: '/sale', label: 'Акции', en: 'Sale' },
+]
 
 const legal = [
   { href: '/privacy', label: 'Политика конфиденциальности', en: 'Privacy Policy' },
@@ -81,6 +73,8 @@ const DEFAULT_SOCIALS = [
 export default function Footer() {
   const { t } = useLang()
   const settings = useSettings()
+  const categories = useCategories()
+  const catalogLinks = categories.map(c => ({ href: `/catalog/${c.slug}`, label: c.name, en: c.nameEn || c.name }))
   const socialLinks = (settings.socials.length
     ? settings.socials.map((x) => ({ href: x.url, platform: x.platform }))
     : DEFAULT_SOCIALS
@@ -157,7 +151,7 @@ export default function Footer() {
           {/* Каталог */}
           <div>
             <span style={s.h}>{t('Каталог', 'Catalog')}</span>
-            {nav.catalog.map(l => (
+            {catalogLinks.map(l => (
               <Link key={l.href} href={l.href} style={s.link}>{t(l.label, l.en)}</Link>
             ))}
           </div>
@@ -165,7 +159,7 @@ export default function Footer() {
           {/* Информация */}
           <div>
             <span style={s.h}>{t('Информация', 'Information')}</span>
-            {nav.info.map(l => (
+            {navInfo.map(l => (
               <Link key={l.href} href={l.href} style={s.link}>{t(l.label, l.en)}</Link>
             ))}
           </div>

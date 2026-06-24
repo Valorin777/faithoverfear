@@ -3,6 +3,7 @@ import config from '@payload-config'
 import { products, reviews } from '@/data/products'
 import { blogPosts } from '@/data/blog'
 import { INFO_TOPICS } from '@/data/infoSections'
+import { DEFAULT_CATEGORIES } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,10 +29,42 @@ export async function GET(request: Request) {
 
   const payload = await getPayload({ config })
 
+  // ── Категории (создаём дефолтные, если коллекция пуста; строим карту slug→id) ──
+  let categories_created = 0
+  const catIdBySlug: Record<string, number> = {}
+  try {
+    const existing = await payload.find({ collection: 'categories', limit: 200, depth: 0, pagination: false })
+    for (const c of existing.docs) catIdBySlug[c.slug] = Number(c.id)
+    for (const c of DEFAULT_CATEGORIES) {
+      if (catIdBySlug[c.slug]) continue
+      const created = await payload.create({
+        collection: 'categories',
+        data: {
+          slug: c.slug, name: c.name, nameEn: c.nameEn ?? null,
+          order: c.order, icon: c.icon ?? 'tag',
+          description: c.description ?? null, descriptionEn: c.descriptionEn ?? null,
+        } as never,
+        overrideAccess: true,
+      })
+      catIdBySlug[c.slug] = Number(created.id)
+      categories_created++
+    }
+  } catch (err) {
+    console.error('Seed categories error:', err)
+  }
+
   // ── Товары (upsert по slug) ──
   let products_created = 0
   let products_updated = 0
+  let products_skipped = 0
   for (const p of products) {
+    // Без валидной категории товар не создать (поле обязательное) — пропускаем явно, а не молча падаем.
+    const catId = catIdBySlug[p.category]
+    if (!catId) {
+      console.error('Seed: товар пропущен — категория не найдена:', p.slug, '→', p.category)
+      products_skipped++
+      continue
+    }
     const data = {
       name: p.name,
       nameEn: p.nameEn ?? null,
@@ -42,7 +75,7 @@ export async function GET(request: Request) {
       spiritualMeaningEn: p.spiritualMeaningEn ?? null,
       price: p.price,
       salePrice: p.salePrice ?? null,
-      category: p.category,
+      category: catId,
       variants: p.variants.map(v => ({
         size: v.size,
         color: v.color,
@@ -174,14 +207,20 @@ export async function GET(request: Request) {
     console.error('Seed info-topics error:', err)
   }
 
+  const categories_total = Object.keys(catIdBySlug).length
+  // success=false, если хоть один товар пропущен из-за отсутствующей категории — чтобы провал был виден, а не маскировался.
+  const success = products_skipped === 0
   return Response.json({
-    info_created,
-    success: true,
+    success,
+    categories_created,
+    categories_total,
     products_created,
     products_updated,
+    products_skipped,
     posts_upserted,
     reviews_created,
     payments_created,
-    message: `Товары: +${products_created} · Статьи: ${posts_upserted} · Отзывы: ${reviews_created} · Платёжные системы: +${payments_created} · Баннер обновлён`,
+    info_created,
+    message: `Категории: +${categories_created} (всего ${categories_total}) · Товары: +${products_created}/обновлено ${products_updated}${products_skipped ? ` · ⚠ ПРОПУЩЕНО ${products_skipped} (нет категории)` : ''} · Статьи: ${posts_upserted} · Отзывы: ${reviews_created} · Оплаты: +${payments_created} · Баннер обновлён`,
   })
 }

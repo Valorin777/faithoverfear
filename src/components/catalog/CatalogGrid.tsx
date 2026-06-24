@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { LayoutGrid, List } from 'lucide-react'
 import ProductCard from '@/components/ui/ProductCard'
 import CatalogFilters, { FilterState, DEFAULT_FILTERS } from './CatalogFilters'
-import { Product, ProductCategory } from '@/types'
+import { Product } from '@/types'
 import { useLang } from '@/context/LanguageContext'
 
 const SORT_OPTIONS = [
@@ -20,7 +20,7 @@ const COLOR_MAP: Record<string, string> = {
 
 interface CatalogGridProps {
   products: Product[]
-  initialCategory?: ProductCategory
+  initialCategory?: string
   title?: string
   titleEn?: string
 }

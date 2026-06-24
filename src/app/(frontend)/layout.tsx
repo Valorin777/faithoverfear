@@ -4,7 +4,8 @@ import { CartProvider } from '@/context/CartContext'
 import { WishlistProvider } from '@/context/WishlistContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { SettingsProvider } from '@/context/SettingsContext'
-import { getSettings } from '@/lib/cms'
+import { CategoriesProvider } from '@/context/CategoriesContext'
+import { getSettings, getCategories } from '@/lib/cms'
 import '../globals.css'
 
 export const revalidate = 60
@@ -46,18 +47,20 @@ export default async function FrontendLayout({
 }: {
   children: React.ReactNode
 }) {
-  const settings = await getSettings()
+  const [settings, categories] = await Promise.all([getSettings(), getCategories()])
   return (
     <html lang="ru" className={`${playfair.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
         <SettingsProvider value={settings}>
-          <LanguageProvider>
-            <CartProvider>
-              <WishlistProvider>
-                {children}
-              </WishlistProvider>
-            </CartProvider>
-          </LanguageProvider>
+          <CategoriesProvider value={categories}>
+            <LanguageProvider>
+              <CartProvider>
+                <WishlistProvider>
+                  {children}
+                </WishlistProvider>
+              </CartProvider>
+            </LanguageProvider>
+          </CategoriesProvider>
         </SettingsProvider>
       </body>
     </html>

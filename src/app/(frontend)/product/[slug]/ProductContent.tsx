@@ -1,10 +1,14 @@
 'use client'
 
+import { useState } from 'react'
 import ProductGallery from '@/components/product/ProductGallery'
 import ProductForm from '@/components/product/ProductForm'
 import ProductCard from '@/components/ui/ProductCard'
 import { Product, Review } from '@/types'
 import { useLang } from '@/context/LanguageContext'
+
+const CROSS_NOTE_RU = 'Крест можно изменить на православный или католический — укажите пожелание в комментарии к заказу.'
+const CROSS_NOTE_EN = 'The cross can be made Orthodox or Catholic — just note your preference in the order comment.'
 
 interface ProductContentProps {
   product: Product
@@ -14,6 +18,11 @@ interface ProductContentProps {
 
 export default function ProductContent({ product, related, productReviews }: ProductContentProps) {
   const { t } = useLang()
+
+  const designs = product.designs ?? []
+  const [designIdx, setDesignIdx] = useState(0)
+  const activeDesign = designs[designIdx]
+  const galleryImages = activeDesign && activeDesign.images.length ? activeDesign.images : product.images
 
   const DEFAULT_SPECS: { label: string; labelEn?: string; value: string; valueEn?: string }[] = [
     { label: 'Состав', labelEn: 'Composition', value: '100% хлопок (пеньё)', valueEn: '100% cotton (combed)' },
@@ -44,8 +53,45 @@ export default function ProductContent({ product, related, productReviews }: Pro
 
       {/* Основной блок */}
       <div className="product-layout" style={{ display: 'grid', gap: '3rem', marginBottom: '4rem' }}>
-        {/* Галерея */}
-        <ProductGallery images={product.images} video={product.video} name={product.name} />
+        {/* Галерея + переключатель дизайнов */}
+        <div>
+          <ProductGallery key={designIdx} images={galleryImages} video={product.video} name={product.name} />
+          {designs.length > 0 && (
+            <div style={{ marginTop: '1.25rem' }}>
+              <p style={{
+                fontFamily: 'var(--font-inter), sans-serif',
+                fontSize: '0.75rem', fontWeight: 600, color: 'var(--navy)',
+                textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.6rem',
+              }}>
+                {t('Вариант дизайна', 'Design')}{activeDesign ? <span style={{ fontWeight: 400, color: '#888', textTransform: 'none', letterSpacing: 0 }}>: {t(activeDesign.name, activeDesign.nameEn || activeDesign.name)}</span> : null}
+              </p>
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                {designs.map((d, i) => {
+                  const active = i === designIdx
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setDesignIdx(i)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        border: active ? '2px solid var(--navy)' : '1.5px solid #ddd',
+                        borderRadius: 4,
+                        background: active ? 'var(--navy)' : '#fff',
+                        color: active ? '#fff' : '#444',
+                        fontFamily: 'var(--font-inter), sans-serif',
+                        fontSize: '0.8rem', fontWeight: 600,
+                        cursor: 'pointer', transition: 'all 0.15s',
+                      }}
+                    >
+                      {t(d.name, d.nameEn || d.name)}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Информация */}
         <div>
@@ -94,6 +140,24 @@ export default function ProductContent({ product, related, productReviews }: Pro
           }}>
             {t(product.description, product.descriptionEn)}
           </p>
+
+          {product.crossCustomizable && (
+            <div style={{
+              display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+              background: 'rgba(201,168,76,0.1)',
+              border: '1px solid rgba(201,168,76,0.3)',
+              borderRadius: 6, padding: '0.875rem 1rem',
+              marginBottom: '1.75rem',
+            }}>
+              <span style={{ color: 'var(--gold)', fontSize: '1.1rem', lineHeight: 1.2, flexShrink: 0 }} aria-hidden>★</span>
+              <span style={{
+                fontFamily: 'var(--font-inter), sans-serif',
+                fontSize: '0.82rem', color: 'var(--navy)', lineHeight: 1.6, fontWeight: 400,
+              }}>
+                {t(product.crossNote || CROSS_NOTE_RU, product.crossNoteEn || CROSS_NOTE_EN)}
+              </span>
+            </div>
+          )}
 
           <ProductForm product={product} />
         </div>

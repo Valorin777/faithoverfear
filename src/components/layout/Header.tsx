@@ -14,12 +14,13 @@ const navLinks = [
   { href: '/catalog', label: 'Каталог', en: 'Catalog' },
   { href: '/new', label: 'Новинки', en: 'New In' },
   { href: '/sale', label: 'Акции', en: 'Sale' },
-  { href: '/gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
+  { href: '/catalog/gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
   { href: '/about', label: 'О проекте', en: 'About' },
   { href: '/presentation', label: 'Презентация проекта', en: 'Brand deck' },
   { href: '/info', label: 'Информация', en: 'Information' },
   { href: '/contacts', label: 'Контакты', en: 'Contacts' },
   { href: '/delivery', label: 'Доставка и оплата', en: 'Delivery & Payment' },
+  { href: '/cases', label: 'Чехлы на заказ', en: 'Custom cases' },
   { href: '/blog', label: 'Блог', en: 'Blog' },
 ]
 

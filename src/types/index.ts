@@ -9,7 +9,7 @@ export interface Product {
   spiritualMeaningEn?: string
   price: number
   salePrice?: number
-  category: ProductCategory
+  category: string
   images: string[]
   video?: string
   variants: ProductVariant[]
@@ -18,6 +18,10 @@ export interface Product {
   isBestseller?: boolean
   wildberriesUrl?: string
   specifications?: { label: string; labelEn?: string; value: string; valueEn?: string }[]
+  designs?: { name: string; nameEn?: string; images: string[] }[]
+  crossCustomizable?: boolean
+  crossNote?: string
+  crossNoteEn?: string
 }
 
 export interface ProductVariant {
@@ -152,3 +156,24 @@ export const CATEGORY_LABELS_EN: Record<ProductCategory, string> = {
   'gift-sets': 'Gift Sets',
   accessories: 'Accessories',
 }
+
+/** Категория для витрины (приходит из админки; имеет запасной список ниже). */
+export interface CategoryItem {
+  slug: string
+  name: string
+  nameEn?: string
+  order: number
+  icon?: string
+  description?: string
+  descriptionEn?: string
+}
+
+/** Запасной список категорий — используется, если коллекция «Категории» в базе пуста/недоступна. */
+export const DEFAULT_CATEGORIES: CategoryItem[] = [
+  { slug: 'tshirts', name: 'Футболки', nameEn: 'T-shirts', order: 1, icon: 'tshirt', description: 'С принтами и цитатами', descriptionEn: 'With prints and quotes' },
+  { slug: 'polo', name: 'Поло', nameEn: 'Polo', order: 2, icon: 'polo', description: 'Лаконичный стиль', descriptionEn: 'Minimalist style' },
+  { slug: 'sweatshirts', name: 'Свитшоты / Худи', nameEn: 'Sweatshirts / Hoodies', order: 3, icon: 'sweatshirt', description: 'Тепло и уют', descriptionEn: 'Warm and cosy' },
+  { slug: 'sweaters', name: 'Свитеры', nameEn: 'Sweaters', order: 4, icon: 'sweater', description: 'Для прохладных дней', descriptionEn: 'For cooler days' },
+  { slug: 'gift-sets', name: 'Подарочные наборы', nameEn: 'Gift Sets', order: 5, icon: 'gift', description: 'Подарочные комплекты', descriptionEn: 'Gift bundles' },
+  { slug: 'accessories', name: 'Аксессуары', nameEn: 'Accessories', order: 6, icon: 'accessory', description: 'Дополните образ', descriptionEn: 'Complete your look' },
+]

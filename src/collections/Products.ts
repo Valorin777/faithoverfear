@@ -94,16 +94,10 @@ export const Products: CollectionConfig = {
     {
       name: 'category',
       label: 'Категория',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'categories',
       required: true,
-      options: [
-        { label: 'Футболки', value: 'tshirts' },
-        { label: 'Поло', value: 'polo' },
-        { label: 'Свитшоты / Худи', value: 'sweatshirts' },
-        { label: 'Свитеры', value: 'sweaters' },
-        { label: 'Подарочные наборы', value: 'gift-sets' },
-        { label: 'Аксессуары', value: 'accessories' },
-      ],
+      admin: { description: 'Выбор из раздела «Категории». Управлять списком — там же.' },
     },
     {
       name: 'images',
@@ -122,6 +116,59 @@ export const Products: CollectionConfig = {
       relationTo: 'media',
       admin: {
         description: 'Опционально: видео товара (MP4/WebM). Покажется первым в галерее.',
+      },
+    },
+    {
+      name: 'designs',
+      label: 'Варианты дизайна',
+      type: 'array',
+      labels: { singular: 'Дизайн', plural: 'Дизайны' },
+      admin: {
+        description: 'Напр.: минималистичный и крупный вариант одного принта. У каждого — свои фото. Если пусто — на странице показываются основные «Фотографии».',
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'name', label: 'Название дизайна (рус)', type: 'text', required: true, admin: { description: 'Напр.: Минимализм' } },
+            { name: 'nameEn', label: 'Name (English)', type: 'text', admin: { description: 'Напр.: Minimal' } },
+          ],
+        },
+        {
+          name: 'images',
+          label: 'Фото этого дизайна',
+          type: 'upload',
+          relationTo: 'media',
+          hasMany: true,
+          required: true,
+          admin: { description: 'Фото именно этого варианта дизайна (первое — главное). Без фото дизайн не сохранить.' },
+        },
+      ],
+    },
+    {
+      name: 'crossCustomizable',
+      label: 'Крест можно изменить (православный / католический)',
+      type: 'checkbox',
+      admin: {
+        description: 'Покажет на странице товара заметную отметку ★: крест можно сделать православным или католическим по желанию клиента.',
+        components: { Cell: '/components/admin/YesNoCell#default' },
+      },
+    },
+    {
+      name: 'crossNote',
+      label: 'Текст отметки про крест (рус)',
+      type: 'text',
+      admin: {
+        description: 'Если пусто — используется текст по умолчанию. Показывается только при включённой галочке выше.',
+        condition: (data) => Boolean(data?.crossCustomizable),
+      },
+    },
+    {
+      name: 'crossNoteEn',
+      label: 'Cross note (English)',
+      type: 'text',
+      admin: {
+        condition: (data) => Boolean(data?.crossCustomizable),
       },
     },
     {

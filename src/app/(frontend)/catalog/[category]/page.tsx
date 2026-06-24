@@ -2,12 +2,9 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
 import CatalogGrid from '@/components/catalog/CatalogGrid'
-import { getProducts } from '@/lib/cms'
-import { CATEGORY_LABELS, CATEGORY_LABELS_EN, ProductCategory } from '@/types'
+import { getProducts, getCategories } from '@/lib/cms'
 
 export const revalidate = 60
-
-const VALID_CATEGORIES = ['tshirts', 'polo', 'sweatshirts', 'sweaters', 'gift-sets', 'accessories']
 
 interface PageProps {
   params: Promise<{ category: string }>
@@ -15,37 +12,38 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category } = await params
-  const label = CATEGORY_LABELS[category as ProductCategory]
-  if (!label) return {}
+  const cats = await getCategories()
+  const cat = cats.find(c => c.slug === category)
+  if (!cat) return {}
   return {
-    title: `${label} — христианская одежда`,
-    description: `${label} с христианскими дизайнами, цитатами Иисуса Христа и христианской символикой.`,
+    title: `${cat.name} — христианская одежда`,
+    description: `${cat.name} с христианскими дизайнами, цитатами Иисуса Христа и христианской символикой.`,
   }
 }
 
-export function generateStaticParams() {
-  return VALID_CATEGORIES.map(category => ({ category }))
+export async function generateStaticParams() {
+  const cats = await getCategories()
+  return cats.map(c => ({ category: c.slug }))
 }
 
 export default async function CategoryPage({ params }: PageProps) {
   const { category } = await params
+  const cats = await getCategories()
+  const cat = cats.find(c => c.slug === category)
 
-  if (!VALID_CATEGORIES.includes(category)) {
+  if (!cat) {
     notFound()
   }
 
-  const cat = category as ProductCategory
-  const label = CATEGORY_LABELS[cat]
-  const labelEn = CATEGORY_LABELS_EN[cat]
   const products = await getProducts()
 
   return (
     <PageLayout>
       <CatalogGrid
         products={products}
-        initialCategory={cat}
-        title={label}
-        titleEn={labelEn}
+        initialCategory={cat.slug}
+        title={cat.name}
+        titleEn={cat.nameEn || cat.name}
       />
     </PageLayout>
   )

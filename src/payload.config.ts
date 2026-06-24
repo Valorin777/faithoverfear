@@ -10,6 +10,7 @@ import { ru } from '@payloadcms/translations/languages/ru'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
+import { Categories } from './collections/Categories'
 import { Orders } from './collections/Orders'
 import { Reviews } from './collections/Reviews'
 import { Posts } from './collections/Posts'
@@ -17,6 +18,7 @@ import { Promocodes } from './collections/Promocodes'
 import { Returns } from './collections/Returns'
 import { PaymentSystems } from './collections/PaymentSystems'
 import { SupportMessages } from './collections/SupportMessages'
+import { CustomRequests } from './collections/CustomRequests'
 import { Campaigns } from './collections/Campaigns'
 import { Customers } from './collections/Customers'
 import { InfoTopics } from './collections/InfoTopics'
@@ -83,7 +85,7 @@ export default buildConfig({
     },
   },
   // Порядок задаёт группировку в навигации: Магазин · Аудитория · Контент · Маркетинг · Система
-  collections: [Products, Orders, Returns, PaymentSystems, Customers, Reviews, SupportMessages, Posts, InfoTopics, Media, Promocodes, Campaigns, Users],
+  collections: [Products, Categories, Orders, Returns, PaymentSystems, Customers, Reviews, SupportMessages, CustomRequests, Posts, InfoTopics, Media, Promocodes, Campaigns, Users],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

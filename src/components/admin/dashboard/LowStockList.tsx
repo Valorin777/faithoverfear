@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CATEGORY_LABELS, ProductCategory } from '@/types'
 
 interface Row {
   id: string
@@ -55,7 +54,7 @@ export default function LowStockList({ rows, empty }: { rows: Row[]; empty: bool
                   />
                 </div>
                 <span className="fof-stock__cat">
-                  {CATEGORY_LABELS[r.category as ProductCategory] || r.category} · {r.variantCount} вар.
+                  {r.category || '—'} · {r.variantCount} вар.
                 </span>
               </li>
             )

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { X, SlidersHorizontal } from 'lucide-react'
 import { useLang } from '@/context/LanguageContext'
+import { useCategories } from '@/context/CategoriesContext'
 
 export interface FilterState {
   categories: string[]
@@ -12,15 +13,6 @@ export interface FilterState {
   priceMax: number
   inStockOnly: boolean
 }
-
-const CATEGORIES = [
-  { value: 'tshirts', label: 'Футболки', en: 'T-shirts' },
-  { value: 'polo', label: 'Поло', en: 'Polo' },
-  { value: 'sweatshirts', label: 'Свитшоты / Худи', en: 'Sweatshirts / Hoodies' },
-  { value: 'sweaters', label: 'Свитеры', en: 'Sweaters' },
-  { value: 'gift-sets', label: 'Подарочные наборы', en: 'Gift Sets' },
-  { value: 'accessories', label: 'Аксессуары', en: 'Accessories' },
-]
 
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 
@@ -50,6 +42,7 @@ interface Props {
 
 export default function CatalogFilters({ filters, onChange, mobileOnly = false }: Props) {
   const { t } = useLang()
+  const categoryOptions = useCategories().map(c => ({ value: c.slug, label: c.name, en: c.nameEn || c.name }))
   const [mobileOpen, setMobileOpen] = useState(false)
 
   function toggle<K extends 'categories' | 'sizes' | 'colors'>(key: K, value: string) {
@@ -93,7 +86,7 @@ export default function CatalogFilters({ filters, onChange, mobileOnly = false }
       <div>
         <span style={labelStyle}>{t('Тип одежды', 'Type')}</span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {CATEGORIES.map(cat => (
+          {categoryOptions.map(cat => (
             <label key={cat.value} style={{
               display: 'flex', alignItems: 'center', gap: '0.625rem',
               cursor: 'pointer',

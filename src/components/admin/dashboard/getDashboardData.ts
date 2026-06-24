@@ -79,7 +79,7 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
   const DAY_MS = 86_400_000
   const series0 = new Date(todayStart.getTime() - 89 * DAY_MS) // 90 дней включая сегодня
 
-  const [allOrdersRes, recentRes, productsRes, reviewsRes, customersTotal, customersNew, customersPrev, topRefsRes] =
+  const [allOrdersRes, recentRes, productsRes, reviewsRes, customersTotal, customersNew, customersPrev, topRefsRes, categoriesRes] =
     await Promise.all([
       payload.find({ collection: 'orders', limit: 5000, depth: 0, sort: '-createdAt', pagination: false }),
       payload.find({ collection: 'orders', limit: 8, depth: 1, sort: '-createdAt' }),
@@ -112,6 +112,7 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
         limit: 6,
         depth: 0,
       }),
+      payload.find({ collection: 'categories', limit: 200, depth: 0, pagination: false }),
     ])
 
   const orders = allOrdersRes.docs as any[]
@@ -195,6 +196,10 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
   })
 
   // ── Товары + остатки ──
+  const catMap = new Map<string, string>()
+  for (const c of categoriesRes.docs as any[]) catMap.set(String(c.id), c.name)
+  const catName = (cat: any): string =>
+    cat && typeof cat === 'object' ? (cat.name || '') : (catMap.get(String(cat)) || '')
   const products = productsRes.docs as any[]
   const stockRows = products.map((p) => {
     const variants = Array.isArray(p.variants) ? p.variants : []
@@ -202,7 +207,7 @@ export async function getDashboardData(payload: Payload): Promise<DashboardData>
     return {
       id: String(p.id),
       name: p.name || '—',
-      category: p.category || '',
+      category: catName(p.category),
       totalStock,
       variantCount: variants.length,
     }

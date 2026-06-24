@@ -1,7 +1,7 @@
 import 'server-only'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { Product, ProductVariant, Review, BlogPost, ProductCategory, SiteSettingsData } from '@/types'
+import { Product, ProductVariant, Review, BlogPost, SiteSettingsData, CategoryItem, DEFAULT_CATEGORIES } from '@/types'
 import { products as staticProducts, reviews as staticReviews } from '@/data/products'
 import { INFO_TOPICS, type InfoTopic } from '@/data/infoSections'
 import { blogPosts as staticPosts } from '@/data/blog'
@@ -43,7 +43,7 @@ function mapProduct(doc: any): Product {
     spiritualMeaningEn: doc.spiritualMeaningEn || undefined,
     price: typeof doc.price === 'number' ? doc.price : 0,
     salePrice: typeof doc.salePrice === 'number' ? doc.salePrice : undefined,
-    category: doc.category as ProductCategory,
+    category: typeof doc.category === 'object' && doc.category ? String(doc.category.slug ?? '') : (doc.category ?? ''),
     images: images.length ? images : [PLACEHOLDER_IMG],
     video: mediaUrl(doc.video) || undefined,
     variants,
@@ -56,6 +56,18 @@ function mapProduct(doc: any): Product {
           .filter((s: any) => s?.label)
           .map((s: any) => ({ label: s.label, labelEn: s.labelEn || undefined, value: s.value || '', valueEn: s.valueEn || undefined }))
       : undefined,
+    designs: Array.isArray(doc.designs)
+      ? doc.designs
+          .map((d: any) => ({
+            name: d?.name || '',
+            nameEn: d?.nameEn || undefined,
+            images: Array.isArray(d?.images) ? d.images.map(mediaUrl).filter((u: string | null): u is string => !!u) : [],
+          }))
+          .filter((d: { name: string; images: string[] }) => d.name && d.images.length)
+      : undefined,
+    crossCustomizable: !!doc.crossCustomizable,
+    crossNote: doc.crossNote || undefined,
+    crossNoteEn: doc.crossNoteEn || undefined,
   }
 }
 
@@ -100,6 +112,28 @@ export async function getProducts(): Promise<Product[]> {
     // БД недоступна на этапе сборки/деплоя — используем статические данные
   }
   return staticProducts
+}
+
+/** Категории из админки (Payload), с откатом на встроенный список, если коллекция пуста/недоступна. */
+export async function getCategories(): Promise<CategoryItem[]> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({ collection: 'categories', sort: 'order', depth: 0, limit: 100, pagination: false })
+    if (res.docs.length) {
+      return (res.docs as any[]).map((d) => ({
+        slug: d.slug,
+        name: d.name,
+        nameEn: d.nameEn || undefined,
+        order: typeof d.order === 'number' ? d.order : 0,
+        icon: d.icon || 'tag',
+        description: d.description || undefined,
+        descriptionEn: d.descriptionEn || undefined,
+      }))
+    }
+  } catch {
+    // БД недоступна на этапе сборки/деплоя — встроенный список
+  }
+  return DEFAULT_CATEGORIES
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
