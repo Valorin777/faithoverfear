@@ -9,7 +9,7 @@ function ChristianCross({ size }: { size: number }) {
         <line x1="50" y1="12" x2="50" y2="138" strokeWidth="9" />
         <line x1="37" y1="32" x2="63" y2="32" strokeWidth="8" />
         <line x1="26" y1="58" x2="74" y2="58" strokeWidth="9" />
-        <line x1="34" y1="108" x2="66" y2="94" strokeWidth="8" />
+        <line x1="34" y1="94" x2="66" y2="108" strokeWidth="8" />
       </g>
     </svg>
   )
