@@ -3,7 +3,7 @@
    - страницы: network-first (всегда свежее онлайн; из кэша/офлайн-страницы — только без сети);
    - неизменяемая статика (_next/static, иконки, шрифты, картинки): cache-first;
    - админка, API, оплата, seed — НЕ кэшируем (всегда из сети). */
-const VERSION = 'fof-v2'
+const VERSION = 'fof-v3'
 const STATIC_CACHE = `${VERSION}-static`
 const PAGE_CACHE = `${VERSION}-pages`
 const OFFLINE_URL = '/offline.html'
